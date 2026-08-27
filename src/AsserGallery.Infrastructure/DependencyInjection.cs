@@ -13,11 +13,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection") 
-            ?? "Server=(localdb)\\mssqllocaldb;Database=AsserGalleryDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? "Server=.\\MSSQLSERVER01;Database=AsserGalleryDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString, b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+            options.UseSqlServer(connectionString, b =>
+            {
+                b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+            }));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppName" xml:space="preserve">
+    <value>Asser Gallery</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>Catalog</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="AdminDashboard" xml:space="preserve">
+    <value>Admin Dashboard</value>
+  </data>
+  <data name="Discover" xml:space="preserve">
+    <value>Discover</value>
+  </data>
+  <data name="ExploreCollection" xml:space="preserve">
+    <value>Explore our latest curated clothing collection</value>
+  </data>
+  <data name="FeaturedItems" xml:space="preserve">
+    <value>Featured Items</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="SpecialOffers" xml:space="preserve">
+    <value>Special Offers</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="LimitedStock" xml:space="preserve">
+    <value>Limited Stock</value>
+  </data>
+  <data name="OutOfStock" xml:space="preserve">
+    <value>Out of Stock</value>
+  </data>
+  <data name="OrderWhatsApp" xml:space="preserve">
+    <value>Order via WhatsApp</value>
+  </data>
+  <data name="OrderMessenger" xml:space="preserve">
+    <value>Chat on Messenger</value>
+  </data>
+  <data name="RequestCallback" xml:space="preserve">
+    <value>Request Callback / Hold</value>
+  </data>
+  <data name="OriginalPhoto" xml:space="preserve">
+    <value>Real Photo (Phone)</value>
+  </data>
+  <data name="AiEnhancedPhoto" xml:space="preserve">
+    <value>Studio AI View</value>
+  </data>
+  <data name="Colors" xml:space="preserve">
+    <value>Available Colors</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>EGP</value>
+  </data>
+  <data name="AllCategories" xml:space="preserve">
+    <value>All Categories</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search shirts, dresses, jackets...</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Clear Filters</value>
+  </data>
+  <data name="InStockOnly" xml:space="preserve">
+    <value>In Stock Only</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+</root>
