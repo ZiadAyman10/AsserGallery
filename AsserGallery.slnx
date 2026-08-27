@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AsserGallery.Application/AsserGallery.Application.csproj" />
+    <Project Path="src/AsserGallery.Domain/AsserGallery.Domain.csproj" />
+    <Project Path="src/AsserGallery.Infrastructure/AsserGallery.Infrastructure.csproj" />
+    <Project Path="src/AsserGallery.Web/AsserGallery.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/AsserGallery.Tests/">
+    <Project Path="src/AsserGallery.Tests/AsserGallery.Application.Tests/AsserGallery.Application.Tests.csproj" />
+    <Project Path="src/AsserGallery.Tests/AsserGallery.Domain.Tests/AsserGallery.Domain.Tests.csproj" />
+    <Project Path="src/AsserGallery.Tests/AsserGallery.Infrastructure.Tests/AsserGallery.Infrastructure.Tests.csproj" />
+  </Folder>
+</Solution>
