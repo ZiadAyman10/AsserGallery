@@ -1,0 +1,269 @@
+@model ProductDto
+@using System.Globalization
+@{
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    var lang = isArabic ? "ar" : "en";
+    ViewData["Title"] = isArabic ? Model.ArabicName : Model.Name;
+    var settings = ViewBag.Settings as StoreSettingsDto;
+    var storeWhatsApp = ViewBag.StoreWhatsApp as string ?? "201000000000";
+    var defaultWhatsAppLink = ViewBag.WhatsAppOrderLink as string;
+    var messengerUrl = ViewBag.MessengerUrl as string;
+    var relatedProducts = ViewBag.RelatedProducts as List<ProductDto> ?? new List<ProductDto>();
+
+    var originalImages = Model.Images.Where(i => i.ImageType == ImageType.Original).ToList();
+    var aiImages = Model.Images.Where(i => i.ImageType == ImageType.AiEnhanced).ToList();
+    var primaryImage = Model.PrimaryImageUrl ?? (Model.Images.FirstOrDefault()?.ImageUrl ?? "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=80");
+    var firstVariant = Model.Variants.FirstOrDefault(v => v.Quantity > 0) ?? Model.Variants.FirstOrDefault();
+}
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-muted">@Localizer["Home"]</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Catalog" asp-action="Index" class="text-decoration-none text-muted">@Localizer["Catalog"]</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="text-decoration-none text-muted">@(isArabic ? Model.CategoryArabicName : Model.CategoryName)</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@(isArabic ? Model.ArabicName : Model.Name)</li>
+    </ol>
+</nav>
+
+<div class="row g-4 g-lg-5 mb-5">
+    <!-- Left Column: Image Viewer with Original vs AI Switcher (§4.8 & §6) -->
+    <div class="col-lg-6">
+        <div class="card-custom p-2 position-relative overflow-hidden">
+            <!-- Main Photo Display -->
+            <div class="position-relative text-center rounded-4 overflow-hidden" style="background: var(--bg-surface-subtle); aspect-ratio: 3/4;">
+                <img id="mainProductDisplayImage" 
+                     src="@primaryImage" 
+                     alt="@(isArabic ? Model.ArabicName : Model.Name)" 
+                     class="w-100 h-100 object-fit-cover transition" />
+
+                @if (Model.DiscountPercentage.HasValue)
+                {
+                    <span class="discount-badge">-@Model.DiscountPercentage% OFF</span>
+                }
+            </div>
+
+            <!-- Original vs AI-Enhanced Toggle (§4.8) -->
+            @if (originalImages.Any() && aiImages.Any())
+            {
+                <div class="text-center mt-3">
+                    <div class="image-mode-toggle-group shadow-sm">
+                        <button type="button" class="image-mode-btn active" onclick="switchProductImage('@aiImages.First().ImageUrl', this, 'AI')">
+                            <i class="bi bi-stars text-warning me-1"></i> @Localizer["AiEnhancedPhoto"]
+                        </button>
+                        <button type="button" class="image-mode-btn" onclick="switchProductImage('@originalImages.First().ImageUrl', this, 'Real')">
+                            <i class="bi bi-camera-fill text-primary me-1"></i> @Localizer["OriginalPhoto"]
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <!-- Thumbnails Rail -->
+            @if (Model.Images.Count > 1)
+            {
+                <div class="d-flex gap-2 mt-3 overflow-x-auto pb-1">
+                    @foreach (var img in Model.Images)
+                    {
+                        <div class="rounded-3 border overflow-hidden flex-shrink-0 cursor-pointer" 
+                             style="width: 65px; height: 65px; cursor: pointer;" 
+                             onclick="switchProductImage('@img.ImageUrl', null, '')">
+                            <img src="@img.ImageUrl" alt="Thumbnail" class="w-100 h-100 object-fit-cover" />
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Right Column: Product Info & Order CTAs -->
+    <div class="col-lg-6 d-flex flex-column">
+        <div class="card-custom p-4 p-md-5 flex-grow-1 d-flex flex-column">
+            <!-- Category & Title -->
+            <div class="mb-2">
+                <span class="badge bg-secondary bg-opacity-10 text-muted px-3 py-1 rounded-pill">
+                    @(isArabic ? Model.SubCategoryArabicName : Model.SubCategoryName)
+                </span>
+            </div>
+            
+            <h2 class="display-6 fw-bold mb-2">
+                @(isArabic ? Model.ArabicName : Model.Name)
+            </h2>
+
+            <!-- Price Block -->
+            <div class="price-block mb-3 align-items-center">
+                <span class="fs-2 fw-extrabold text-main">
+                    @((Model.DiscountedPrice ?? Model.Price).ToString("N0")) @Localizer["Currency"]
+                </span>
+                @if (Model.DiscountedPrice.HasValue)
+                {
+                    <span class="fs-5 text-muted text-decoration-line-through">
+                        @Model.Price.ToString("N0") @Localizer["Currency"]
+                    </span>
+                    <span class="badge bg-danger ms-2">Save @Model.DiscountPercentage%</span>
+                }
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4 text-muted" style="line-height: 1.7;">
+                <p class="mb-0">
+                    @(isArabic ? Model.ArabicDescription ?? Model.Description : Model.Description ?? Model.ArabicDescription)
+                </p>
+            </div>
+
+            <!-- Available Colors & Stock Selector (§6) -->
+            <div class="mb-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <label class="fw-bold small mb-0">@Localizer["Colors"]:</label>
+                    <span id="selectedVariantStockNotice" class="status-badge status-available">
+                        @if (firstVariant != null && firstVariant.Quantity > 3)
+                        {
+                            <span>@(isArabic ? $"متوفر ({firstVariant.Quantity} قطعة)" : $"In Stock ({firstVariant.Quantity} pcs)")</span>
+                        }
+                        else if (firstVariant != null && firstVariant.Quantity > 0)
+                        {
+                            <span>@(isArabic ? $"كمية محدودة! ({firstVariant.Quantity} متبقي)" : $"Limited Stock! ({firstVariant.Quantity} left)")</span>
+                        }
+                        else
+                        {
+                            <span>@Localizer["OutOfStock"]</span>
+                        }
+                    </span>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var variant in Model.Variants)
+                    {
+                        var isFirst = variant.Id == firstVariant?.Id;
+                        <button type="button" 
+                                id="variant-chip-@variant.Id" 
+                                class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-2 rounded-pill px-3 py-2 color-variant-chip @(isFirst ? "active border-dark fw-bold" : "")" 
+                                onclick="selectColorVariant(@variant.Id, '@(isArabic ? variant.ColorArabicName : variant.ColorName)', @variant.Quantity, '@(Model.DiscountedPrice ?? Model.Price)', '@(isArabic ? Model.ArabicName : Model.Name)', '@storeWhatsApp', '@lang')">
+                            <span class="color-dot" style="background-color: @variant.ColorHexCode;"></span>
+                            <span>@(isArabic ? variant.ColorArabicName : variant.ColorName)</span>
+                            <span class="badge bg-light text-dark rounded-pill border">@variant.Quantity</span>
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Fast Order CTA Buttons (§4.7 & §6) -->
+            <div class="d-flex flex-column gap-2 mt-auto pt-3 border-top">
+                <!-- Direct WhatsApp Order -->
+                <a id="btnOrderWhatsApp" href="@defaultWhatsAppLink" target="_blank" class="btn-whatsapp shadow">
+                    <i class="bi bi-whatsapp fs-5"></i>
+                    <span>@Localizer["OrderWhatsApp"]</span>
+                </a>
+
+                <!-- Messenger & Callback Row -->
+                <div class="row g-2">
+                    <div class="col-sm-6">
+                        <a href="@messengerUrl" target="_blank" class="btn-messenger w-100">
+                            <i class="bi bi-messenger"></i>
+                            <span>@Localizer["OrderMessenger"]</span>
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-outline-dark w-100 fw-bold py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#callbackRequestModal">
+                            <i class="bi bi-telephone-inbound me-1"></i> @Localizer["RequestCallback"]
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center gap-3 text-muted small mt-2">
+                    <span><i class="bi bi-shield-check text-success me-1"></i> @(isArabic ? "معاينة قبل الاستلام" : "Inspect before delivery")</span>
+                    <span>•</span>
+                    <span><i class="bi bi-truck text-primary me-1"></i> @(isArabic ? "شحن سريع" : "Fast Shipping")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Request Callback / Hold Modal -->
+<div class="modal fade" id="callbackRequestModal" tabindex="-1" aria-labelledby="callbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="callbackModalLabel">
+                    <i class="bi bi-bookmark-heart text-danger me-2"></i> @Localizer["RequestCallback"]
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="Contact" asp-action="Submit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="productId" value="@Model.Id" />
+                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+
+                <div class="modal-body py-3">
+                    <p class="text-muted small mb-3">
+                        @(isArabic ? "اترك بياناتك وسيقوم ممثل خدمة العملاء بالتواصل معك لتأكيد المقاس وتفاصيل الشحن." : "Leave your details and our team will contact you to confirm size and shipping details.")
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">@(isArabic ? "الاسم الكريم" : "Your Name") *</label>
+                        <input type="text" name="customerName" class="form-control" required placeholder="Ahmed Ali" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">@(isArabic ? "رقم الهاتف / واتساب" : "Phone / WhatsApp Number") *</label>
+                        <input type="tel" name="phoneNumber" class="form-control" required placeholder="010XXXXXXXX" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">@(isArabic ? "طريقة التواصل المفضلة" : "Preferred Channel")</label>
+                        <select name="preferredChannel" class="form-select">
+                            <option value="@ContactChannel.WhatsApp">WhatsApp</option>
+                            <option value="@ContactChannel.Phone">Phone Call</option>
+                            <option value="@ContactChannel.Messenger">Messenger</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">@(isArabic ? "ملاحظة أو مقاس مطلوب (اختياري)" : "Message / Preferred Size (Optional)")</label>
+                        <textarea name="message" class="form-control" rows="2" placeholder="@(isArabic ? "مثال: مقاس XL لون أبيض" : "e.g. Size L, White color")"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">@(isArabic ? "إلغاء" : "Cancel")</button>
+                    <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">@(isArabic ? "إرسال الطلب" : "Send Request")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Related Products Rail -->
+@if (relatedProducts.Any())
+{
+    <section class="mt-5 pt-4 border-top">
+        <h4 class="fw-bold mb-3">@(isArabic ? "موديلات قد تعجبك أيضاً" : "You Might Also Like")</h4>
+        <div class="row row-cols-2 row-cols-md-4 g-3">
+            @foreach (var item in relatedProducts)
+            {
+                <div class="col">
+                    <div class="product-card">
+                        <div class="product-card-img-wrapper">
+                            @if (item.DiscountPercentage.HasValue)
+                            {
+                                <span class="discount-badge">-@item.DiscountPercentage%</span>
+                            }
+                            <img src="@(item.PrimaryImageUrl ?? "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&auto=format&fit=crop&q=80")" 
+                                 alt="@(isArabic ? item.ArabicName : item.Name)" 
+                                 class="product-card-img" />
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h6 class="fw-bold mb-1 text-truncate">@(isArabic ? item.ArabicName : item.Name)</h6>
+                            <div class="price-block mt-auto">
+                                <span class="price-current">@((item.DiscountedPrice ?? item.Price).ToString("N0")) @Localizer["Currency"]</span>
+                            </div>
+                            <a asp-controller="Catalog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark mt-2">
+                                @(isArabic ? "عرض" : "View")
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}

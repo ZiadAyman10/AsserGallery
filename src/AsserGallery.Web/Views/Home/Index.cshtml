@@ -1,8 +1,205 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model IReadOnlyList<ProductDto>
+@using System.Globalization
+@{
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = isArabic ? "الرئيسية" : "Home";
+    var categories = ViewBag.Categories as List<CategoryDto> ?? new List<CategoryDto>();
+    var latestProducts = ViewBag.LatestProducts as IReadOnlyList<ProductDto> ?? new List<ProductDto>();
+    var settings = ViewBag.Settings as StoreSettingsDto;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Banner (§6 Visual Reference) -->
+<section class="hero-banner shadow-lg">
+    <div class="row align-items-center">
+        <div class="col-lg-7 text-center text-lg-start mb-4 mb-lg-0">
+            <span class="badge bg-white text-dark px-3 py-2 rounded-pill fw-bold mb-3 shadow-sm">
+                ✨ @(isArabic ? "تشكيلة صيف / شتاء الحصرية" : "Exclusive New Season Collection")
+            </span>
+            <h1 class="display-4 fw-extrabold mb-3 brand-font text-white">
+                @(isArabic ? settings?.StoreArabicName ?? "آسر جاليري" : settings?.StoreName ?? "Asser Gallery")
+            </h1>
+            <p class="lead text-light mb-4 opacity-90">
+                @Localizer["ExploreCollection"]
+            </p>
+            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                <a asp-controller="Catalog" asp-action="Index" class="btn btn-light btn-lg px-4 py-2 rounded-pill fw-bold text-dark shadow">
+                    <i class="bi bi-bag-fill me-2"></i> @(isArabic ? "تسوق الآن" : "Shop Collection")
+                </a>
+                <a asp-controller="Contact" asp-action="Index" class="btn btn-outline-light btn-lg px-4 py-2 rounded-pill fw-bold">
+                    <i class="bi bi-chat-dots me-2"></i> @Localizer["ContactUs"]
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-5 text-center">
+            <div class="position-relative d-inline-block">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80" 
+                     alt="Fashion Hero" 
+                     class="img-fluid rounded-4 shadow-lg border border-2 border-white/20" 
+                     style="max-height: 380px; object-fit: cover;" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Rail -->
+@if (categories.Any())
+{
+    <section class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="fw-bold mb-0">@Localizer["Categories"]</h3>
+            <a asp-controller="Catalog" asp-action="Index" class="text-decoration-none fw-semibold text-muted">
+                @(isArabic ? "عرض الكل" : "View All") <i class="bi bi-arrow-@(isArabic ? "left" : "right")"></i>
+            </a>
+        </div>
+        <div class="d-flex gap-3 overflow-x-auto pb-2">
+            @foreach (var cat in categories)
+            {
+                <a asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@cat.Id" 
+                   class="card-custom text-decoration-none p-3 text-center flex-shrink-0 d-flex flex-column align-items-center justify-content-center" 
+                   style="min-width: 140px; min-height: 120px;">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 mb-2 text-primary">
+                        <i class="bi bi-tags-fill fs-4"></i>
+                    </div>
+                    <span class="fw-bold text-main small">@(isArabic ? cat.ArabicName : cat.Name)</span>
+                    <span class="text-muted small">@cat.ProductCount @(isArabic ? "منتج" : "items")</span>
+                </a>
+            }
+        </div>
+    </section>
+}
+
+<!-- Featured Products Horizontal Rail (§6 Hanger Treatment) -->
+<section class="mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+            <h3 class="fw-bold mb-1">@Localizer["FeaturedItems"]</h3>
+            <p class="text-muted small mb-0">@(isArabic ? "أفضل اختياراتنا والأكثر طلباً" : "Handpicked top choices and customer favorites")</p>
+        </div>
+        <a asp-controller="Catalog" asp-action="Index" class="text-decoration-none fw-semibold text-muted">
+            @(isArabic ? "استعراض المزيد" : "Explore More") <i class="bi bi-arrow-@(isArabic ? "left" : "right")"></i>
+        </a>
+    </div>
+
+    <div class="product-rail">
+        @foreach (var product in Model)
+        {
+            <div style="min-width: 250px; max-width: 260px;" class="flex-shrink-0">
+                <div class="product-card">
+                    <!-- Image with Discount Ribbon -->
+                    <div class="product-card-img-wrapper">
+                        @if (product.DiscountPercentage.HasValue)
+                        {
+                            <span class="discount-badge">-@product.DiscountPercentage% OFF</span>
+                        }
+                        <img src="@(product.PrimaryImageUrl ?? "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&auto=format&fit=crop&q=80")" 
+                             alt="@(isArabic ? product.ArabicName : product.Name)" 
+                             class="product-card-img" />
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="p-3 d-flex flex-column flex-grow-1">
+                        <span class="text-muted small">@(isArabic ? product.SubCategoryArabicName : product.SubCategoryName)</span>
+                        <h6 class="fw-bold mb-1 text-truncate" title="@(isArabic ? product.ArabicName : product.Name)">
+                            @(isArabic ? product.ArabicName : product.Name)
+                        </h6>
+
+                        <!-- Color Swatch Dots -->
+                        <div class="color-swatches-row">
+                            @foreach (var variant in product.Variants.Take(5))
+                            {
+                                <span class="color-dot" style="background-color: @variant.ColorHexCode;" title="@(isArabic ? variant.ColorArabicName : variant.ColorName)"></span>
+                            }
+                            @if (product.Variants.Count > 5)
+                            {
+                                <span class="text-muted small ms-1">+@(product.Variants.Count - 5)</span>
+                            }
+                        </div>
+
+                        <!-- Price & CTA -->
+                        <div class="mt-auto pt-2 d-flex align-items-center justify-content-between">
+                            <div class="price-block">
+                                <span class="price-current">@((product.DiscountedPrice ?? product.Price).ToString("N0")) @Localizer["Currency"]</span>
+                                @if (product.DiscountedPrice.HasValue)
+                                {
+                                    <span class="price-original">@product.Price.ToString("N0")</span>
+                                }
+                            </div>
+                        </div>
+
+                        <a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id" class="btn btn-sm btn-primary-action mt-2">
+                            @(isArabic ? "تفاصيل الموديل" : "View Details")
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Promotional Offer Banner Card (§6) -->
+<section class="mb-5">
+    <div class="promo-offer-card shadow">
+        <div>
+            <span class="badge bg-white text-danger fw-bold mb-2">LIMITED TIME DEAL</span>
+            <h3 class="fw-bold text-white mb-1">@(isArabic ? "احصل على خصم فوري يصل إلى 30% على التشكيلة المختارة!" : "Get up to 30% OFF on selected summer arrivals!")</h3>
+            <p class="text-white text-opacity-90 mb-0 small">@(isArabic ? "التوصيل متاح لجميع المحافظات والدفع عند الاستلام والمعاينة." : "Direct shipping to all cities with cash on delivery & preview before receiving.")</p>
+        </div>
+        <a asp-controller="Catalog" asp-action="Index" class="btn btn-light px-4 py-2 rounded-pill fw-bold text-danger text-nowrap ms-3 d-none d-sm-inline-block">
+            @(isArabic ? "تصفح العروض" : "Browse Deals")
+        </a>
+    </div>
+</section>
+
+<!-- Latest Arrivals Grid -->
+@if (latestProducts.Any())
+{
+    <section class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="fw-bold mb-0">@(isArabic ? "وصل حديثاً" : "New Arrivals")</h3>
+            <a asp-controller="Catalog" asp-action="Index" class="text-decoration-none fw-semibold text-muted">
+                @(isArabic ? "عرض كل المنتجات" : "View All Products") <i class="bi bi-arrow-@(isArabic ? "left" : "right")"></i>
+            </a>
+        </div>
+
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4">
+            @foreach (var prod in latestProducts)
+            {
+                <div class="col">
+                    <div class="product-card">
+                        <div class="product-card-img-wrapper">
+                            @if (prod.DiscountPercentage.HasValue)
+                            {
+                                <span class="discount-badge">-@prod.DiscountPercentage% OFF</span>
+                            }
+                            <img src="@(prod.PrimaryImageUrl ?? "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&auto=format&fit=crop&q=80")" 
+                                 alt="@(isArabic ? prod.ArabicName : prod.Name)" 
+                                 class="product-card-img" />
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <span class="text-muted small">@(isArabic ? prod.SubCategoryArabicName : prod.SubCategoryName)</span>
+                            <h6 class="fw-bold mb-1 text-truncate" title="@(isArabic ? prod.ArabicName : prod.Name)">
+                                @(isArabic ? prod.ArabicName : prod.Name)
+                            </h6>
+                            <div class="color-swatches-row">
+                                @foreach (var variant in prod.Variants.Take(4))
+                                {
+                                    <span class="color-dot" style="background-color: @variant.ColorHexCode;" title="@(isArabic ? variant.ColorArabicName : variant.ColorName)"></span>
+                                }
+                            </div>
+                            <div class="price-block mt-auto pt-2">
+                                <span class="price-current">@((prod.DiscountedPrice ?? prod.Price).ToString("N0")) @Localizer["Currency"]</span>
+                                @if (prod.DiscountedPrice.HasValue)
+                                {
+                                    <span class="price-original">@prod.Price.ToString("N0")</span>
+                                }
+                            </div>
+                            <a asp-controller="Catalog" asp-action="Details" asp-route-id="@prod.Id" class="btn btn-sm btn-primary-action mt-2">
+                                @(isArabic ? "تفاصيل" : "Details")
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}
