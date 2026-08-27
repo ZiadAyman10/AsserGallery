@@ -1,0 +1,59 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Admin Login";
+    var returnUrl = ViewBag.ReturnUrl as string;
+}
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card-custom p-4 p-md-5 shadow-lg">
+            <div class="text-center mb-4">
+                <span class="badge-logo fs-4 px-3 py-2 d-inline-block mb-2">AG</span>
+                <h4 class="fw-bold mb-1">Admin Portal</h4>
+                <p class="text-muted small">Sign in to manage inventory, sales & orders</p>
+            </div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger py-2 small mb-3">
+                    <ul class="mb-0 ps-3">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-area="Admin" asp-controller="Account" asp-action="Login" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+                        <input type="email" name="email" class="form-control border-start-0" required placeholder="admin@assergallery.com" value="admin@assergallery.com" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-lock text-muted"></i></span>
+                        <input type="password" name="password" class="form-control border-start-0" required placeholder="••••••••" value="Admin@123456" />
+                    </div>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" value="true" checked />
+                    <label class="form-check-label small" for="rememberMe">Remember me</label>
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100 py-2 rounded-pill fw-bold shadow">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Log In to Dashboard
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

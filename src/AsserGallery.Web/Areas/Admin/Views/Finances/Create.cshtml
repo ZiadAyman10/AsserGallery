@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = "Record Financial Transaction";
+    var products = ViewBag.Products as IReadOnlyList<ProductDto> ?? new List<ProductDto>();
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Record Financial Transaction</h4>
+        <p class="text-muted small mb-0">Add an income or operational expense (packaging, ads, stock purchase, etc.).</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
+        <i class="bi bi-arrow-left me-1"></i> Back to Finances
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card-custom p-4 p-md-5 shadow-sm">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Transaction Type *</label>
+                        <select name="type" class="form-select" required>
+                            <option value="@TransactionType.Expense">Expense (مصروفات)</option>
+                            <option value="@TransactionType.Income">Income (إيراد)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Category *</label>
+                        <select name="category" class="form-select" required>
+                            <option value="StockPurchase">Stock Purchase (مشتريات بضاعة وقماش)</option>
+                            <option value="Packaging">Packaging (أكياس وتغليف)</option>
+                            <option value="Advertising">Advertising (إعلانات وفيسبوك)</option>
+                            <option value="Delivery">Delivery & Logistics (شحن ومواصلات)</option>
+                            <option value="SalesRevenue">Sales Revenue (إيراد مبيعات)</option>
+                            <option value="Other">Other Expenses (أخرى)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label class="form-label small fw-bold">Title / Purpose *</label>
+                        <input type="text" name="title" class="form-control" required placeholder="e.g. 500 Custom Glossy Bags" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">Amount (EGP) *</label>
+                        <input type="number" step="0.5" name="amount" class="form-control" required placeholder="1500" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Date</label>
+                        <input type="datetime-local" name="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Linked Product (Optional)</label>
+                        <select name="linkedProductId" class="form-select">
+                            <option value="">None (General Store Expense)</option>
+                            @foreach (var p in products)
+                            {
+                                <option value="@p.Id">@p.Name (@p.ArabicName)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Description / Receipt Notes</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Supplier name, invoice details..."></textarea>
+                    </div>
+
+                    <div class="col-12 mt-4 text-end">
+                        <button type="submit" class="btn btn-dark btn-lg rounded-pill px-5 fw-bold shadow">
+                            <i class="bi bi-check-circle me-1"></i> Save Transaction
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

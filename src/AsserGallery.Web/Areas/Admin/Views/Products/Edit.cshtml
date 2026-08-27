@@ -1,0 +1,195 @@
+@model ProductDto
+@{
+    ViewData["Title"] = $"Edit — {Model.Name}";
+    var categories = ViewBag.Categories as List<CategoryDto> ?? new List<CategoryDto>();
+    var colors = ViewBag.Colors as List<ColorDto> ?? new List<ColorDto>();
+    var variantMap = Model.Variants.ToDictionary(v => v.ColorId, v => v.Quantity);
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Edit Product</h4>
+        <p class="text-muted small mb-0">Update @Model.Name (@Model.ArabicName) and manage images.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Left Column: Product Info & Variants -->
+    <div class="col-lg-8">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <div class="card-custom p-4 mb-4">
+                <h5 class="fw-bold mb-3 border-bottom pb-2">1. Product Information</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Product Name (English) *</label>
+                        <input type="text" name="name" class="form-control" value="@Model.Name" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">اسم المنتج (بالعربي) *</label>
+                        <input type="text" name="arabicName" class="form-control text-end" value="@Model.ArabicName" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Regular Price (EGP) *</label>
+                        <input type="number" step="1" name="price" class="form-control" value="@Model.Price" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Discounted Price (Optional)</label>
+                        <input type="number" step="1" name="discountedPrice" class="form-control" value="@Model.DiscountedPrice" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">SubCategory *</label>
+                        <select name="subCategoryId" class="form-select" required>
+                            @foreach (var cat in categories)
+                            {
+                                <optgroup label="@cat.Name (@cat.ArabicName)">
+                                    @foreach (var sub in cat.SubCategories)
+                                    {
+                                        <option value="@sub.Id" selected="@(Model.SubCategoryId == sub.Id)">@sub.Name (@sub.ArabicName)</option>
+                                    }
+                                </optgroup>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 d-flex align-items-center gap-4 pt-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="isFeatured" id="isFeatured" value="true" checked="@Model.IsFeatured" />
+                            <label class="form-check-label small fw-bold" for="isFeatured">Featured in Home Rail</label>
+                        </div>
+                        <div>
+                            <label class="form-label small fw-bold mb-0 me-2">Display Order:</label>
+                            <input type="number" name="displayOrder" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="@Model.DisplayOrder" />
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Description (English)</label>
+                        <textarea name="description" class="form-control" rows="3">@Model.Description</textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">الوصف والتفاصيل (بالعربي)</label>
+                        <textarea name="arabicDescription" class="form-control text-end" rows="3">@Model.ArabicDescription</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Color Variants & Stock Quantities -->
+            <div class="card-custom p-4 mb-4">
+                <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
+                    <h5 class="fw-bold mb-0">2. Color Variants & Stock Quantities</h5>
+                    <span class="badge bg-primary">Total: @Model.TotalStock pcs</span>
+                </div>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    @for (int i = 0; i < colors.Count; i++)
+                    {
+                        var c = colors[i];
+                        var currentQty = variantMap.GetValueOrDefault(c.Id, 0);
+                        <div class="col">
+                            <div class="p-3 border rounded-3 d-flex align-items-center justify-content-between @(currentQty > 0 ? "border-primary border-opacity-50" : "")">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="color-dot" style="background-color: @c.HexCode; width: 20px; height: 20px;"></span>
+                                    <div>
+                                        <div class="fw-bold small">@c.Name</div>
+                                        <div class="text-muted extra-small">@c.ArabicName</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="colorIds" value="@c.Id" />
+                                <div style="width: 80px;">
+                                    <input type="number" name="quantities" class="form-control form-control-sm text-center" min="0" value="@currentQty" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">
+                        <i class="bi bi-save me-1"></i> Update Product & Stock
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Right Column: Image Gallery & Management -->
+    <div class="col-lg-4">
+        <div class="card-custom p-4 mb-4">
+            <h5 class="fw-bold mb-3 border-bottom pb-2">3. Product Images Gallery</h5>
+
+            <div class="d-flex flex-column gap-3 mb-4">
+                @foreach (var img in Model.Images)
+                {
+                    <div class="p-2 border rounded-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="@img.ImageUrl" alt="Product photo" class="rounded object-fit-cover" style="width: 60px; height: 60px;" />
+                            <div>
+                                <span class="badge @(img.ImageType == ImageType.AiEnhanced ? "bg-warning text-dark" : "bg-info text-dark") small">
+                                    @(img.ImageType == ImageType.AiEnhanced ? "AI Studio" : "Real Photo")
+                                </span>
+                                @if (img.IsPrimary)
+                                {
+                                    <span class="badge bg-dark small ms-1">Primary</span>
+                                }
+                            </div>
+                        </div>
+                        <form asp-action="DeleteImage" method="post" onsubmit="return confirm('Delete this image?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="imageId" value="@img.Id" />
+                            <input type="hidden" name="productId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+
+            <!-- Upload Additional Image -->
+            <div class="p-3 bg-light rounded-3 border">
+                <h6 class="fw-bold mb-2">Upload Additional Image</h6>
+                <form asp-action="AddImage" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    
+                    <div class="mb-2">
+                        <label class="form-label extra-small fw-bold">Select File</label>
+                        <input type="file" name="file" class="form-control form-control-sm" accept="image/*" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label extra-small fw-bold">Or Image URL</label>
+                        <input type="url" name="imageUrl" class="form-control form-control-sm" placeholder="https://..." />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label extra-small fw-bold">Image Type</label>
+                        <select name="imageType" class="form-select form-select-sm">
+                            <option value="@ImageType.AiEnhanced">AI Studio View</option>
+                            <option value="@ImageType.Original">Real Phone Photo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="isPrimary" id="isPrimary" value="true" />
+                        <label class="form-check-label extra-small" for="isPrimary">Set as primary catalog photo</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-sm btn-dark w-100 rounded-pill fw-bold">
+                        <i class="bi bi-cloud-arrow-up me-1"></i> Upload Image
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

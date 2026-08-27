@@ -1,0 +1,171 @@
+@{
+    ViewData["Title"] = "Register New Sale";
+    var products = ViewBag.Products as IReadOnlyList<ProductDto> ?? new List<ProductDto>();
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Register New Sale</h4>
+        <p class="text-muted small mb-0">Record a confirmed customer order. Selected variant stock will auto-decrement.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
+        <i class="bi bi-arrow-left me-1"></i> Back to Sales
+    </a>
+</div>
+
+<form asp-action="Create" method="post" id="registerSaleForm">
+    @Html.AntiForgeryToken()
+    <div class="row g-4">
+        <!-- Customer & Order Meta -->
+        <div class="col-lg-4">
+            <div class="card-custom p-4 mb-4">
+                <h5 class="fw-bold mb-3 border-bottom pb-2">Customer & Details</h5>
+                
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Customer Name</label>
+                    <input type="text" name="customerName" class="form-control" placeholder="e.g. Mahmoud Hassan" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Customer Phone</label>
+                    <input type="tel" name="customerPhone" class="form-control" placeholder="010XXXXXXXX" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Sale Date</label>
+                    <input type="datetime-local" name="saleDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Notes / Shipping Info</label>
+                    <textarea name="notes" class="form-control" rows="3" placeholder="Courier details, payment method, address..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items Selector -->
+        <div class="col-lg-8">
+            <div class="card-custom p-4 mb-4">
+                <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
+                    <h5 class="fw-bold mb-0">Order Items</h5>
+                    <button type="button" class="btn btn-sm btn-dark rounded-pill" onclick="addSaleRow()">
+                        <i class="bi bi-plus-lg me-1"></i> Add Another Item
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-middle" id="saleItemsTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 45%;">Product & Color Variant</th>
+                                <th style="width: 20%;">Qty</th>
+                                <th style="width: 25%;">Unit Price (EGP)</th>
+                                <th style="width: 10%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="saleItemsBody">
+                            <tr class="sale-item-row">
+                                <td>
+                                    <select name="variantIds" class="form-select variant-select" required onchange="onVariantSelected(this)">
+                                        <option value="">Select Variant (Stock)...</option>
+                                        @foreach (var p in products)
+                                        {
+                                            <optgroup label="@p.Name (@p.ArabicName)">
+                                                @foreach (var v in p.Variants.Where(v => v.Quantity > 0))
+                                                {
+                                                    <option value="@v.Id" data-prodid="@p.Id" data-price="@(p.DiscountedPrice ?? p.Price)" data-stock="@v.Quantity">
+                                                        @v.ColorName (@v.ColorArabicName) — Stock: @v.Quantity pcs
+                                                    </option>
+                                                }
+                                            </optgroup>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="productIds" class="hidden-prod-id" value="" />
+                                </td>
+                                <td>
+                                    <input type="number" name="quantities" class="form-control text-center item-qty" min="1" value="1" required onchange="calcTotal()" />
+                                </td>
+                                <td>
+                                    <input type="number" step="1" name="unitPrices" class="form-control item-price" value="0" required onchange="calcTotal()" />
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeSaleRow(this)">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Total Amount Summary Card -->
+                <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between mt-3">
+                    <span class="fs-5 fw-bold">Grand Total:</span>
+                    <span class="fs-4 fw-extrabold text-success" id="grandTotalDisplay">0 EGP</span>
+                </div>
+
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 fw-bold shadow">
+                        <i class="bi bi-check-circle-fill me-2"></i> Confirm Sale & Update Inventory
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+    function onVariantSelected(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const row = selectElement.closest('tr');
+        const priceInput = row.querySelector('.item-price');
+        const prodIdInput = row.querySelector('.hidden-prod-id');
+        const qtyInput = row.querySelector('.item-qty');
+
+        if (selectedOption && selectedOption.value) {
+            const price = selectedOption.getAttribute('data-price') || '0';
+            const prodId = selectedOption.getAttribute('data-prodid') || '0';
+            const stock = parseInt(selectedOption.getAttribute('data-stock') || '1');
+
+            priceInput.value = price;
+            prodIdInput.value = prodId;
+            qtyInput.max = stock;
+        }
+        calcTotal();
+    }
+
+    function addSaleRow() {
+        const firstRow = document.querySelector('.sale-item-row');
+        const newRow = firstRow.cloneNode(true);
+        newRow.querySelector('.variant-select').selectedIndex = 0;
+        newRow.querySelector('.item-qty').value = 1;
+        newRow.querySelector('.item-price').value = 0;
+        newRow.querySelector('.hidden-prod-id').value = '';
+        document.getElementById('saleItemsBody').appendChild(newRow);
+        calcTotal();
+    }
+
+    function removeSaleRow(btn) {
+        const rows = document.querySelectorAll('.sale-item-row');
+        if (rows.length > 1) {
+            btn.closest('tr').remove();
+            calcTotal();
+        } else {
+            alert('At least one item is required.');
+        }
+    }
+
+    function calcTotal() {
+        let total = 0;
+        document.querySelectorAll('.sale-item-row').forEach(row => {
+            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.item-price').value) || 0;
+            total += (qty * price);
+        });
+        document.getElementById('grandTotalDisplay').innerText = total.toLocaleString() + ' EGP';
+    }
+
+    document.addEventListener('DOMContentLoaded', calcTotal);
+</script>
+}

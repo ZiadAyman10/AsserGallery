@@ -1,0 +1,93 @@
+@model SaleDto
+@{
+    ViewData["Title"] = $"Invoice — {Model.SaleNumber}";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Sale Receipt</h4>
+        <p class="text-muted small mb-0">Invoice #@Model.SaleNumber</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i> Back to Sales
+        </a>
+        <button type="button" class="btn btn-dark btn-sm rounded-pill" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> Print Invoice
+        </button>
+    </div>
+</div>
+
+<div class="card-custom p-4 p-md-5 shadow-sm max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start border-bottom pb-4 mb-4">
+        <div>
+            <span class="badge-logo fs-4 px-3 py-1 d-inline-block mb-2">AG</span>
+            <h4 class="fw-bold mb-0">Asser Gallery</h4>
+            <p class="text-muted small mb-0">Cairo, Egypt • WhatsApp Order</p>
+        </div>
+        <div class="text-end">
+            <h5 class="fw-bold text-success mb-1">PAID / CONFIRMED</h5>
+            <div class="small text-muted">Invoice: <strong>@Model.SaleNumber</strong></div>
+            <div class="small text-muted">Date: <strong>@Model.SaleDate.ToString("dd MMM yyyy, hh:mm tt")</strong></div>
+        </div>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6">
+            <span class="text-muted small d-block">Billed To:</span>
+            <h6 class="fw-bold mb-1">@(Model.CustomerName ?? "Walk-in Customer")</h6>
+            <p class="text-muted small mb-0">Phone: @(Model.CustomerPhone ?? "—")</p>
+        </div>
+        <div class="col-sm-6 text-sm-end">
+            <span class="text-muted small d-block">Order Notes:</span>
+            <p class="small mb-0">@(Model.Notes ?? "Standard customer delivery.")</p>
+        </div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Item Description</th>
+                    <th>Color Variant</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-end">Unit Price</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.ProductName</strong>
+                            <div class="text-muted extra-small">@item.ProductArabicName</div>
+                        </td>
+                        <td>
+                            <span class="d-inline-flex align-items-center gap-1">
+                                <span class="color-dot" style="width: 10px; height: 10px; background-color: @item.ColorHexCode;"></span>
+                                <span>@item.ColorName (@item.ColorArabicName)</span>
+                            </span>
+                        </td>
+                        <td class="text-center">@item.Quantity</td>
+                        <td class="text-end">@item.UnitPrice.ToString("N0") EGP</td>
+                        <td class="text-end fw-bold">@item.SubTotal.ToString("N0") EGP</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4" class="text-end fs-5">Total Amount:</th>
+                    <th class="text-end fs-5 text-success">@Model.TotalAmount.ToString("N0") EGP</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="text-center text-muted small pt-3 border-top">
+        Thank you for shopping with Asser Gallery! All items are quality guaranteed.
+    </div>
+</div>
