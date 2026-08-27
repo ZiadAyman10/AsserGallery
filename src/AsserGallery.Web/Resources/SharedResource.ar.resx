@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppName" xml:space="preserve">
+    <value>آسر جاليري</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>الكتالوج والمنتجات</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>تواصل معنا</value>
+  </data>
+  <data name="AdminDashboard" xml:space="preserve">
+    <value>لوحة تحكم الإدارة</value>
+  </data>
+  <data name="Discover" xml:space="preserve">
+    <value>اكتشف جديدنا</value>
+  </data>
+  <data name="ExploreCollection" xml:space="preserve">
+    <value>استكشف أحدث تشكيلة ملابس مختارة بعناية</value>
+  </data>
+  <data name="FeaturedItems" xml:space="preserve">
+    <value>أبرز الموديلات المميزة</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>الأقسام</value>
+  </data>
+  <data name="SpecialOffers" xml:space="preserve">
+    <value>أقوى العروض والخصومات</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>متوفر</value>
+  </data>
+  <data name="LimitedStock" xml:space="preserve">
+    <value>كمية محدودة</value>
+  </data>
+  <data name="OutOfStock" xml:space="preserve">
+    <value>نفدت الكمية</value>
+  </data>
+  <data name="OrderWhatsApp" xml:space="preserve">
+    <value>طلب مباشر عبر واتساب</value>
+  </data>
+  <data name="OrderMessenger" xml:space="preserve">
+    <value>مراسلة عبر ماسنجر</value>
+  </data>
+  <data name="RequestCallback" xml:space="preserve">
+    <value>طلب حجز / معاودة اتصال</value>
+  </data>
+  <data name="OriginalPhoto" xml:space="preserve">
+    <value>الصورة الواقعية (تصوير الموبايل)</value>
+  </data>
+  <data name="AiEnhancedPhoto" xml:space="preserve">
+    <value>تصوير ستوديو (محسن بالذكاء الاصطناعي)</value>
+  </data>
+  <data name="Colors" xml:space="preserve">
+    <value>الألوان المتوفرة</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>السعر</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>ج.م</value>
+  </data>
+  <data name="AllCategories" xml:space="preserve">
+    <value>جميع الأقسام</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>ابحث عن قميص، فستان، جاكيت...</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>تصفية</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>إلغاء الفلاتر</value>
+  </data>
+  <data name="InStockOnly" xml:space="preserve">
+    <value>المتوفر فقط</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+</root>
