@@ -1,0 +1,58 @@
+using System.Net;
+using FluentAssertions;
+using Xunit;
+
+namespace AsserGallery.Web.Tests;
+
+public class PublicApiAndControllerTests : IClassFixture<CustomWebApplicationFactory>
+{
+    private readonly HttpClient _client;
+
+    public PublicApiAndControllerTests(CustomWebApplicationFactory factory)
+    {
+        _client = factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+    }
+
+    [Fact]
+    public async Task Get_ApiProductById_WithValidId_ShouldReturnProduct()
+    {
+        var response = await _client.GetAsync("/api/products/1");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var json = await response.Content.ReadAsStringAsync();
+        json.Should().Contain("id");
+        json.Should().Contain("price");
+    }
+
+    [Fact]
+    public async Task Get_ApiProductById_WithInvalidId_ShouldReturnNotFound()
+    {
+        var response = await _client.GetAsync("/api/products/99999");
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Get_ApiColors_ShouldReturnColorsList()
+    {
+        var response = await _client.GetAsync("/api/products/colors");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var json = await response.Content.ReadAsStringAsync();
+        json.Should().Contain("hexCode");
+    }
+
+    [Fact]
+    public async Task Get_Catalog_WithCategoryFilter_ShouldReturnOk()
+    {
+        var response = await _client.GetAsync("/Catalog?categoryId=1");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task Get_Catalog_WithPriceFilter_ShouldReturnOk()
+    {
+        var response = await _client.GetAsync("/Catalog?minPrice=100&maxPrice=1000");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+}

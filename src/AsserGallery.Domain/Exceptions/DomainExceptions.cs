@@ -27,3 +27,19 @@ public class InsufficientStockException : DomainException
         Available = available;
     }
 }
+
+public class NotFoundException : DomainException
+{
+    public NotFoundException(string name, object key)
+        : base($"Entity \"{name}\" ({key}) was not found.")
+    {
+    }
+}
+
+public class ValidationException : DomainException
+{
+    public ValidationException(string message)
+        : base(message)
+    {
+    }
+}
