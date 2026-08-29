@@ -20,7 +20,13 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
 
     public async Task<DashboardSummaryDto> Handle(GetDashboardSummaryQuery request, CancellationToken cancellationToken)
     {
-        var products = await _context.Products.AsNoTracking().ToListAsync(cancellationToken);
+        var products = await _context.Products
+            .Include(p => p.SubCategory)
+                .ThenInclude(sc => sc!.Category)
+            .Include(p => p.Variants)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
         var totalProducts = products.Count;
         var inStock = products.Count(p => p.Status == ProductStatus.Available);
         var limitedStock = products.Count(p => p.Status == ProductStatus.LimitedStock);
@@ -56,6 +62,56 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
             .Take(5)
             .ToListAsync(cancellationToken);
 
+        // 1. Calculate Monthly Revenue & Expense Trends (Last 6 months)
+        var monthlyTrends = new List<MonthlyTrendDto>();
+        var now = DateTime.UtcNow;
+        for (int i = 5; i >= 0; i--)
+        {
+            var targetMonth = now.AddMonths(-i);
+            var year = targetMonth.Year;
+            var month = targetMonth.Month;
+            var monthLabel = targetMonth.ToString("MMM yyyy");
+
+            var rev = sales
+                .Where(s => s.SaleDate.Year == year && s.SaleDate.Month == month)
+                .Sum(s => s.TotalAmount);
+
+            var exp = transactions
+                .Where(t => t.Type == TransactionType.Expense && t.Date.Year == year && t.Date.Month == month)
+                .Sum(t => t.Amount);
+
+            monthlyTrends.Add(new MonthlyTrendDto(monthLabel, rev, exp, rev - exp));
+        }
+
+        // 2. Category Breakdowns
+        var categoryBreakdowns = products
+            .GroupBy(p => p.SubCategory?.Category?.Name ?? "Uncategorized")
+            .Select(g => new CategoryBreakdownDto(
+                CategoryName: g.Key,
+                ProductCount: g.Count(),
+                TotalStock: g.Sum(p => p.GetTotalStock())
+            ))
+            .OrderByDescending(c => c.ProductCount)
+            .ToList();
+
+        // 3. Top Selling Products
+        var allSaleItems = await _context.SaleItems.AsNoTracking().ToListAsync(cancellationToken);
+        var topSellingProducts = allSaleItems
+            .GroupBy(i => i.ProductId)
+            .Select(g =>
+            {
+                var prod = products.FirstOrDefault(p => p.Id == g.Key);
+                return new TopSellingProductDto(
+                    ProductId: g.Key,
+                    ProductName: prod?.Name ?? $"Product #{g.Key}",
+                    QuantitySold: g.Sum(i => i.Quantity),
+                    TotalRevenue: g.Sum(i => i.Quantity * i.UnitPrice)
+                );
+            })
+            .OrderByDescending(t => t.TotalRevenue)
+            .Take(5)
+            .ToList();
+
         return new DashboardSummaryDto(
             TotalProductsCount: totalProducts,
             InStockProductsCount: inStock,
@@ -67,7 +123,10 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
             NetProfit: netProfit,
             PendingCustomerRequestsCount: pendingRequests,
             RecentSales: recentSales,
-            RecentRequests: recentRequests.Select(r => r.ToDto()).ToList()
+            RecentRequests: recentRequests.Select(r => r.ToDto()).ToList(),
+            MonthlyTrends: monthlyTrends,
+            CategoryBreakdowns: categoryBreakdowns,
+            TopSellingProducts: topSellingProducts
         );
     }
 }
