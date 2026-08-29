@@ -9,5 +9,6 @@
     <Project Path="src/AsserGallery.Tests/AsserGallery.Application.Tests/AsserGallery.Application.Tests.csproj" />
     <Project Path="src/AsserGallery.Tests/AsserGallery.Domain.Tests/AsserGallery.Domain.Tests.csproj" />
     <Project Path="src/AsserGallery.Tests/AsserGallery.Infrastructure.Tests/AsserGallery.Infrastructure.Tests.csproj" />
+    <Project Path="src/AsserGallery.Tests/AsserGallery.Web.Tests/AsserGallery.Web.Tests.csproj" />
   </Folder>
 </Solution>
