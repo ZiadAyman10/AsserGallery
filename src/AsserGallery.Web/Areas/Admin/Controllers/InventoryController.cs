@@ -28,4 +28,11 @@ public class InventoryController : Controller
 
         return View(products.Items);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportCsv(int? categoryId = null, string? search = null)
+    {
+        var result = await _mediator.Send(new ExportInventoryQuery(CategoryId: categoryId, Search: search));
+        return File(result.Content, result.ContentType, result.FileName);
+    }
 }
