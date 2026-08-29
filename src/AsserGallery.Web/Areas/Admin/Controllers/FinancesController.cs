@@ -74,4 +74,11 @@ public class FinancesController : Controller
         TempData["SuccessMessage"] = "Transaction removed.";
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportCsv(TransactionType? type = null, string? category = null, DateTime? startDate = null, DateTime? endDate = null)
+    {
+        var result = await _mediator.Send(new ExportFinancesQuery(Type: type, Category: category, StartDate: startDate, EndDate: endDate));
+        return File(result.Content, result.ContentType, result.FileName);
+    }
 }
