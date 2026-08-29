@@ -63,9 +63,18 @@ using (var scope = app.Services.CreateScope())
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var configuration = services.GetRequiredService<IConfiguration>();
 
-        logger.LogInformation("Applying EF Core Database Migrations...");
-        await dbContext.Database.MigrateAsync();
-        logger.LogInformation("Database migrated successfully. Seeding initial data...");
+        if (dbContext.Database.IsRelational())
+        {
+            logger.LogInformation("Applying EF Core Database Migrations...");
+            await dbContext.Database.MigrateAsync();
+            logger.LogInformation("Database migrated successfully.");
+        }
+        else
+        {
+            await dbContext.Database.EnsureCreatedAsync();
+        }
+
+        logger.LogInformation("Seeding initial data...");
         await DbInitializer.SeedDatabaseAsync(dbContext, userManager, roleManager, configuration, logger);
         logger.LogInformation("Database seed completed successfully.");
     }
@@ -123,3 +132,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+public partial class Program { }

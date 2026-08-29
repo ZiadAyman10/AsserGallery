@@ -12,9 +12,14 @@
         <h4 class="fw-bold mb-1">Sales & Orders Ledger</h4>
         <p class="text-muted small mb-0">Record orders, auto-reduce inventory, and track customer receipts.</p>
     </div>
-    <a asp-action="Create" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
-        <i class="bi bi-cart-plus me-1"></i> Register New Sale
-    </a>
+    <div class="d-flex gap-2">
+        <a asp-action="ExportCsv" asp-route-search="@search" asp-route-startDate="@(startDate?.ToString("yyyy-MM-dd"))" asp-route-endDate="@(endDate?.ToString("yyyy-MM-dd"))" class="btn btn-outline-success rounded-pill px-3 fw-bold shadow-sm">
+            <i class="bi bi-file-earmark-excel me-1"></i> Export CSV / Excel
+        </a>
+        <a asp-action="Create" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+            <i class="bi bi-cart-plus me-1"></i> Register New Sale
+        </a>
+    </div>
 </div>
 
 <!-- Financial Summary Bar -->
