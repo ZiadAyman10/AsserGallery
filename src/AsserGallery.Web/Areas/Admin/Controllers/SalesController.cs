@@ -99,4 +99,11 @@ public class SalesController : Controller
 
         return View(sale);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportCsv(string? search = null, DateTime? startDate = null, DateTime? endDate = null)
+    {
+        var result = await _mediator.Send(new ExportSalesQuery(StartDate: startDate, EndDate: endDate, Search: search));
+        return File(result.Content, result.ContentType, result.FileName);
+    }
 }
