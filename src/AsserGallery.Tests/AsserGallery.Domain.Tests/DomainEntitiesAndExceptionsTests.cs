@@ -94,6 +94,69 @@ public class DomainEntitiesAndExceptionsTests
     }
 
     [Fact]
+    public void Color_Properties_ShouldHoldHexAndNames()
+    {
+        var color = new Color
+        {
+            Name = "Navy Blue",
+            ArabicName = "كحلي",
+            HexCode = "#000080"
+        };
+
+        color.Name.Should().Be("Navy Blue");
+        color.ArabicName.Should().Be("كحلي");
+        color.HexCode.Should().Be("#000080");
+    }
+
+    [Fact]
+    public void ProductVariant_Properties_ShouldLinkProductAndColor()
+    {
+        var variant = new ProductVariant
+        {
+            ProductId = 1,
+            ColorId = 2,
+            Quantity = 10
+        };
+
+        variant.ProductId.Should().Be(1);
+        variant.ColorId.Should().Be(2);
+        variant.Quantity.Should().Be(10);
+    }
+
+    [Fact]
+    public void ProductImage_Properties_ShouldHoldTypeAndPrimaryFlag()
+    {
+        var img = new ProductImage
+        {
+            ProductId = 1,
+            ImageUrl = "https://example.com/photo.jpg",
+            ImageType = ImageType.AiEnhanced,
+            IsPrimary = true
+        };
+
+        img.ImageUrl.Should().Be("https://example.com/photo.jpg");
+        img.ImageType.Should().Be(ImageType.AiEnhanced);
+        img.IsPrimary.Should().BeTrue();
+    }
+
+    [Fact]
+    public void DomainException_ShouldCreateWithMessageAndInnerException()
+    {
+        var inner = new InvalidOperationException("Inner error");
+        var ex = new DomainException("Domain error", inner);
+
+        ex.Message.Should().Be("Domain error");
+        ex.InnerException.Should().Be(inner);
+    }
+
+    [Fact]
+    public void ValidationException_ShouldCreateWithMessage()
+    {
+        var ex = new ValidationException("Invalid email format");
+        ex.Message.Should().Be("Invalid email format");
+    }
+
+    [Fact]
     public void NotFoundException_ShouldSetEntityAndKeyMessage()
     {
         var ex = new NotFoundException("Product", 42);
@@ -108,5 +171,9 @@ public class DomainEntitiesAndExceptionsTests
         ex.Message.Should().Contain("1");
         ex.Message.Should().Contain("5");
         ex.Message.Should().Contain("2");
+        ex.ProductId.Should().Be(1);
+        ex.VariantId.Should().Be(2);
+        ex.Requested.Should().Be(5);
+        ex.Available.Should().Be(2);
     }
 }

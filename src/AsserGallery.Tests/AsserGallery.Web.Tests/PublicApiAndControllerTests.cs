@@ -57,6 +57,40 @@ public class PublicApiAndControllerTests : IClassFixture<CustomWebApplicationFac
     }
 
     [Fact]
+    public async Task Get_Contact_ShouldReturnOk()
+    {
+        var response = await _client.GetAsync("/Contact");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var html = await response.Content.ReadAsStringAsync();
+        html.Should().Contain("WhatsApp");
+    }
+
+    [Fact]
+    public async Task Get_AdminLogin_ShouldReturnOk()
+    {
+        var response = await _client.GetAsync("/Admin/Account/Login");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var html = await response.Content.ReadAsStringAsync();
+        html.Should().Contain("admin@assergallery.com");
+    }
+
+    [Fact]
+    public async Task Get_AdminAccessDenied_ShouldReturnOk()
+    {
+        var response = await _client.GetAsync("/Admin/Account/AccessDenied");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task Get_SetLanguage_ShouldSetCultureCookieAndRedirect()
+    {
+        var response = await _client.GetAsync("/Culture/SetLanguage?culture=ar&returnUrl=%2F");
+        response.StatusCode.Should().Be(HttpStatusCode.Redirect);
+        response.Headers.Location.Should().Be("/");
+        response.Headers.Should().ContainKey("Set-Cookie");
+    }
+
+    [Fact]
     public async Task Localization_ArabicCulture_ShouldRenderArabicStrings()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/");
