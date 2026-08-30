@@ -30,7 +30,8 @@
         const text = target.value || target.innerText;
         navigator.clipboard.writeText(text).then(() => {
             const origHtml = buttonElement.innerHTML;
-            buttonElement.innerHTML = '✅ Copied!';
+            const isAr = document.documentElement.getAttribute('lang') === 'ar';
+            buttonElement.innerHTML = isAr ? '✅ تم النسخ!' : '✅ Copied!';
             buttonElement.classList.add('btn-success');
             setTimeout(() => {
                 buttonElement.innerHTML = origHtml;
