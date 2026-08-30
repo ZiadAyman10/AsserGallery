@@ -646,3 +646,68 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 [dir="rtl"] .dropdown-menu {
     text-align: right;
 }
+
+/* ==========================================================================
+   Responsive Design Enhancements (Fix 7: Mobile & Tablet Optimization)
+   ========================================================================== */
+@media (max-width: 767.98px) {
+    h1, .display-4 {
+        font-size: 1.85rem !important;
+        line-height: 1.25;
+    }
+    h2, .display-6 {
+        font-size: 1.5rem !important;
+        line-height: 1.3;
+    }
+    h3 {
+        font-size: 1.25rem !important;
+    }
+    .hero-banner {
+        padding: 1.75rem 1.25rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1.5rem;
+    }
+    .promo-offer-card {
+        padding: 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .product-card-img-wrapper {
+        aspect-ratio: 1/1.25;
+    }
+    .brand-logo {
+        font-size: 1.1rem;
+    }
+    .card-custom {
+        padding: 1rem !important;
+        border-radius: var(--radius-sm);
+    }
+    .btn-whatsapp, .btn-messenger, .btn-primary-action {
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+    .stat-kpi-card {
+        padding: 1rem;
+    }
+    .stat-kpi-value {
+        font-size: 1.4rem;
+    }
+    .table th, .table td {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .row-cols-2 > * {
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+    }
+    .product-card .p-3 {
+        padding: 0.75rem !important;
+    }
+    .price-current {
+        font-size: 1rem;
+    }
+}
