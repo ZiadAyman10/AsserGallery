@@ -5,14 +5,25 @@
     var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
     ViewData["Title"] = isArabic ? "لوحة التحكم العامة" : "Dashboard Overview";
     var currency = Localizer["Currency"].Value;
+    var arCulture = new CultureInfo("ar-EG");
 
     // Serialize chart data for client-side Chart.js
-    var trendLabels = Model.MonthlyTrends.Select(t => t.MonthLabel).ToList();
+    var trendLabels = Model.MonthlyTrends
+        .Select(t => {
+            if (isArabic && DateTime.TryParseExact(t.MonthLabel, "MMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+            {
+                return dt.ToString("MMMM yyyy", arCulture);
+            }
+            return t.MonthLabel;
+        })
+        .ToList();
     var trendRevenues = Model.MonthlyTrends.Select(t => t.Revenue).ToList();
     var trendExpenses = Model.MonthlyTrends.Select(t => t.Expenses).ToList();
     var trendProfits = Model.MonthlyTrends.Select(t => t.Profit).ToList();
 
-    var catLabels = Model.CategoryBreakdowns.Select(c => c.CategoryName).ToList();
+    var catLabels = Model.CategoryBreakdowns
+        .Select(c => isArabic && !string.IsNullOrWhiteSpace(c.CategoryArabicName) ? c.CategoryArabicName : c.CategoryName)
+        .ToList();
     var catCounts = Model.CategoryBreakdowns.Select(c => c.ProductCount).ToList();
     var catStocks = Model.CategoryBreakdowns.Select(c => c.TotalStock).ToList();
 }
@@ -206,8 +217,8 @@
                             {
                                 <tr>
                                     <td class="fw-semibold">
-                                        <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@item.ProductId" class="text-decoration-none text-dark">
-                                            @item.ProductName
+                                        <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@item.ProductId" class="text-decoration-none">
+                                            @(isArabic && !string.IsNullOrWhiteSpace(item.ProductArabicName) ? item.ProductArabicName : item.ProductName)
                                         </a>
                                     </td>
                                     <td class="text-center">
@@ -315,7 +326,7 @@
             const isDark = document.documentElement.getAttribute("data-theme") === "dark";
             const textColor = isDark ? "#adb5bd" : "#495057";
             const gridColor = isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.05)";
-            const currencyLabel = "@currency";
+            const currencyLabel = @Html.Raw(JsonSerializer.Serialize(currency));
 
             // 1. Revenue vs Expenses Line Chart
             const trendLabels = @Html.Raw(JsonSerializer.Serialize(trendLabels));

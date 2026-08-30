@@ -85,9 +85,10 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
 
         // 2. Category Breakdowns
         var categoryBreakdowns = products
-            .GroupBy(p => p.SubCategory?.Category?.Name ?? "Uncategorized")
+            .GroupBy(p => p.SubCategory?.Category)
             .Select(g => new CategoryBreakdownDto(
-                CategoryName: g.Key,
+                CategoryName: g.Key?.Name ?? "Uncategorized",
+                CategoryArabicName: g.Key?.ArabicName ?? "غير مصنف",
                 ProductCount: g.Count(),
                 TotalStock: g.Sum(p => p.GetTotalStock())
             ))
@@ -104,6 +105,7 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
                 return new TopSellingProductDto(
                     ProductId: g.Key,
                     ProductName: prod?.Name ?? $"Product #{g.Key}",
+                    ProductArabicName: prod?.ArabicName ?? string.Empty,
                     QuantitySold: g.Sum(i => i.Quantity),
                     TotalRevenue: g.Sum(i => i.Quantity * i.UnitPrice)
                 );
