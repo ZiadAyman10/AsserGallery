@@ -1,6 +1,8 @@
 @model IReadOnlyList<ProductDto>
+@using System.Globalization
 @{
-    ViewData["Title"] = "Color Variant Stock Matrix";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["ColorStockMatrix"].Value;
     var categories = ViewBag.Categories as List<CategoryDto> ?? new List<CategoryDto>();
     var selectedCatId = ViewBag.CategoryId as int?;
     var search = ViewBag.Search as string;
@@ -8,15 +10,15 @@
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Color Variant Stock Matrix</h4>
-        <p class="text-muted small mb-0">High-visibility live inventory matrix. Quickly adjust quantities per color variant.</p>
+        <h4 class="fw-bold mb-1">@Localizer["ColorStockMatrix"]</h4>
+        <p class="text-muted small mb-0">@(isArabic ? "مصفوفة حية تفاعلية لعرض وتعديل كميات المخزون لكل لون بشكل فوري." : "High-visibility live inventory matrix. Quickly adjust quantities per color variant.")</p>
     </div>
     <div class="d-flex gap-2">
         <a asp-action="ExportCsv" asp-route-categoryId="@selectedCatId" asp-route-search="@search" class="btn btn-outline-success rounded-pill px-3 fw-bold shadow-sm">
-            <i class="bi bi-file-earmark-excel me-1"></i> Export Inventory CSV
+            <i class="bi bi-file-earmark-excel me-1"></i> @Localizer["ExportCsv"]
         </a>
         <a asp-controller="Products" asp-action="Create" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">
-            <i class="bi bi-plus-lg me-1"></i> Add Product
+            <i class="bi bi-plus-lg me-1"></i> @Localizer["AddNewProduct"]
         </a>
     </div>
 </div>
@@ -26,20 +28,22 @@
     <form method="get" asp-action="Index">
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
-                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="Search product name..." />
+                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="@Localizer["SearchProductsPlaceholder"]" />
             </div>
             <div class="col-md-4">
                 <select name="categoryId" class="form-select form-select-sm">
-                    <option value="">All Categories</option>
+                    <option value="">@Localizer["AllCategories"]</option>
                     @foreach (var cat in categories)
                     {
-                        <option value="@cat.Id" selected="@(selectedCatId == cat.Id)">@cat.Name (@cat.ArabicName)</option>
+                        <option value="@cat.Id" selected="@(selectedCatId == cat.Id)">
+                            @(isArabic && !string.IsNullOrWhiteSpace(cat.ArabicName) ? cat.ArabicName : cat.Name)
+                        </option>
                     }
                 </select>
             </div>
             <div class="col-md-2 d-flex gap-1">
-                <button type="submit" class="btn btn-sm btn-dark w-100">Filter</button>
-                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Reset</a>
+                <button type="submit" class="btn btn-sm btn-dark w-100">@Localizer["Filter"]</button>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">@Localizer["Reset"]</a>
             </div>
         </div>
     </form>
@@ -49,7 +53,7 @@
 <div class="d-flex flex-column gap-3 mb-4">
     @if (!Model.Any())
     {
-        <div class="card-custom p-4 text-center text-muted">No products found.</div>
+        <div class="card-custom p-4 text-center text-muted">@Localizer["NoProductsFound"]</div>
     }
     @foreach (var prod in Model)
     {
@@ -59,17 +63,19 @@
                 <div class="col-md-4 d-flex align-items-center gap-3">
                     <img src="@(prod.PrimaryImageUrl ?? "https://via.placeholder.com/70")" alt="@prod.Name" class="rounded-3 object-fit-cover" style="width: 60px; height: 60px;" />
                     <div>
-                        <h6 class="fw-bold mb-0">@prod.Name</h6>
-                        <div class="text-muted extra-small">@prod.ArabicName</div>
-                        <span class="badge bg-light text-dark border extra-small mt-1">@prod.SubCategoryName</span>
+                        <h6 class="fw-bold mb-0">@(isArabic && !string.IsNullOrWhiteSpace(prod.ArabicName) ? prod.ArabicName : prod.Name)</h6>
+                        <div class="text-muted extra-small">@(isArabic ? prod.Name : prod.ArabicName)</div>
+                        <span class="badge bg-light text-dark border extra-small mt-1">
+                            @(isArabic && !string.IsNullOrWhiteSpace(prod.SubCategoryArabicName) ? prod.SubCategoryArabicName : prod.SubCategoryName)
+                        </span>
                     </div>
                 </div>
 
                 <!-- Total Stock -->
                 <div class="col-md-2 text-md-center">
-                    <span class="text-muted extra-small d-block">Total Available</span>
+                    <span class="text-muted extra-small d-block">@Localizer["TotalStock"]</span>
                     <strong class="fs-5 @(prod.TotalStock > 3 ? "text-success" : (prod.TotalStock > 0 ? "text-warning" : "text-danger"))">
-                        @prod.TotalStock pcs
+                        @prod.TotalStock @(isArabic ? "قطعة" : "pcs")
                     </strong>
                 </div>
 
@@ -80,14 +86,14 @@
                         {
                             <div class="p-2 border rounded-3 bg-light d-inline-flex align-items-center gap-2">
                                 <span class="color-dot" style="background-color: @v.ColorHexCode; width: 14px; height: 14px;"></span>
-                                <span class="small fw-bold">@v.ColorName:</span>
+                                <span class="small fw-bold">@(isArabic && !string.IsNullOrWhiteSpace(v.ColorArabicName) ? v.ColorArabicName : v.ColorName):</span>
 
                                 <form asp-controller="Products" asp-action="AdjustStock" method="post" class="d-inline-flex align-items-center gap-1">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="variantId" value="@v.Id" />
                                     <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
                                     <input type="number" name="newQuantity" value="@v.Quantity" min="0" class="form-control form-control-sm text-center p-0" style="width: 50px; height: 28px;" />
-                                    <button type="submit" class="btn btn-sm btn-outline-dark p-0 px-2" style="height: 28px;" title="Update Stock">
+                                    <button type="submit" class="btn btn-sm btn-outline-dark p-0 px-2" style="height: 28px;" title="@Localizer["Edit"]">
                                         <i class="bi bi-check"></i>
                                     </button>
                                 </form>

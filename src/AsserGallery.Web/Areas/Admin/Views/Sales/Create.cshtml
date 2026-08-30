@@ -1,15 +1,19 @@
+@using System.Globalization
+@using System.Text.Json
 @{
-    ViewData["Title"] = "Register New Sale";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["RegisterNewSale"].Value;
     var products = ViewBag.Products as IReadOnlyList<ProductDto> ?? new List<ProductDto>();
+    var currency = Localizer["Currency"].Value;
 }
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Register New Sale</h4>
-        <p class="text-muted small mb-0">Record a confirmed customer order. Selected variant stock will auto-decrement.</p>
+        <h4 class="fw-bold mb-1">@Localizer["RegisterNewSale"]</h4>
+        <p class="text-muted small mb-0">@(isArabic ? "تسجيل طلب عميل مؤكد والخصم التلقائي لكمية المخزون حسب اللون المحدد." : "Record a confirmed customer order. Selected variant stock will auto-decrement.")</p>
     </div>
     <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
-        <i class="bi bi-arrow-left me-1"></i> Back to Sales
+        <i class="bi bi-arrow-@(isArabic ? "right" : "left") me-1"></i> @Localizer["BackToSales"]
     </a>
 </div>
 
@@ -19,26 +23,26 @@
         <!-- Customer & Order Meta -->
         <div class="col-lg-4">
             <div class="card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">Customer & Details</h5>
+                <h5 class="fw-bold mb-3 border-bottom pb-2">@(isArabic ? "بيانات العميل والطلب" : "Customer & Details")</h5>
                 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Customer Name</label>
-                    <input type="text" name="customerName" class="form-control" placeholder="e.g. Mahmoud Hassan" />
+                    <label class="form-label small fw-bold">@Localizer["CustomerName"]</label>
+                    <input type="text" name="customerName" class="form-control" placeholder="@(isArabic ? "مثال: محمود حسن" : "e.g. Mahmoud Hassan")" />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Customer Phone</label>
+                    <label class="form-label small fw-bold">@Localizer["Phone"]</label>
                     <input type="tel" name="customerPhone" class="form-control" placeholder="010XXXXXXXX" />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Sale Date</label>
+                    <label class="form-label small fw-bold">@Localizer["Date"]</label>
                     <input type="datetime-local" name="saleDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Notes / Shipping Info</label>
-                    <textarea name="notes" class="form-control" rows="3" placeholder="Courier details, payment method, address..."></textarea>
+                    <label class="form-label small fw-bold">@Localizer["OrderNotes"]</label>
+                    <textarea name="notes" class="form-control" rows="3" placeholder="@(isArabic ? "عنوان الشحن، شركة التوصيل، طريقة الدفع..." : "Courier details, payment method, address...")"></textarea>
                 </div>
             </div>
         </div>
@@ -47,9 +51,9 @@
         <div class="col-lg-8">
             <div class="card-custom p-4 mb-4">
                 <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
-                    <h5 class="fw-bold mb-0">Order Items</h5>
+                    <h5 class="fw-bold mb-0">@Localizer["OrderItems"]</h5>
                     <button type="button" class="btn btn-sm btn-dark rounded-pill" onclick="addSaleRow()">
-                        <i class="bi bi-plus-lg me-1"></i> Add Another Item
+                        <i class="bi bi-plus-lg me-1"></i> @Localizer["AddAnotherItem"]
                     </button>
                 </div>
 
@@ -57,9 +61,9 @@
                     <table class="table align-middle" id="saleItemsTable">
                         <thead>
                             <tr>
-                                <th style="width: 45%;">Product & Color Variant</th>
-                                <th style="width: 20%;">Qty</th>
-                                <th style="width: 25%;">Unit Price (EGP)</th>
+                                <th style="width: 45%;">@Localizer["ItemDescription"]</th>
+                                <th style="width: 20%;">@Localizer["Qty"]</th>
+                                <th style="width: 25%;">@Localizer["UnitPrice"] (@currency)</th>
                                 <th style="width: 10%;"></th>
                             </tr>
                         </thead>
@@ -67,14 +71,14 @@
                             <tr class="sale-item-row">
                                 <td>
                                     <select name="variantIds" class="form-select variant-select" required onchange="onVariantSelected(this)">
-                                        <option value="">Select Variant (Stock)...</option>
+                                        <option value="">@(isArabic ? "اختر اللون والمخزون..." : "Select Variant (Stock)...")</option>
                                         @foreach (var p in products)
                                         {
-                                            <optgroup label="@p.Name (@p.ArabicName)">
+                                            <optgroup label="@(isArabic && !string.IsNullOrWhiteSpace(p.ArabicName) ? p.ArabicName : p.Name)">
                                                 @foreach (var v in p.Variants.Where(v => v.Quantity > 0))
                                                 {
                                                     <option value="@v.Id" data-prodid="@p.Id" data-price="@(p.DiscountedPrice ?? p.Price)" data-stock="@v.Quantity">
-                                                        @v.ColorName (@v.ColorArabicName) — Stock: @v.Quantity pcs
+                                                        @(isArabic && !string.IsNullOrWhiteSpace(v.ColorArabicName) ? v.ColorArabicName : v.ColorName) — @(isArabic ? $"المتوفر: {v.Quantity} قطعة" : $"Stock: {v.Quantity} pcs")
                                                     </option>
                                                 }
                                             </optgroup>
@@ -100,13 +104,13 @@
 
                 <!-- Total Amount Summary Card -->
                 <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between mt-3">
-                    <span class="fs-5 fw-bold">Grand Total:</span>
-                    <span class="fs-4 fw-extrabold text-success" id="grandTotalDisplay">0 EGP</span>
+                    <span class="fs-5 fw-bold">@Localizer["GrandTotal"]</span>
+                    <span class="fs-4 fw-extrabold text-success" id="grandTotalDisplay">0 @currency</span>
                 </div>
 
                 <div class="mt-4 text-end">
                     <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 fw-bold shadow">
-                        <i class="bi bi-check-circle-fill me-2"></i> Confirm Sale & Update Inventory
+                        <i class="bi bi-check-circle-fill me-2"></i> @Localizer["ConfirmSale"]
                     </button>
                 </div>
             </div>
@@ -116,33 +120,35 @@
 
 @section Scripts {
 <script>
+    const currencyLabel = @Html.Raw(JsonSerializer.Serialize(currency));
     function onVariantSelected(selectElement) {
         const selectedOption = selectElement.options[selectElement.selectedIndex];
-        const row = selectElement.closest('tr');
-        const priceInput = row.querySelector('.item-price');
-        const prodIdInput = row.querySelector('.hidden-prod-id');
-        const qtyInput = row.querySelector('.item-qty');
-
+        const row = selectElement.closest('.sale-item-row');
         if (selectedOption && selectedOption.value) {
-            const price = selectedOption.getAttribute('data-price') || '0';
-            const prodId = selectedOption.getAttribute('data-prodid') || '0';
-            const stock = parseInt(selectedOption.getAttribute('data-stock') || '1');
+            const price = selectedOption.getAttribute('data-price');
+            const prodId = selectedOption.getAttribute('data-prodid');
+            const stock = parseInt(selectedOption.getAttribute('data-stock'), 10);
 
-            priceInput.value = price;
-            prodIdInput.value = prodId;
+            row.querySelector('.hidden-prod-id').value = prodId;
+            row.querySelector('.item-price').value = price;
+            const qtyInput = row.querySelector('.item-qty');
             qtyInput.max = stock;
+            if (parseInt(qtyInput.value, 10) > stock) {
+                qtyInput.value = stock;
+            }
         }
         calcTotal();
     }
 
     function addSaleRow() {
-        const firstRow = document.querySelector('.sale-item-row');
+        const tbody = document.getElementById('saleItemsBody');
+        const firstRow = tbody.querySelector('.sale-item-row');
         const newRow = firstRow.cloneNode(true);
         newRow.querySelector('.variant-select').selectedIndex = 0;
+        newRow.querySelector('.hidden-prod-id').value = '';
         newRow.querySelector('.item-qty').value = 1;
         newRow.querySelector('.item-price').value = 0;
-        newRow.querySelector('.hidden-prod-id').value = '';
-        document.getElementById('saleItemsBody').appendChild(newRow);
+        tbody.appendChild(newRow);
         calcTotal();
     }
 
@@ -152,7 +158,7 @@
             btn.closest('tr').remove();
             calcTotal();
         } else {
-            alert('At least one item is required.');
+            alert('@(isArabic ? "يجب إضافة صنف واحد على الأقل." : "At least one item is required.")');
         }
     }
 
@@ -163,7 +169,7 @@
             const price = parseFloat(row.querySelector('.item-price').value) || 0;
             total += (qty * price);
         });
-        document.getElementById('grandTotalDisplay').innerText = total.toLocaleString() + ' EGP';
+        document.getElementById('grandTotalDisplay').innerText = total.toLocaleString() + ' ' + currencyLabel;
     }
 
     document.addEventListener('DOMContentLoaded', calcTotal);

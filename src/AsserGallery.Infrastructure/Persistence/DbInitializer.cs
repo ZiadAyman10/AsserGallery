@@ -141,6 +141,52 @@ public static class DbInitializer
                 await context.SaveChangesAsync();
             }
 
+            // Backfill SubCategories and Categories Arabic Names if missing
+            var existingSubCategories = await context.SubCategories.ToListAsync();
+            bool subCatModified = false;
+            foreach (var sub in existingSubCategories)
+            {
+                if (string.IsNullOrWhiteSpace(sub.ArabicName))
+                {
+                    sub.ArabicName = sub.Name switch
+                    {
+                        "Casual Shirts & Polos" => "قمصان وبولو كاجوال",
+                        "Formal & Suits" => "بدل وملابس رسمية",
+                        "Pajamas & Loungewear" => "بيجامات وملابس منزلية",
+                        "Jackets & Winterwear" => "جواكت ومعاطف شتوية",
+                        "Casual Tops & Dresses" => "فساتين وتوبات كاجوال",
+                        "Loungewear & Sleepwear" => "بيجامات وملابس نوم",
+                        "Abayas & Modest Wear" => "عبايات وملابس محتشمة",
+                        "Cardigans & Jackets" => "كارديجان وجواكت",
+                        "Boys Casual Sets" => "أطقم أولادي كاجوال",
+                        "Girls Dresses & Sets" => "فساتين وأطقم بناتي",
+                        _ => sub.Name
+                    };
+                    subCatModified = true;
+                }
+            }
+
+            var existingCategories = await context.Categories.ToListAsync();
+            foreach (var cat in existingCategories)
+            {
+                if (string.IsNullOrWhiteSpace(cat.ArabicName))
+                {
+                    cat.ArabicName = cat.Name switch
+                    {
+                        "Men's Collection" => "تشكيلة الرجال",
+                        "Women's Collection" => "تشكيلة النساء",
+                        "Kids & Teens" => "أزياء الأطفال والناشئين",
+                        _ => cat.Name
+                    };
+                    subCatModified = true;
+                }
+            }
+
+            if (subCatModified)
+            {
+                await context.SaveChangesAsync();
+            }
+
             // Seed Sample Products
             if (!await context.Products.AnyAsync())
             {

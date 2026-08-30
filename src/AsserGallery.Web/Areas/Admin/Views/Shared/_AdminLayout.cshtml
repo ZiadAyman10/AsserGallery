@@ -115,51 +115,54 @@
             <div class="p-3 border-bottom d-flex align-items-center justify-content-between" style="border-color: var(--border-main) !important;">
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="brand-logo fs-5">
                     <span class="badge-logo">AG</span>
-                    <span>Admin Panel</span>
+                    <span>@Localizer["AdminPanel"]</span>
                 </a>
                 <button type="button" class="btn-close d-lg-none" onclick="document.getElementById('adminSidebar').classList.remove('show')"></button>
             </div>
 
             <!-- Links -->
             <div class="flex-grow-1 overflow-y-auto py-2">
-                <div class="sidebar-section-title">Operations</div>
+                <div class="sidebar-section-title">@Localizer["Operations"]</div>
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="sidebar-link @(currentCtrl == "Dashboard" ? "active" : "")">
-                    <i class="bi bi-grid-1x2"></i> Dashboard
+                    <i class="bi bi-grid-1x2"></i> @Localizer["Dashboard"]
                 </a>
                 <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="sidebar-link @(currentCtrl == "Products" ? "active" : "")">
-                    <i class="bi bi-tags"></i> Products & Stock
+                    <i class="bi bi-tags"></i> @Localizer["ProductsAndStock"]
                 </a>
                 <a asp-area="Admin" asp-controller="Sales" asp-action="Index" class="sidebar-link @(currentCtrl == "Sales" ? "active" : "")">
-                    <i class="bi bi-cart-check"></i> Sales & Orders
+                    <i class="bi bi-cart-check"></i> @Localizer["SalesAndOrders"]
                 </a>
                 <a asp-area="Admin" asp-controller="Finances" asp-action="Index" class="sidebar-link @(currentCtrl == "Finances" ? "active" : "")">
-                    <i class="bi bi-cash-stack"></i> Income & Expenses
+                    <i class="bi bi-cash-stack"></i> @Localizer["IncomeAndExpenses"]
                 </a>
 
-                <div class="sidebar-section-title">Customer & Visibility</div>
+                <div class="sidebar-section-title">@Localizer["CustomerAndVisibility"]</div>
                 <a asp-area="Admin" asp-controller="CustomerRequests" asp-action="Index" class="sidebar-link @(currentCtrl == "CustomerRequests" ? "active" : "")">
-                    <i class="bi bi-people"></i> Customer Requests
+                    <i class="bi bi-people"></i> @Localizer["CustomerRequests"]
                 </a>
                 <a asp-area="Admin" asp-controller="Facebook" asp-action="Index" class="sidebar-link @(currentCtrl == "Facebook" ? "active" : "")">
-                    <i class="bi bi-facebook"></i> Facebook Publishing
+                    <i class="bi bi-facebook"></i> @Localizer["FacebookPublishing"]
                 </a>
                 <a asp-area="Admin" asp-controller="ImageGuide" asp-action="Index" class="sidebar-link @(currentCtrl == "ImageGuide" ? "active" : "")">
-                    <i class="bi bi-camera"></i> Photo & AI Guide
+                    <i class="bi bi-camera"></i> @Localizer["PhotoAndAiGuide"]
                 </a>
 
-                <div class="sidebar-section-title">Configuration</div>
+                <div class="sidebar-section-title">@Localizer["Configuration"]</div>
                 <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="sidebar-link @(currentCtrl == "Categories" ? "active" : "")">
-                    <i class="bi bi-diagram-3"></i> Categories
+                    <i class="bi bi-diagram-3"></i> @Localizer["Categories"]
+                </a>
+                <a asp-area="Admin" asp-controller="Colors" asp-action="Index" class="sidebar-link @(currentCtrl == "Colors" ? "active" : "")">
+                    <i class="bi bi-palette"></i> @(isRtl ? "الألوان" : "Colors")
                 </a>
                 <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="sidebar-link @(currentCtrl == "Settings" ? "active" : "")">
-                    <i class="bi bi-sliders"></i> Store Settings
+                    <i class="bi bi-sliders"></i> @Localizer["StoreSettings"]
                 </a>
             </div>
 
             <!-- Footer / Back to Public -->
             <div class="p-3 border-top" style="border-color: var(--border-main) !important;">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-sm btn-outline-secondary w-100 mb-2">
-                    <i class="bi bi-box-arrow-up-right me-1"></i> View Public Store
+                    <i class="bi bi-box-arrow-up-right me-1"></i> @Localizer["ViewPublicStore"]
                 </a>
                 <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
                     <button type="submit" class="btn btn-sm btn-outline-danger w-100">
@@ -185,13 +188,13 @@
                     @if (isRtl)
                     {
                         <a href="/Culture/SetLanguage?culture=en&returnUrl=@Uri.EscapeDataString(returnUrl)" class="btn-lang-toggle" title="Switch to English">
-                            <i class="bi bi-globe"></i> EN
+                            <i class="bi bi-globe"></i> English
                         </a>
                     }
                     else
                     {
                         <a href="/Culture/SetLanguage?culture=ar&returnUrl=@Uri.EscapeDataString(returnUrl)" class="btn-lang-toggle" title="التحويل للغة العربية">
-                            <i class="bi bi-globe"></i> عربي
+                            <i class="bi bi-globe"></i> العربية
                         </a>
                     }
 
@@ -205,14 +208,14 @@
                     <div class="dropdown">
                         <button class="btn btn-sm btn-light border dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i>
-                            <span class="d-none d-md-inline small fw-semibold">Admin</span>
+                            <span class="d-none d-md-inline small fw-semibold">@(isRtl ? "المسؤول" : "Admin")</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                            <li><a class="dropdown-item" asp-area="Admin" asp-controller="Settings" asp-action="Index"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" asp-area="Admin" asp-controller="Settings" asp-action="Index"><i class="bi bi-gear me-2"></i>@Localizer["Settings"]</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" class="px-2">
-                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0 text-decoration-none"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0 text-decoration-none"><i class="bi bi-box-arrow-right me-2"></i>@Localizer["Logout"]</button>
                                 </form>
                             </li>
                         </ul>
