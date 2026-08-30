@@ -125,3 +125,103 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
         return true;
     }
 }
+
+public record UpdateCategoryCommand(
+    int Id,
+    string Name,
+    string ArabicName,
+    string? Description,
+    string? ArabicDescription,
+    int DisplayOrder,
+    bool IsActive
+) : IRequest<bool>;
+
+public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, bool>
+{
+    private readonly IApplicationDbContext _context;
+
+    public UpdateCategoryCommandHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<bool> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+
+        if (category == null) return false;
+
+        category.Name = request.Name.Trim();
+        category.ArabicName = request.ArabicName.Trim();
+        category.Description = request.Description?.Trim();
+        category.ArabicDescription = request.ArabicDescription?.Trim();
+        category.DisplayOrder = request.DisplayOrder;
+        category.IsActive = request.IsActive;
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+}
+
+public record UpdateSubCategoryCommand(
+    int Id,
+    string Name,
+    string ArabicName,
+    string? Description,
+    string? ArabicDescription,
+    int DisplayOrder,
+    bool IsActive
+) : IRequest<bool>;
+
+public class UpdateSubCategoryCommandHandler : IRequestHandler<UpdateSubCategoryCommand, bool>
+{
+    private readonly IApplicationDbContext _context;
+
+    public UpdateSubCategoryCommandHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<bool> Handle(UpdateSubCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var subCategory = await _context.SubCategories
+            .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
+
+        if (subCategory == null) return false;
+
+        subCategory.Name = request.Name.Trim();
+        subCategory.ArabicName = request.ArabicName.Trim();
+        subCategory.Description = request.Description?.Trim();
+        subCategory.ArabicDescription = request.ArabicDescription?.Trim();
+        subCategory.DisplayOrder = request.DisplayOrder;
+        subCategory.IsActive = request.IsActive;
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+}
+
+public record DeleteSubCategoryCommand(int Id) : IRequest<bool>;
+
+public class DeleteSubCategoryCommandHandler : IRequestHandler<DeleteSubCategoryCommand, bool>
+{
+    private readonly IApplicationDbContext _context;
+
+    public DeleteSubCategoryCommandHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<bool> Handle(DeleteSubCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var subCategory = await _context.SubCategories
+            .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
+
+        if (subCategory == null) return false;
+
+        _context.SubCategories.Remove(subCategory);
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+}

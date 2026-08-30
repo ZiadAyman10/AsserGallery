@@ -151,6 +151,9 @@
                 <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="sidebar-link @(currentCtrl == "Categories" ? "active" : "")">
                     <i class="bi bi-diagram-3"></i> @Localizer["Categories"]
                 </a>
+                <a asp-area="Admin" asp-controller="Colors" asp-action="Index" class="sidebar-link @(currentCtrl == "Colors" ? "active" : "")">
+                    <i class="bi bi-palette"></i> @(isRtl ? "الألوان" : "Colors")
+                </a>
                 <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="sidebar-link @(currentCtrl == "Settings" ? "active" : "")">
                     <i class="bi bi-sliders"></i> @Localizer["StoreSettings"]
                 </a>

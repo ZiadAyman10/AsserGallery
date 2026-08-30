@@ -25,3 +25,5 @@ $RECYCLE.BIN/
 # User Secrets / Local Config
 appsettings.Production.json
 secrets.json
+src/AsserGallery.Web/wwwroot/uploads/products/457bf64700d04e538bc10be927f7eaaf.avif
+src/AsserGallery.Web/wwwroot/uploads/products/e776e0df5acb47aca2b045f1aaad2197.avif
