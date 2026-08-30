@@ -1,16 +1,18 @@
+@using System.Globalization
 @{
-    ViewData["Title"] = "Add New Product";
+    var isRtl = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = isRtl ? "إضافة منتج جديد" : "Add New Product";
     var categories = ViewBag.Categories as List<CategoryDto> ?? new List<CategoryDto>();
     var colors = ViewBag.Colors as List<ColorDto> ?? new List<ColorDto>();
 }
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Add New Product</h4>
-        <p class="text-muted small mb-0">Create a new item with multi-color stock tracking and dual photos.</p>
+        <h4 class="fw-bold mb-1">@(isRtl ? "إضافة منتج جديد" : "Add New Product")</h4>
+        <p class="text-muted small mb-0">@(isRtl ? "إنشاء منتج جديد مع تتبع المخزون لكل لون ورفع صور متعددة واقعية واستوديو." : "Create a new item with multi-color stock tracking and multiple real/studio photos.")</p>
     </div>
     <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
-        <i class="bi bi-arrow-left me-1"></i> Back to Products
+        <i class="bi bi-arrow-@(isRtl ? "right" : "left") me-1"></i> @(isRtl ? "رجوع للمنتجات" : "Back to Products")
     </a>
 </div>
 
@@ -20,7 +22,7 @@
         <!-- Left Column: Details -->
         <div class="col-lg-8">
             <div class="card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">1. Product Information</h5>
+                <h5 class="fw-bold mb-3 border-bottom pb-2">@(isRtl ? "1. بيانات وتفاصيل المنتج" : "1. Product Information")</h5>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Product Name (English) *</label>
@@ -32,25 +34,25 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Regular Price (EGP) *</label>
+                        <label class="form-label small fw-bold">@(isRtl ? "السعر الأساسي (ج.م) *" : "Regular Price (EGP) *")</label>
                         <input type="number" step="1" name="price" class="form-control" required placeholder="500" />
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Discounted Price (Optional)</label>
+                        <label class="form-label small fw-bold">@(isRtl ? "سعر الخصم / العرض (اختياري)" : "Discounted Price (Optional)")</label>
                         <input type="number" step="1" name="discountedPrice" class="form-control" placeholder="380" />
-                        <span class="text-muted extra-small">Leave empty if no discount</span>
+                        <span class="text-muted extra-small">@(isRtl ? "اتركه فارغاً إذا لم يكن هناك خصم" : "Leave empty if no discount")</span>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">SubCategory *</label>
+                        <label class="form-label small fw-bold">@(isRtl ? "القسم الفرعي *" : "SubCategory *")</label>
                         <select name="subCategoryId" class="form-select" required>
-                            <option value="">Select SubCategory...</option>
+                            <option value="">@(isRtl ? "اختر القسم الفرعي..." : "Select SubCategory...")</option>
                             @foreach (var cat in categories)
                             {
-                                <optgroup label="@cat.Name (@cat.ArabicName)">
+                                <optgroup label="@(isRtl ? cat.ArabicName : cat.Name) (@(isRtl ? cat.Name : cat.ArabicName))">
                                     @foreach (var sub in cat.SubCategories)
                                     {
-                                        <option value="@sub.Id">@sub.Name (@sub.ArabicName)</option>
+                                        <option value="@sub.Id">@(isRtl ? sub.ArabicName : sub.Name) (@(isRtl ? sub.Name : sub.ArabicName))</option>
                                     }
                                 </optgroup>
                             }
@@ -60,10 +62,10 @@
                     <div class="col-md-6 d-flex align-items-center gap-4 pt-4">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="isFeatured" id="isFeatured" value="true" />
-                            <label class="form-check-label small fw-bold" for="isFeatured">Featured in Home Rail</label>
+                            <label class="form-check-label small fw-bold" for="isFeatured">@(isRtl ? "مميز في الصفحة الرئيسية" : "Featured in Home Rail")</label>
                         </div>
                         <div>
-                            <label class="form-label small fw-bold mb-0 me-2">Display Order:</label>
+                            <label class="form-label small fw-bold mb-0 me-2">@(isRtl ? "الترتيب:" : "Display Order:")</label>
                             <input type="number" name="displayOrder" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="1" />
                         </div>
                     </div>
@@ -79,13 +81,13 @@
                 </div>
             </div>
 
-            <!-- Color & Stock Matrix (§4.1) -->
+            <!-- Color & Stock Matrix -->
             <div class="card-custom p-4 mb-4">
                 <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
-                    <h5 class="fw-bold mb-0">2. Color Variants & Stock Quantities</h5>
-                    <span class="badge bg-light text-dark border">Per-Color Inventory</span>
+                    <h5 class="fw-bold mb-0">@(isRtl ? "2. درجات الألوان والمخزون المتوفر" : "2. Color Variants & Stock Quantities")</h5>
+                    <span class="badge bg-surface-subtle text-main border">@(isRtl ? "تتبع المخزون لكل لون" : "Per-Color Inventory")</span>
                 </div>
-                <p class="text-muted small">Specify available quantities for each color variant. Enter 0 for colors currently out of stock.</p>
+                <p class="text-muted small">@(isRtl ? "حدد الكمية المتوفرة لكل لون. اكتب 0 للألوان غير المتوفرة حالياً." : "Specify available quantities for each color variant. Enter 0 for colors currently out of stock.")</p>
 
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     @for (int i = 0; i < colors.Count; i++)
@@ -96,8 +98,8 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="color-dot" style="background-color: @c.HexCode; width: 20px; height: 20px;"></span>
                                     <div>
-                                        <div class="fw-bold small">@c.Name</div>
-                                        <div class="text-muted extra-small">@c.ArabicName</div>
+                                        <div class="fw-bold small">@(isRtl ? c.ArabicName : c.Name)</div>
+                                        <div class="text-muted extra-small">@(isRtl ? c.Name : c.ArabicName)</div>
                                     </div>
                                 </div>
                                 <input type="hidden" name="colorIds" value="@c.Id" />
@@ -111,41 +113,46 @@
             </div>
         </div>
 
-        <!-- Right Column: Dual Images (§4.8 Original vs AI) -->
+        <!-- Right Column: Multi-Image Upload (Fix 12: Support multiple real/studio photos) -->
         <div class="col-lg-4">
             <div class="card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">3. Product Images</h5>
-                <p class="text-muted small">Asser Gallery supports storing both the studio AI photo and the authentic phone photo for buyer transparency.</p>
+                <h5 class="fw-bold mb-3 border-bottom pb-2">@(isRtl ? "3. صور المنتج" : "3. Product Images")</h5>
+                <p class="text-muted small">@(isRtl ? "يدعم المتجر رفع صور ستوديو محسنة وصور واقعية متعددة بشفافية كاملة للعميل." : "Asser Gallery supports studio AI photos and multiple authentic real phone photos for buyer transparency.")</p>
 
-                <!-- AI Enhanced Photo (Studio) -->
-                <div class="mb-4 p-3 bg-light rounded-3 border">
+                <!-- AI Enhanced Photo (Studio Primary) -->
+                <div class="mb-3 p-3 bg-surface-subtle rounded-3 border">
                     <label class="form-label small fw-bold text-primary">
-                        <i class="bi bi-stars text-warning me-1"></i> AI Studio Photo (Primary)
+                        <i class="bi bi-stars text-warning me-1"></i> @(isRtl ? "صورة الاستوديو الرئيسية (AI Studio)" : "AI Studio Photo (Primary)")
                     </label>
                     <input type="file" name="aiPhotoFile" class="form-control form-control-sm mb-2" accept="image/*" />
-                    <span class="text-muted extra-small d-block mb-1">Or paste direct image URL:</span>
+                    <span class="text-muted extra-small d-block mb-1">@(isRtl ? "أو رابط صورة مباشر:" : "Or direct image URL:")</span>
                     <input type="url" name="aiPhotoUrl" class="form-control form-control-sm" placeholder="https://..." />
                 </div>
 
-                <!-- Original Phone Camera Photo -->
-                <div class="mb-3 p-3 bg-light rounded-3 border">
-                    <label class="form-label small fw-bold text-dark">
-                        <i class="bi bi-camera-fill me-1"></i> Real Phone Photo (Original)
+                <!-- Primary Real Phone Photo -->
+                <div class="mb-3 p-3 bg-surface-subtle rounded-3 border">
+                    <label class="form-label small fw-bold text-main">
+                        <i class="bi bi-camera-fill me-1"></i> @(isRtl ? "الصورة الواقعية الأساسية (تصوير الهاتف)" : "Primary Real Photo (Original)")
                     </label>
                     <input type="file" name="originalPhotoFile" class="form-control form-control-sm mb-2" accept="image/*" />
-                    <span class="text-muted extra-small d-block mb-1">Or paste direct image URL:</span>
+                    <span class="text-muted extra-small d-block mb-1">@(isRtl ? "أو رابط صورة مباشر:" : "Or direct image URL:")</span>
                     <input type="url" name="originalPhotoUrl" class="form-control form-control-sm" placeholder="https://..." />
                 </div>
 
-                <div class="p-2 bg-info bg-opacity-10 rounded-3 text-info extra-small mb-3">
-                    <i class="bi bi-lightbulb me-1"></i> Need help generating prompts for studio enhancement? Check our <a asp-action="Index" asp-controller="ImageGuide" class="fw-bold">Photo & AI Guide</a>.
+                <!-- Additional Real Photos (Multi-Upload Support) -->
+                <div class="mb-3 p-3 bg-surface-subtle rounded-3 border">
+                    <label class="form-label small fw-bold text-success">
+                        <i class="bi bi-images me-1"></i> @(isRtl ? "صور واقعية إضافية (حدد عدة صور دفعة واحدة)" : "Additional Real Photos (Upload Multiple)")
+                    </label>
+                    <input type="file" name="morePhotos" class="form-control form-control-sm mb-1" accept="image/*" multiple />
+                    <span class="text-muted extra-small">@(isRtl ? "يمكنك اختيار أكثر من صورة للموديل (تفاصيل القماش، الموديل من زوايا مختلفة)" : "You can select multiple photos (angles, fabric closeups, etc.)")</span>
                 </div>
             </div>
 
             <!-- Submit Buttons -->
             <div class="card-custom p-4">
                 <button type="submit" class="btn btn-dark w-100 py-2 rounded-pill fw-bold shadow">
-                    <i class="bi bi-check2-circle me-1"></i> Save Product & Stock
+                    <i class="bi bi-check2-circle me-1"></i> @(isRtl ? "حفظ المنتج والمخزون" : "Save Product & Stock")
                 </button>
             </div>
         </div>
