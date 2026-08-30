@@ -34,10 +34,25 @@
     <header>
         <nav class="navbar-custom">
             <div class="container-fluid max-w-7xl d-flex align-items-center justify-content-between">
-                <!-- Brand Logo -->
+                <!-- Brand Logo (Combined Gallery + Clothes Hanger) -->
                 <a class="brand-logo" asp-controller="Home" asp-action="Index">
-                    <span class="badge-logo">AG</span>
-                    <span>@Localizer["AppName"]</span>
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-3"
+                         style="width:38px;height:38px;background:linear-gradient(135deg,#2563eb,#7c3aed);flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,0.3);">
+                        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Gallery Frame -->
+                            <rect x="3" y="6" width="26" height="21" rx="3" stroke="white" stroke-width="2" fill="none"/>
+                            <!-- Inner gallery line -->
+                            <line x1="3" y1="12" x2="29" y2="12" stroke="white" stroke-width="1.2" opacity="0.6"/>
+                            <!-- Clothes Hanger Hook -->
+                            <path d="M16 3 C16 1.5, 18 1.5, 18 3 C18 4.5, 16 5, 16 6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            <!-- Clothes Hanger Triangle / Shoulders -->
+                            <path d="M7 19 L16 13 L25 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="8" y1="19" x2="24" y2="19" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                            <!-- Small accent dress/tag dot -->
+                            <circle cx="16" cy="22" r="1.5" fill="white"/>
+                        </svg>
+                    </div>
+                    <span class="brand-name">@Localizer["AppName"]</span>
                 </a>
 
                 <!-- Desktop Nav Links -->
@@ -53,7 +68,7 @@
                     </a>
                 </div>
 
-                <!-- Utilities: Language, Theme & Admin Area -->
+                <!-- Utilities: Language, Theme & Staff Icon -->
                 <div class="d-flex align-items-center gap-2">
                     <!-- Language Switcher -->
                     @if (isRtl)
@@ -75,10 +90,9 @@
                         <i class="bi bi-moon-stars-fill theme-icon-moon text-primary"></i>
                     </button>
 
-                    <!-- Admin Portal Link -->
-                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn-theme-toggle ms-1" title="@Localizer["AdminDashboard"]">
-                        <i class="bi bi-shield-lock-fill text-accent"></i>
-                        <span class="d-none d-lg-inline">@Localizer["AdminDashboard"]</span>
+                    <!-- Staff / Admin Icon Only (Fix 8: Icon in header for staff only, no prominent text) -->
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn-theme-toggle ms-1" title="@(isRtl ? "بوابة الإدارة / الموظفين" : "Staff / Admin Portal")" aria-label="Staff Portal">
+                        <i class="bi bi-shield-lock"></i>
                     </a>
                 </div>
             </div>
@@ -120,25 +134,19 @@
             <i class="bi bi-chat-dots-fill fs-5"></i>
             <span>@Localizer["ContactUs"]</span>
         </a>
-        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="mobile-nav-item">
-            <i class="bi bi-shield-lock-fill fs-5"></i>
-            <span>@Localizer["AdminDashboard"]</span>
-        </a>
     </nav>
 
     <!-- Footer -->
     <footer class="border-top py-4 mt-auto" style="border-color: var(--border-main) !important; background: var(--bg-surface);">
         <div class="container-fluid max-w-7xl text-center">
             <div class="d-flex flex-wrap justify-content-center gap-3 mb-2 text-muted small">
-                <span>&copy; @DateTime.UtcNow.Year @Localizer["AppName"]. All rights reserved.</span>
+                <span>&copy; @DateTime.UtcNow.Year @Localizer["AppName"]. @(isRtl ? "جميع الحقوق محفوظة." : "All rights reserved.")</span>
                 <span>•</span>
                 <a asp-controller="Catalog" asp-action="Index" class="text-decoration-none text-muted">@Localizer["Catalog"]</a>
                 <span>•</span>
                 <a asp-controller="Contact" asp-action="Index" class="text-decoration-none text-muted">@Localizer["ContactUs"]</a>
-                <span>•</span>
-                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="text-decoration-none text-muted">@Localizer["AdminDashboard"]</a>
             </div>
-            <p class="text-muted small mb-0">High-quality curated fashion collection. Direct orders via WhatsApp & Messenger.</p>
+            <p class="text-muted small mb-0">@(isRtl ? "تشكيلة أزياء وموديلات راقية ومختارة بعناية. طلب فوري وتوصيل سريع." : "High-quality curated fashion collection. Direct orders via WhatsApp & Messenger.")</p>
         </div>
     </footer>
 
