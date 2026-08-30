@@ -145,7 +145,7 @@ else
 
                         <!-- Price -->
                         <div class="price-block mt-auto pt-2">
-                            <span class="price-current">@((product.DiscountedPrice ?? product.Price).ToString("N0")) @(isArabic ? "ج.م" : "EGP")</span>
+                            <span class="price-current">@((product.DiscountedPrice ?? product.Price).ToString("N0")) @Localizer["Currency"]</span>
                             @if (product.DiscountedPrice.HasValue)
                             {
                                 <span class="price-original">@product.Price.ToString("N0")</span>

@@ -1,4 +1,4 @@
-namespace AsserGallery.Web;
+namespace AsserGallery.Web.Resources;
 
 public class SharedResource
 {

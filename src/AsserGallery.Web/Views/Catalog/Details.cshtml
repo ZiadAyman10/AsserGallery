@@ -92,12 +92,12 @@
             <!-- Price Block -->
             <div class="price-block mb-3 align-items-center">
                 <span class="fs-2 fw-extrabold text-main">
-                    @((Model.DiscountedPrice ?? Model.Price).ToString("N0")) @(isArabic ? "ج.م" : "EGP")
+                    @((Model.DiscountedPrice ?? Model.Price).ToString("N0")) @Localizer["Currency"]
                 </span>
                 @if (Model.DiscountedPrice.HasValue)
                 {
                     <span class="fs-5 text-muted text-decoration-line-through">
-                        @Model.Price.ToString("N0") @(isArabic ? "ج.م" : "EGP")
+                        @Model.Price.ToString("N0") @Localizer["Currency"]
                     </span>
                     <span class="badge bg-danger ms-2">Save @Model.DiscountPercentage%</span>
                 }
@@ -255,7 +255,7 @@
                         <div class="p-3 d-flex flex-column flex-grow-1">
                             <h6 class="fw-bold mb-1 text-truncate">@(isArabic ? item.ArabicName : item.Name)</h6>
                             <div class="price-block mt-auto">
-                                <span class="price-current">@((item.DiscountedPrice ?? item.Price).ToString("N0")) @(isArabic ? "ج.م" : "EGP")</span>
+                                <span class="price-current">@((item.DiscountedPrice ?? item.Price).ToString("N0")) @Localizer["Currency"]</span>
                             </div>
                             <a asp-controller="Catalog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark mt-2">
                                 @(isArabic ? "عرض" : "View")

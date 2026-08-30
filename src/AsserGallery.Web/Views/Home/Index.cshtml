@@ -118,7 +118,7 @@
                         <!-- Price & CTA -->
                         <div class="mt-auto pt-2 d-flex align-items-center justify-content-between">
                             <div class="price-block">
-                                <span class="price-current">@((product.DiscountedPrice ?? product.Price).ToString("N0")) @(isArabic ? "ج.م" : "EGP")</span>
+                                <span class="price-current">@((product.DiscountedPrice ?? product.Price).ToString("N0")) @Localizer["Currency"]</span>
                                 @if (product.DiscountedPrice.HasValue)
                                 {
                                     <span class="price-original">@product.Price.ToString("N0")</span>
@@ -187,7 +187,7 @@
                                 }
                             </div>
                             <div class="price-block mt-auto pt-2">
-                                <span class="price-current">@((prod.DiscountedPrice ?? prod.Price).ToString("N0")) @(isArabic ? "ج.م" : "EGP")</span>
+                                <span class="price-current">@((prod.DiscountedPrice ?? prod.Price).ToString("N0")) @Localizer["Currency"]</span>
                                 @if (prod.DiscountedPrice.HasValue)
                                 {
                                     <span class="price-original">@prod.Price.ToString("N0")</span>

@@ -2,14 +2,14 @@
 @using System.Globalization
 @{
     var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
-    ViewData["Title"] = isArabic ? "طلبات التواصل وحجز الموديلات" : "Customer Inquiries & Callbacks";
+    ViewData["Title"] = isArabic ? "طلبات العملاء والاستفسارات" : "Customer Inquiries & Callbacks";
     var selectedStatus = ViewBag.SelectedStatus as CustomerRequestStatus?;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">@(isArabic ? "طلبات المعاودة وحجز الموديلات" : "Customer Callback & Hold Requests")</h4>
-        <p class="text-muted small mb-0">@(isArabic ? "متابعة طلبات العملاء الراغبين في الاستفسار عن المقاسات أو تأكيد الشحن." : "Follow up with customers who submitted hold requests or size inquiries.")</p>
+        <h4 class="fw-bold mb-1">@(isArabic ? "طلبات الحجز والمعاودة" : "Customer Callback & Hold Requests")</h4>
+        <p class="text-muted small mb-0">@(isArabic ? "تابع العملاء الذين أرسلوا طلبات حجز أو استفسارات عن المقاسات." : "Follow up with customers who submitted hold requests or size inquiries.")</p>
     </div>
     <div class="d-flex gap-2">
         <a asp-action="Index" class="btn btn-sm @(selectedStatus == null ? "btn-dark" : "btn-outline-secondary") rounded-pill">@(isArabic ? "الكل" : "All")</a>
@@ -26,17 +26,17 @@
                 <tr>
                     <th>@(isArabic ? "التاريخ" : "Date")</th>
                     <th>@(isArabic ? "بيانات العميل" : "Customer Info")</th>
-                    <th>@(isArabic ? "المنتج المطلوب" : "Product")</th>
-                    <th>@(isArabic ? "الرسالة والملاحظات" : "Message / Request")</th>
+                    <th>@(isArabic ? "المنتج" : "Product")</th>
+                    <th>@(isArabic ? "الرسالة / الطلب" : "Message / Request")</th>
                     <th>@(isArabic ? "الحالة" : "Status")</th>
-                    <th class="text-end">@(isArabic ? "الإجراءات والمتابعة" : "Actions & Update")</th>
+                    <th class="text-end">@(isArabic ? "إجراءات وتحديث" : "Actions & Update")</th>
                 </tr>
             </thead>
             <tbody>
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="6" class="text-center py-4 text-muted">@(isArabic ? "لا توجد طلبات عملاء في هذا القسم." : "No customer requests in this view.")</td>
+                        <td colspan="6" class="text-center py-4 text-muted">@(isArabic ? "لا توجد طلبات عملاء في هذا العرض." : "No customer requests in this view.")</td>
                     </tr>
                 }
                 @foreach (var req in Model)
@@ -46,12 +46,12 @@
                         <td>
                             <div class="fw-bold">@req.CustomerName</div>
                             <div class="small text-muted">@req.PhoneNumber</div>
-                            <span class="badge bg-surface-subtle text-main border extra-small">@req.PreferredChannel</span>
+                            <span class="badge bg-light text-dark border extra-small">@req.PreferredChannel</span>
                         </td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(req.ProductName))
                             {
-                                <span class="badge bg-secondary bg-opacity-10 text-main fw-bold">@req.ProductName</span>
+                                <span class="badge bg-secondary bg-opacity-10 text-dark fw-bold">@req.ProductName</span>
                             }
                             else
                             {
@@ -62,7 +62,7 @@
                             @(req.Message ?? "—")
                             @if (!string.IsNullOrWhiteSpace(req.AdminNotes))
                             {
-                                <div class="text-muted extra-small mt-1 fst-italic">@(isArabic ? "ملاحظة الإدارة:" : "Note:") @req.AdminNotes</div>
+                                <div class="text-muted extra-small mt-1 fst-italic">@(isArabic ? "ملاحظة: " : "Note: ")@req.AdminNotes</div>
                             }
                         </td>
                         <td>
@@ -80,18 +80,17 @@
                             }
                             else
                             {
-                                <span class="badge bg-secondary">@(isArabic ? "ملغي" : "Cancelled")</span>
+                                <span class="badge bg-secondary">@(isArabic ? "ملغى" : "Cancelled")</span>
                             }
                         </td>
                         <td class="text-end">
                             <div class="d-inline-flex gap-2 align-items-center">
-                                <a href="https://wa.me/@req.PhoneNumber" target="_blank" class="btn btn-sm btn-success rounded-circle" title="@(isArabic ? "مراسلة عبر واتساب" : "Chat on WhatsApp")">
+                                <a href="https://wa.me/@req.PhoneNumber" target="_blank" class="btn btn-sm btn-success rounded-circle" title="@(isArabic ? "واتساب" : "Chat on WhatsApp")">
                                     <i class="bi bi-whatsapp"></i>
                                 </a>
-                                <a href="tel:@req.PhoneNumber" class="btn btn-sm btn-outline-primary rounded-circle" title="@(isArabic ? "اتصال هاتفي" : "Call Customer")">
+                                <a href="tel:@req.PhoneNumber" class="btn btn-sm btn-outline-primary rounded-circle" title="@(isArabic ? "اتصال" : "Call Customer")">
                                     <i class="bi bi-telephone"></i>
                                 </a>
-                                <!-- Quick Status Dropdown Modal Trigger -->
                                 <button type="button" class="btn btn-sm btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#updateModal-@req.Id">
                                     @(isArabic ? "تحديث" : "Update")
                                 </button>
@@ -102,7 +101,7 @@
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content rounded-4">
                                         <div class="modal-header">
-                                            <h6 class="modal-title fw-bold">@(isArabic ? $"تحديث حالة الطلب — {req.CustomerName}" : $"Update Request — {req.CustomerName}")</h6>
+                                            <h6 class="modal-title fw-bold">@(isArabic ? "تحديث الطلب" : "Update Request") — @req.CustomerName</h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <form asp-action="UpdateStatus" method="post">
@@ -112,20 +111,21 @@
                                                 <div class="mb-3">
                                                     <label class="form-label small fw-bold">@(isArabic ? "الحالة" : "Status")</label>
                                                     <select name="status" class="form-select">
-                                                        <option value="@CustomerRequestStatus.New" selected="@(req.Status == CustomerRequestStatus.New)">@(isArabic ? "جديد (New)" : "New")</option>
-                                                        <option value="@CustomerRequestStatus.Contacted" selected="@(req.Status == CustomerRequestStatus.Contacted)">@(isArabic ? "تم التواصل (Contacted)" : "Contacted")</option>
-                                                        <option value="@CustomerRequestStatus.Completed" selected="@(req.Status == CustomerRequestStatus.Completed)">@(isArabic ? "مكتمل / تم الطلب (Completed)" : "Completed")</option>
-                                                        <option value="@CustomerRequestStatus.Cancelled" selected="@(req.Status == CustomerRequestStatus.Cancelled)">@(isArabic ? "ملغي / غير مهتم (Cancelled)" : "Cancelled")</option>
+                                                        <option value="@CustomerRequestStatus.New" selected="@(req.Status == CustomerRequestStatus.New)">@(isArabic ? "جديد" : "New")</option>
+                                                        <option value="@CustomerRequestStatus.Contacted" selected="@(req.Status == CustomerRequestStatus.Contacted)">@(isArabic ? "تم التواصل (قيد المتابعة)" : "Contacted (In Progress)")</option>
+                                                        <option value="@CustomerRequestStatus.Completed" selected="@(req.Status == CustomerRequestStatus.Completed)">@(isArabic ? "مكتمل (تم الطلب)" : "Completed (Order Placed)")</option>
+                                                        <option value="@CustomerRequestStatus.Cancelled" selected="@(req.Status == CustomerRequestStatus.Cancelled)">@(isArabic ? "ملغى / غير مهتم" : "Cancelled / Not Interested")</option>
                                                     </select>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-bold">@(isArabic ? "ملاحظات المتابعة (داخلي)" : "Admin Follow-up Notes")</label>
-                                                    <textarea name="adminNotes" class="form-control" rows="2" placeholder="@(isArabic ? "مثال: تم التواصل عبر واتساب، تم تأكيد مقاس XL للشحن" : "e.g. Spoke on WhatsApp, customer wants size XL next week")">@req.AdminNotes</textarea>
+                                                    <label class="form-label small fw-bold">@(isArabic ? "ملاحظات المتابعة" : "Admin Follow-up Notes")</label>
+                                                    <textarea name="adminNotes" class="form-control" rows="2"
+                                                              placeholder="@(isArabic ? "مثال: تحدثنا عبر واتساب، العميل يريد XL الأسبوع القادم" : "e.g. Spoke on WhatsApp, customer wants size XL next week")">@req.AdminNotes</textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
-                                                <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Save"]</button>
+                                                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@(isArabic ? "إلغاء" : "Cancel")</button>
+                                                <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@(isArabic ? "حفظ التحديث" : "Save Update")</button>
                                             </div>
                                         </form>
                                     </div>

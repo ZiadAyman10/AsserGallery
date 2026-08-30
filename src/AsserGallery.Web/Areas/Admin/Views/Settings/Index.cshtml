@@ -1,13 +1,11 @@
 @model StoreSettingsDto
-@using System.Globalization
 @{
-    var isRtl = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
-    ViewData["Title"] = isRtl ? "إعدادات المتجر والهوية" : "Store Settings & Branding";
+    ViewData["Title"] = "Store Settings & Branding";
 }
 
 <div class="mb-4">
-    <h4 class="fw-bold mb-1">@(isRtl ? "إعدادات المتجر والهوية التجارية" : "Store Settings & Configuration")</h4>
-    <p class="text-muted small mb-0">@(isRtl ? "تحديد بيانات المتجر، قنوات التواصل والطلب عبر واتساب وفيسبوك، والتحكم في ظهور المنتجات." : "Configure store branding, order communication channels, and availability behaviors.")</p>
+    <h4 class="fw-bold mb-1">Store Settings & Configuration</h4>
+    <p class="text-muted small mb-0">Configure store branding, order communication channels, and availability behaviors.</p>
 </div>
 
 <div class="row justify-content-center">
@@ -26,16 +24,16 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">@(isRtl ? "رقم هاتف طلبات واتساب *" : "Primary WhatsApp Order Phone *")</label>
+                        <label class="form-label small fw-bold">Primary WhatsApp Order Phone *</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-whatsapp text-success"></i></span>
                             <input type="text" name="WhatsAppNumber" class="form-control" value="@Model.WhatsAppNumber" required placeholder="201012345678" />
                         </div>
-                        <span class="text-muted extra-small">@(isRtl ? "اكتب كود الدولة بدون علامة + (مثال: 201012345678)" : "Include country code without '+' (e.g. 201012345678)")</span>
+                        <span class="text-muted extra-small">Include country code without '+' (e.g. 201012345678)</span>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">@(isRtl ? "معرف صفحة ماسنجر *" : "Facebook Messenger Handle *")</label>
+                        <label class="form-label small fw-bold">Facebook Messenger Handle *</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-messenger text-primary"></i></span>
                             <input type="text" name="MessengerUsername" class="form-control" value="@Model.MessengerUsername" required placeholder="assergallery.eg" />
@@ -55,15 +53,15 @@
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" name="HideOutOfStock" id="hideOutOfStockSwitch" value="true" checked="@Model.HideOutOfStock" />
                             <label class="form-check-label fw-bold small" for="hideOutOfStockSwitch">
-                                @(isRtl ? "إخفاء المنتجات التي نفدت كميتها تماماً من كتالوج الموقع العام" : "Automatically hide out-of-stock items completely on the public catalog")
+                                Automatically hide out-of-stock items completely on the public catalog (§4.3)
                             </label>
                         </div>
-                        <span class="text-muted extra-small ms-4 d-block">@(isRtl ? "إذا لم يتم التفعيل، ستظل المنتجات التي نفدت ظاهرة مع شارة 'نفدت الكمية'." : "If unchecked, out-of-stock items remain visible with an 'Out of Stock' badge.")</span>
+                        <span class="text-muted extra-small ms-4 d-block">If unchecked, out-of-stock items remain visible with an 'Out of Stock' badge.</span>
                     </div>
 
                     <div class="col-12 mt-4 text-end">
                         <button type="submit" class="btn btn-dark btn-lg rounded-pill px-5 fw-bold shadow">
-                            <i class="bi bi-check2-circle me-1"></i> @(isRtl ? "حفظ الإعدادات" : "Save Settings")
+                            <i class="bi bi-check2-circle me-1"></i> Save Settings
                         </button>
                     </div>
                 </div>

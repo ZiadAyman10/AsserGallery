@@ -1,37 +1,33 @@
 @model List<FacebookDestinationDto>
-@using System.Globalization
 @{
-    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
-    ViewData["Title"] = isArabic ? "مركز النشر على فيسبوك والمجموعات" : "Facebook Publishing & Groups Center";
+    ViewData["Title"] = "Facebook Publishing & Groups Center";
     var products = ViewBag.Products as IReadOnlyList<ProductDto> ?? new List<ProductDto>();
-    var curr = isArabic ? "ج.م" : "EGP";
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">@(isArabic ? "مركز النشر على فيسبوك ومجموعات البيع" : "Facebook Publishing Center")</h4>
-        <p class="text-muted small mb-0">@(isArabic ? "نشر تلقائي على الصفحات عبر Graph API ومساعد ذكي لتنسيق المنشورات لمجموعات فيسبوك." : "Automated Page publishing via Graph API & manual assistant for Facebook Groups.")</p>
+        <h4 class="fw-bold mb-1">Facebook Publishing Center</h4>
+        <p class="text-muted small mb-0">Automated Page publishing via Graph API & manual assistant for Facebook Groups.</p>
     </div>
     <div class="d-flex gap-2">
         <a asp-action="GroupAssistant" class="btn btn-primary rounded-pill px-3 fw-bold">
-            <i class="bi bi-people-fill me-1"></i> @(isArabic ? "مساعد النشر في الجروبات" : "Group Posting Assistant")
+            <i class="bi bi-people-fill me-1"></i> Group Posting Assistant
         </a>
         <button type="button" class="btn btn-dark rounded-pill px-3 fw-bold" data-bs-toggle="modal" data-bs-target="#addDestinationModal">
-            <i class="bi bi-plus-lg me-1"></i> @(isArabic ? "إضافة صفحة / جروب" : "Add Destination")
-        </button>
+            <i class="bi bi-plus-lg me-1"></i> Add Destination
+        </a>
     </div>
 </div>
 
-<!-- Architecture & Meta API Info Alert -->
+<!-- Architecture & Meta API Info Alert (§4.9) -->
 <div class="alert alert-info border-0 rounded-4 p-4 shadow-sm mb-4">
     <div class="d-flex gap-3">
         <i class="bi bi-info-circle-fill fs-3 text-info"></i>
         <div>
-            <h6 class="fw-bold mb-1">@(isArabic ? "نظام النشر الذكي والتكامل مع فيسبوك" : "Meta API Publishing Architecture")</h6>
+            <h6 class="fw-bold mb-1">Meta API Publishing Architecture (§4.9)</h6>
             <p class="small mb-0 opacity-90">
-                @(isArabic ?
-                    "• صفحات فيسبوك (Pages): نشر مباشر وتلقائي بضغطة زر واحدة عبر واجهة فيسبوك الرسمية. • مجموعات فيسبوك (Groups): يقوم المساعد الذكي بتنسيق نص الإعلان الاحترافي مع الأسعار وإيموجي وروابط واتساب بنقرة واحدة لفتح الجروب واللصق مباشرة."
-                    : "• Facebook Pages: Fully automated via official Graph API endpoints with one-click multi-page broadcasts. • Facebook Groups: Our Posting Assistant formats attractive post copy with pricing, emojis & WhatsApp links, opens the group page directly, and tracks your manual posting confirmations.")
+                • <strong>Facebook Pages:</strong> Fully automated via official Graph API endpoints with one-click multi-page broadcasts.<br />
+                • <strong>Facebook Groups:</strong> As Meta discontinued the Groups API, our <strong>Posting Assistant</strong> formats attractive post copy with pricing, emojis & WhatsApp links, opens the group page directly, and tracks your manual posting confirmations.
             </p>
         </div>
     </div>
@@ -47,25 +43,25 @@
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="badge @(dest.DestinationType == DestinationType.Page ? "bg-primary" : "bg-success") rounded-pill">
                             <i class="bi @(dest.DestinationType == DestinationType.Page ? "bi-flag-fill" : "bi-people-fill") me-1"></i>
-                            @(isArabic ? (dest.DestinationType == DestinationType.Page ? "صفحة بيج" : "جروب فيسبوك") : dest.DestinationType.ToString())
+                            @dest.DestinationType
                         </span>
-                        <span class="text-muted extra-small">@dest.PostCount @(isArabic ? "منشور مسجل" : "post(s) logged")</span>
+                        <span class="text-muted extra-small">@dest.PostCount post(s) logged</span>
                     </div>
                     <h6 class="fw-bold mb-1">@dest.Name</h6>
-                    <p class="text-muted extra-small text-truncate mb-3">@(isArabic ? "الهدف:" : "Target:") @dest.TargetIdOrUrl</p>
+                    <p class="text-muted extra-small text-truncate mb-3">Target: @dest.TargetIdOrUrl</p>
                 </div>
 
                 <div class="pt-2 border-top">
                     @if (dest.DestinationType == DestinationType.Group)
                     {
                         <a asp-action="GroupAssistant" asp-route-destinationId="@dest.Id" class="btn btn-sm btn-outline-success w-100 rounded-pill fw-bold">
-                            <i class="bi bi-magic me-1"></i> @(isArabic ? "فتح المساعد الذكي" : "Open Assistant")
+                            <i class="bi bi-magic me-1"></i> Open Assistant
                         </a>
                     }
                     else
                     {
                         <button type="button" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-bold" data-bs-toggle="modal" data-bs-target="#publishPageModal-@dest.Id">
-                            <i class="bi bi-send me-1"></i> @(isArabic ? "نشر إعلان على البيج" : "Publish Announcement")
+                            <i class="bi bi-send me-1"></i> Publish Announcement
                         </button>
                     }
                 </div>
@@ -79,7 +75,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content rounded-4">
                         <div class="modal-header">
-                            <h6 class="modal-title fw-bold">@(isArabic ? $"النشر على {dest.Name}" : $"Publish to {dest.Name}")</h6>
+                            <h6 class="modal-title fw-bold">Publish to @dest.Name</h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <form asp-action="PublishPage" method="post">
@@ -87,23 +83,23 @@
                             <input type="hidden" name="destinationId" value="@dest.Id" />
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label class="form-label small fw-bold">@(isArabic ? "اختر المنتج المراد الإعلان عنه" : "Select Product")</label>
+                                    <label class="form-label small fw-bold">Select Product</label>
                                     <select name="productId" class="form-select" required>
                                         @foreach (var p in products)
                                         {
-                                            <option value="@p.Id">@(isArabic ? p.ArabicName : p.Name) (@(isArabic ? p.Name : p.ArabicName)) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) @curr</option>
+                                            <option value="@p.Id">@p.Name (@p.ArabicName) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) EGP</option>
                                         }
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label small fw-bold">@(isArabic ? "نص المنشور / الإعلان" : "Post Caption / Message")</label>
-                                    <textarea name="message" class="form-control" rows="4" required placeholder="@(isArabic ? "🔥 تشكيلة جديدة ومميزة وصلت الآن! تفاصيل الأسعار والمقاسات..." : "🔥 New Collection Alert! Check out our new summer arrivals...")"></textarea>
+                                    <label class="form-label small fw-bold">Post Caption / Message</label>
+                                    <textarea name="message" class="form-control" rows="4" required placeholder="🔥 New Collection Alert! Check out our new summer arrivals..."></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold">
-                                    <i class="bi bi-send-fill me-1"></i> @(isArabic ? "نشر على الصفحة" : "Post to Page")
+                                    <i class="bi bi-send-fill me-1"></i> Post to Page
                                 </button>
                             </div>
                         </form>
@@ -119,35 +115,35 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header">
-                <h6 class="modal-title fw-bold">@(isArabic ? "إضافة صفحة أو جروب فيسبوك جديد" : "Add Facebook Target Destination")</h6>
+                <h6 class="modal-title fw-bold">Add Facebook Target Destination</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form asp-action="CreateDestination" method="post">
                 @Html.AntiForgeryToken()
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">@(isArabic ? "اسم الصفحة أو الجروب *" : "Destination Name *")</label>
-                        <input type="text" name="name" class="form-control" required placeholder="@(isArabic ? "مثال: جروب عروض الأزياء بالقاهرة" : "e.g. Cairo VIP Fashion Deals")" />
+                        <label class="form-label small fw-bold">Destination Name *</label>
+                        <input type="text" name="name" class="form-control" required placeholder="e.g. Cairo VIP Fashion Deals" />
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">@(isArabic ? "نوع الوجهة *" : "Destination Type *")</label>
+                        <label class="form-label small fw-bold">Destination Type *</label>
                         <select name="destinationType" class="form-select" required>
-                            <option value="@DestinationType.Group">@(isArabic ? "جروب فيسبوك (مساعد التنسيق والنسخ)" : "Facebook Group (Manual Assistant)")</option>
-                            <option value="@DestinationType.Page">@(isArabic ? "صفحة بيج رسمية (Graph API مباشر)" : "Facebook Page (Graph API)")</option>
+                            <option value="@DestinationType.Group">Facebook Group (Manual Assistant)</option>
+                            <option value="@DestinationType.Page">Facebook Page (Graph API)</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">@(isArabic ? "معرف الصفحة (Page ID) أو رابط الجروب *" : "Page ID or Group URL Slug *")</label>
-                        <input type="text" name="targetIdOrUrl" class="form-control" required placeholder="groups/cairodeals or PageID..." />
+                        <label class="form-label small fw-bold">Page ID or Group URL Slug *</label>
+                        <input type="text" name="targetIdOrUrl" class="form-control" required placeholder="e.g. groups/cairodeals or PageID 109283..." />
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">@(isArabic ? "رمز الوصول للصفحة (Access Token - للصفحات فقط)" : "Page Access Token (For Pages Only)")</label>
+                        <label class="form-label small fw-bold">Page Access Token (For Pages Only)</label>
                         <input type="password" name="accessToken" class="form-control" placeholder="EAAB..." />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
-                    <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Create"]</button>
+                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">Save Destination</button>
                 </div>
             </form>
         </div>

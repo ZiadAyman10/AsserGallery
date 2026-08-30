@@ -1,23 +1,20 @@
-@using System.Globalization
 @{
-    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
-    ViewData["Title"] = isArabic ? "مساعد النشر في جروبات فيسبوك" : "Facebook Group Posting Assistant";
+    ViewData["Title"] = "Facebook Group Posting Assistant";
     var destinations = ViewBag.Destinations as List<FacebookDestinationDto> ?? new List<FacebookDestinationDto>();
     var products = ViewBag.Products as IReadOnlyList<ProductDto> ?? new List<ProductDto>();
     var selectedProductId = ViewBag.SelectedProductId as int?;
     var selectedDestinationId = ViewBag.SelectedDestinationId as int?;
     var lang = ViewBag.Language as string ?? "ar";
     var generated = ViewBag.GeneratedPost as GeneratedGroupPostDto;
-    var curr = isArabic ? "ج.م" : "EGP";
 }
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h4 class="fw-bold mb-1">@(isArabic ? "مساعد النشر في جروبات فيسبوك" : "Facebook Group Posting Assistant")</h4>
-        <p class="text-muted small mb-0">@(isArabic ? "توليد منشورات إعلانية جذابة مع الأسعار وروابط واتساب، نسخها بضغطة زر وتتبع النشر." : "Generate optimized group posts with pricing & WhatsApp order links, copy with 1-click, and track.")</p>
+        <h4 class="fw-bold mb-1">Facebook Group Posting Assistant</h4>
+        <p class="text-muted small mb-0">Generate optimized group posts with pricing & WhatsApp order links, copy with 1-click, and track.</p>
     </div>
     <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
-        <i class="bi bi-arrow-@(isArabic ? "right" : "left") me-1"></i> @(isArabic ? "رجوع لمركز فيسبوك" : "Back to Destinations")
+        <i class="bi bi-arrow-left me-1"></i> Back to Destinations
     </a>
 </div>
 
@@ -25,26 +22,26 @@
     <!-- Selector Configuration -->
     <div class="col-lg-5">
         <div class="card-custom p-4 mb-4">
-            <h5 class="fw-bold mb-3 border-bottom pb-2">@(isArabic ? "1. اختيار المنتج والجروب المستهدف" : "1. Select Product & Target Group")</h5>
+            <h5 class="fw-bold mb-3 border-bottom pb-2">1. Select Product & Target Group</h5>
             
             <form method="get" asp-action="GroupAssistant">
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">@(isArabic ? "اختر المنتج المراد ترويجه *" : "Select Product to Promote *")</label>
+                    <label class="form-label small fw-bold">Select Product to Promote *</label>
                     <select name="productId" class="form-select" required onchange="this.form.submit()">
-                        <option value="">@(isArabic ? "اختر منتجاً..." : "Choose a product...")</option>
+                        <option value="">Choose a product...</option>
                         @foreach (var p in products)
                         {
                             <option value="@p.Id" selected="@(selectedProductId == p.Id)">
-                                @(isArabic ? p.ArabicName : p.Name) (@(isArabic ? p.Name : p.ArabicName)) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) @curr
+                                @p.Name (@p.ArabicName) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) EGP
                             </option>
                         }
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">@(isArabic ? "اختر جروب فيسبوك *" : "Select Facebook Group *")</label>
+                    <label class="form-label small fw-bold">Select Facebook Group *</label>
                     <select name="destinationId" class="form-select" required onchange="this.form.submit()">
-                        <option value="">@(isArabic ? "اختر الجروب المستهدف..." : "Choose a group destination...")</option>
+                        <option value="">Choose a group destination...</option>
                         @foreach (var d in destinations)
                         {
                             <option value="@d.Id" selected="@(selectedDestinationId == d.Id)">
@@ -55,7 +52,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">@(isArabic ? "لغة نص الإعلان" : "Post Copy Language")</label>
+                    <label class="form-label small fw-bold">Post Copy Language</label>
                     <div class="btn-group w-100" role="group">
                         <button type="submit" name="lang" value="ar" class="btn btn-sm @(lang == "ar" ? "btn-dark" : "btn-outline-secondary")">العربية (Arabic)</button>
                         <button type="submit" name="lang" value="en" class="btn btn-sm @(lang == "en" ? "btn-dark" : "btn-outline-secondary")">English</button>
@@ -68,7 +65,7 @@
         {
             <!-- Confirm Posting Tracker -->
             <div class="card-custom p-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">@(isArabic ? "3. تأكيد وتسجيل النشر" : "3. Confirm & Log Post")</h5>
+                <h5 class="fw-bold mb-3 border-bottom pb-2">3. Confirm & Log Post</h5>
                 <form asp-action="ConfirmGroupPost" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="productId" value="@generated.ProductId" />
@@ -76,17 +73,17 @@
                     <input type="hidden" name="postContent" value="@generated.FormattedText" />
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">@(isArabic ? "رابط البوست المباشر (اختياري)" : "Direct Post URL (Optional)")</label>
+                        <label class="form-label small fw-bold">Direct Post URL (Optional)</label>
                         <input type="url" name="postUrl" class="form-control form-control-sm" placeholder="https://facebook.com/groups/.../posts/..." />
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">@(isArabic ? "ملاحظات وتفاصيل النشر" : "Admin Follow-up Notes")</label>
-                        <input type="text" name="notes" class="form-control form-control-sm" placeholder="@(isArabic ? "مثال: تم النشر الساعة 8 مساءً، تفاعل قوي" : "e.g. Posted at 8 PM, high engagement")" />
+                        <label class="form-label small fw-bold">Admin Follow-up Notes</label>
+                        <input type="text" name="notes" class="form-control form-control-sm" placeholder="e.g. Posted at 8 PM, high engagement" />
                     </div>
 
                     <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold">
-                        <i class="bi bi-check2-all me-1"></i> @(isArabic ? "تأكيد إتمام النشر في الجروب" : "Confirm User Posted to Group")
+                        <i class="bi bi-check2-all me-1"></i> Confirm User Posted to Group
                     </button>
                 </form>
             </div>
@@ -97,37 +94,37 @@
     <div class="col-lg-7">
         <div class="card-custom p-4 h-100 d-flex flex-column">
             <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
-                <h5 class="fw-bold mb-0">@(isArabic ? "2. نص الإعلان الجاهز للنشر" : "2. Generated Post Content")</h5>
+                <h5 class="fw-bold mb-0">2. Generated Post Content</h5>
                 @if (generated != null)
                 {
-                    <span class="badge bg-success bg-opacity-10 text-success">@(isArabic ? "جاهز للنشر" : "Ready to Publish")</span>
+                    <span class="badge bg-success bg-opacity-10 text-success">Ready to Publish</span>
                 }
             </div>
 
             @if (generated == null)
             {
                 <div class="text-center py-5 my-auto text-muted">
-                    <i class="bi bi-arrow-@(isArabic ? "right" : "left")-circle fs-1 mb-2 d-block text-muted opacity-50"></i>
-                    <p class="mb-0">@(isArabic ? "يرجى اختيار المنتج والجروب من اللوحة اليسرى لتوليد نص الإعلان المنسق تلقائياً." : "Please select a product and target Facebook group from the left panel to auto-generate formatted post text.")</p>
+                    <i class="bi bi-arrow-left-circle fs-1 mb-2 d-block text-muted opacity-50"></i>
+                    <p class="mb-0">Please select a product and target Facebook group from the left panel to auto-generate formatted post text.</p>
                 </div>
             }
             else
             {
                 <div class="mb-3 flex-grow-1">
-                    <label class="form-label small fw-bold text-muted">@(isArabic ? "نص الإعلان المنسق بالكامل:" : "Formatted Group Post Text:")</label>
-                    <textarea id="groupPostContentArea" class="form-control font-monospace p-3 bg-surface-subtle" rows="12" readonly style="line-height: 1.6;">@generated.FormattedText</textarea>
+                    <label class="form-label small fw-bold text-muted">Formatted Group Post Text:</label>
+                    <textarea id="groupPostContentArea" class="form-control font-monospace text-dark bg-light p-3" rows="12" readonly style="line-height: 1.6;">@generated.FormattedText</textarea>
                 </div>
 
                 <!-- Action Bar -->
                 <div class="d-flex flex-wrap gap-2 pt-3 border-top">
                     <button type="button" class="btn btn-dark rounded-pill px-4 fw-bold flex-grow-1" onclick="copyToClipboard('groupPostContentArea', this)">
-                        <i class="bi bi-clipboard me-1"></i> @(isArabic ? "نسخ نص الإعلان" : "Copy Post Content")
+                        <i class="bi bi-clipboard me-1"></i> Copy Post Content
                     </button>
 
                     @if (!string.IsNullOrWhiteSpace(generated.TargetGroupUrl))
                     {
                         <a href="@generated.TargetGroupUrl" target="_blank" class="btn btn-primary rounded-pill px-4 fw-bold">
-                            <i class="bi bi-box-arrow-up-right me-1"></i> @(isArabic ? "فتح الجروب على فيسبوك" : "Open Group on Facebook")
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Open Group on Facebook
                         </a>
                     }
                 </div>

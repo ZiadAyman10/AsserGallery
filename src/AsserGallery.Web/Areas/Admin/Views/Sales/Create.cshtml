@@ -1,18 +1,15 @@
-@using System.Globalization
 @{
-    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
-    ViewData["Title"] = isArabic ? "تسجيل مبيعة جديدة" : "Register New Sale";
+    ViewData["Title"] = "Register New Sale";
     var products = ViewBag.Products as IReadOnlyList<ProductDto> ?? new List<ProductDto>();
-    var curr = isArabic ? "ج.م" : "EGP";
 }
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h4 class="fw-bold mb-1">@(isArabic ? "تسجيل مبيعة جديدة" : "Register New Sale")</h4>
-        <p class="text-muted small mb-0">@(isArabic ? "تسجيل طلب بيع وتحديث كميات المخزون للألوان المحددة تلقائياً." : "Record a confirmed customer order. Selected variant stock will auto-decrement.")</p>
+        <h4 class="fw-bold mb-1">Register New Sale</h4>
+        <p class="text-muted small mb-0">Record a confirmed customer order. Selected variant stock will auto-decrement.</p>
     </div>
     <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
-        <i class="bi bi-arrow-@(isArabic ? "right" : "left") me-1"></i> @(isArabic ? "رجوع للمبيعات" : "Back to Sales")
+        <i class="bi bi-arrow-left me-1"></i> Back to Sales
     </a>
 </div>
 
@@ -22,26 +19,26 @@
         <!-- Customer & Order Meta -->
         <div class="col-lg-4">
             <div class="card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">@(isArabic ? "بيانات العميل والفاتورة" : "Customer & Details")</h5>
+                <h5 class="fw-bold mb-3 border-bottom pb-2">Customer & Details</h5>
                 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">@(isArabic ? "اسم العميل" : "Customer Name")</label>
-                    <input type="text" name="customerName" class="form-control" placeholder="@(isArabic ? "مثال: محمود حسن" : "e.g. Mahmoud Hassan")" />
+                    <label class="form-label small fw-bold">Customer Name</label>
+                    <input type="text" name="customerName" class="form-control" placeholder="e.g. Mahmoud Hassan" />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">@(isArabic ? "رقم هاتف العميل" : "Customer Phone")</label>
+                    <label class="form-label small fw-bold">Customer Phone</label>
                     <input type="tel" name="customerPhone" class="form-control" placeholder="010XXXXXXXX" />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">@(isArabic ? "تاريخ ووقت البيع" : "Sale Date")</label>
+                    <label class="form-label small fw-bold">Sale Date</label>
                     <input type="datetime-local" name="saleDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">@(isArabic ? "ملاحظات الشحن والتسليم" : "Notes / Shipping Info")</label>
-                    <textarea name="notes" class="form-control" rows="3" placeholder="@(isArabic ? "شركة الشحن، العنوان، طريقة الدفع..." : "Courier details, payment method, address...")"></textarea>
+                    <label class="form-label small fw-bold">Notes / Shipping Info</label>
+                    <textarea name="notes" class="form-control" rows="3" placeholder="Courier details, payment method, address..."></textarea>
                 </div>
             </div>
         </div>
@@ -50,9 +47,9 @@
         <div class="col-lg-8">
             <div class="card-custom p-4 mb-4">
                 <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
-                    <h5 class="fw-bold mb-0">@(isArabic ? "أصناف الفاتورة" : "Order Items")</h5>
+                    <h5 class="fw-bold mb-0">Order Items</h5>
                     <button type="button" class="btn btn-sm btn-dark rounded-pill" onclick="addSaleRow()">
-                        <i class="bi bi-plus-lg me-1"></i> @(isArabic ? "إضافة صنف آخر" : "Add Another Item")
+                        <i class="bi bi-plus-lg me-1"></i> Add Another Item
                     </button>
                 </div>
 
@@ -60,9 +57,9 @@
                     <table class="table align-middle" id="saleItemsTable">
                         <thead>
                             <tr>
-                                <th style="width: 45%;">@(isArabic ? "الموديل ولون القطعة" : "Product & Color Variant")</th>
-                                <th style="width: 20%;">@(isArabic ? "الكمية" : "Qty")</th>
-                                <th style="width: 25%;">@(isArabic ? "السعر (" + curr + ")" : "Unit Price (" + curr + ")")</th>
+                                <th style="width: 45%;">Product & Color Variant</th>
+                                <th style="width: 20%;">Qty</th>
+                                <th style="width: 25%;">Unit Price (EGP)</th>
                                 <th style="width: 10%;"></th>
                             </tr>
                         </thead>
@@ -70,14 +67,14 @@
                             <tr class="sale-item-row">
                                 <td>
                                     <select name="variantIds" class="form-select variant-select" required onchange="onVariantSelected(this)">
-                                        <option value="">@(isArabic ? "اختر الموديل واللون..." : "Select Variant (Stock)...")</option>
+                                        <option value="">Select Variant (Stock)...</option>
                                         @foreach (var p in products)
                                         {
-                                            <optgroup label="@(isArabic ? p.ArabicName : p.Name) (@(isArabic ? p.Name : p.ArabicName))">
+                                            <optgroup label="@p.Name (@p.ArabicName)">
                                                 @foreach (var v in p.Variants.Where(v => v.Quantity > 0))
                                                 {
                                                     <option value="@v.Id" data-prodid="@p.Id" data-price="@(p.DiscountedPrice ?? p.Price)" data-stock="@v.Quantity">
-                                                        @(isArabic ? v.ColorArabicName : v.ColorName) (@(isArabic ? v.ColorName : v.ColorArabicName)) — @(isArabic ? $"المتاح: {v.Quantity} قطعة" : $"Stock: {v.Quantity} pcs")
+                                                        @v.ColorName (@v.ColorArabicName) — Stock: @v.Quantity pcs
                                                     </option>
                                                 }
                                             </optgroup>
@@ -102,14 +99,14 @@
                 </div>
 
                 <!-- Total Amount Summary Card -->
-                <div class="p-3 bg-surface-subtle rounded-3 border d-flex align-items-center justify-content-between mt-3">
-                    <span class="fs-5 fw-bold">@(isArabic ? "إجمالي الفاتورة:" : "Grand Total:")</span>
-                    <span class="fs-4 fw-extrabold text-success" id="grandTotalDisplay">0 @curr</span>
+                <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between mt-3">
+                    <span class="fs-5 fw-bold">Grand Total:</span>
+                    <span class="fs-4 fw-extrabold text-success" id="grandTotalDisplay">0 EGP</span>
                 </div>
 
                 <div class="mt-4 text-end">
                     <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 fw-bold shadow">
-                        <i class="bi bi-check-circle-fill me-2"></i> @(isArabic ? "تأكيد الفاتورة وخصم المخزون" : "Confirm Sale & Update Inventory")
+                        <i class="bi bi-check-circle-fill me-2"></i> Confirm Sale & Update Inventory
                     </button>
                 </div>
             </div>
@@ -119,8 +116,6 @@
 
 @section Scripts {
 <script>
-    const currencySuffix = ' @(isArabic ? "ج.م" : "EGP")';
-
     function onVariantSelected(selectElement) {
         const selectedOption = selectElement.options[selectElement.selectedIndex];
         const row = selectElement.closest('tr');
@@ -157,7 +152,7 @@
             btn.closest('tr').remove();
             calcTotal();
         } else {
-            alert('@(isArabic ? "يجب إضافة صنف واحد على الأقل." : "At least one item is required.")');
+            alert('At least one item is required.');
         }
     }
 
@@ -168,7 +163,7 @@
             const price = parseFloat(row.querySelector('.item-price').value) || 0;
             total += (qty * price);
         });
-        document.getElementById('grandTotalDisplay').innerText = total.toLocaleString() + currencySuffix;
+        document.getElementById('grandTotalDisplay').innerText = total.toLocaleString() + ' EGP';
     }
 
     document.addEventListener('DOMContentLoaded', calcTotal);
