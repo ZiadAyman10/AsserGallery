@@ -1,0 +1,126 @@
+@model List<ColorDto>
+@using System.Globalization
+@{
+    var isRtl = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["ColorsManagement"];
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">@Localizer["ColorsManagement"]</h4>
+        <p class="text-muted small mb-0">@(isRtl ? "إضافة وتخصيص ألوان الملابس مع كود اللون ودرجته لاستخدامه في المخزون والكتالوج." : "Manage custom clothing colors with Hex code picker for inventory and catalog swatches.")</p>
+    </div>
+    <button type="button" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addColorModal">
+        <i class="bi bi-plus-lg me-1"></i> @(isRtl ? "إضافة لون جديد" : "Add Custom Color")
+    </button>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 mb-4">
+    @foreach (var c in Model)
+    {
+        <div class="col">
+            <div class="card-custom p-3 h-100 d-flex flex-column justify-content-between">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle border shadow-sm flex-shrink-0" 
+                         style="width: 44px; height: 44px; background-color: @c.HexCode;"></div>
+                    <div class="flex-grow-1 min-w-0">
+                        <h6 class="fw-bold mb-0 text-truncate">@(isRtl ? c.ArabicName : c.Name)</h6>
+                        <div class="text-muted small text-truncate">@(isRtl ? c.Name : c.ArabicName)</div>
+                        <code class="extra-small px-2 py-0.5 rounded bg-surface-subtle border">@c.HexCode</code>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-end gap-2 pt-2 border-top">
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle" 
+                            data-bs-toggle="modal" data-bs-target="#editColorModal-@c.Id" title="@Localizer["Edit"]">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <form asp-action="Delete" asp-route-id="@c.Id" method="post" 
+                          onsubmit="return confirm('@(isRtl ? "هل أنت متأكد من حذف هذا اللون؟" : "Delete this color?")');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" title="@Localizer["Delete"]">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Color Modal -->
+        <div class="modal fade" id="editColorModal-@c.Id" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header">
+                        <h6 class="modal-title fw-bold">@(isRtl ? $"تعديل اللون: {c.ArabicName}" : $"Edit Color: {c.Name}")</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@c.Id" />
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Color Name (English) *</label>
+                                <input type="text" name="name" class="form-control" required value="@c.Name" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">الاسم بالعربي *</label>
+                                <input type="text" name="arabicName" class="form-control text-end" required value="@c.ArabicName" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Color Picker / Hex Code *</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="color" id="editColorPicker-@c.Id" class="form-control form-control-color border" 
+                                           value="@c.HexCode" oninput="document.getElementById('editHexInput-@c.Id').value = this.value.toUpperCase();" />
+                                    <input type="text" id="editHexInput-@c.Id" name="hexCode" class="form-control" 
+                                           value="@c.HexCode" required oninput="document.getElementById('editColorPicker-@c.Id').value = this.value;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                            <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Save"]</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Add Custom Color Modal -->
+<div class="modal fade" id="addColorModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h6 class="modal-title fw-bold">@(isRtl ? "إضافة لون جديد" : "Add Custom Color")</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Color Name (English) *</label>
+                        <input type="text" name="name" class="form-control" required placeholder="e.g. Navy Blue" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">الاسم بالعربي *</label>
+                        <input type="text" name="arabicName" class="form-control text-end" required placeholder="مثال: كحلي داكن" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Color Picker / Hex Code *</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="color" id="newColorPicker" class="form-control form-control-color border" 
+                                   value="#2563EB" oninput="document.getElementById('newHexInput').value = this.value.toUpperCase();" />
+                            <input type="text" id="newHexInput" name="hexCode" class="form-control" 
+                                   value="#2563EB" required placeholder="#2563EB" oninput="document.getElementById('newColorPicker').value = this.value;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                    <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Create"]</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
