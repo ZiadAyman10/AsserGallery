@@ -29,7 +29,7 @@ builder.Services.AddControllersWithViews()
     .AddDataAnnotationsLocalization();
 
 // 4. Localization Configuration (Arabic & English)
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddLocalization();
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[]

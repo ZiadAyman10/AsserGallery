@@ -1,19 +1,21 @@
 @model List<CustomerRequestDto>
+@using System.Globalization
 @{
-    ViewData["Title"] = "Customer Inquiries & Callbacks";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["CustomerInquiriesAndCallbacks"].Value;
     var selectedStatus = ViewBag.SelectedStatus as CustomerRequestStatus?;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Customer Callback & Hold Requests</h4>
-        <p class="text-muted small mb-0">Follow up with customers who submitted hold requests or size inquiries.</p>
+        <h4 class="fw-bold mb-1">@Localizer["CustomerCallbackAndHoldRequests"]</h4>
+        <p class="text-muted small mb-0">@Localizer["ManageRequestsDescription"]</p>
     </div>
     <div class="d-flex gap-2">
-        <a asp-action="Index" class="btn btn-sm @(selectedStatus == null ? "btn-dark" : "btn-outline-secondary") rounded-pill">All</a>
-        <a asp-action="Index" asp-route-status="@CustomerRequestStatus.New" class="btn btn-sm @(selectedStatus == CustomerRequestStatus.New ? "btn-warning" : "btn-outline-warning") rounded-pill">New</a>
-        <a asp-action="Index" asp-route-status="@CustomerRequestStatus.Contacted" class="btn btn-sm @(selectedStatus == CustomerRequestStatus.Contacted ? "btn-info" : "btn-outline-info") rounded-pill">Contacted</a>
-        <a asp-action="Index" asp-route-status="@CustomerRequestStatus.Completed" class="btn btn-sm @(selectedStatus == CustomerRequestStatus.Completed ? "btn-success" : "btn-outline-success") rounded-pill">Completed</a>
+        <a asp-action="Index" class="btn btn-sm @(selectedStatus == null ? "btn-dark" : "btn-outline-secondary") rounded-pill">@Localizer["All"]</a>
+        <a asp-action="Index" asp-route-status="@CustomerRequestStatus.New" class="btn btn-sm @(selectedStatus == CustomerRequestStatus.New ? "btn-warning" : "btn-outline-warning") rounded-pill">@Localizer["New"]</a>
+        <a asp-action="Index" asp-route-status="@CustomerRequestStatus.Contacted" class="btn btn-sm @(selectedStatus == CustomerRequestStatus.Contacted ? "btn-info" : "btn-outline-info") rounded-pill">@Localizer["Contacted"]</a>
+        <a asp-action="Index" asp-route-status="@CustomerRequestStatus.Completed" class="btn btn-sm @(selectedStatus == CustomerRequestStatus.Completed ? "btn-success" : "btn-outline-success") rounded-pill">@Localizer["Completed"]</a>
     </div>
 </div>
 
@@ -22,19 +24,19 @@
         <table class="table table-custom table-hover align-middle mb-0">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Customer Info</th>
-                    <th>Product</th>
-                    <th>Message / Request</th>
-                    <th>Status</th>
-                    <th class="text-end">Actions & Update</th>
+                    <th>@Localizer["Date"]</th>
+                    <th>@Localizer["CustomerInfo"]</th>
+                    <th>@Localizer["Product"]</th>
+                    <th>@Localizer["MessageRequest"]</th>
+                    <th>@Localizer["Status"]</th>
+                    <th class="text-end">@Localizer["ActionsAndUpdate"]</th>
                 </tr>
             </thead>
             <tbody>
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="6" class="text-center py-4 text-muted">No customer requests in this view.</td>
+                        <td colspan="6" class="text-center py-4 text-muted">@Localizer["NoRequestsFound"]</td>
                     </tr>
                 }
                 @foreach (var req in Model)
@@ -53,45 +55,45 @@
                             }
                             else
                             {
-                                <span class="text-muted small">General Inquiry</span>
+                                <span class="text-muted small">@(isArabic ? "استفسار عام" : "General Inquiry")</span>
                             }
                         </td>
                         <td class="small" style="max-width: 250px;">
                             @(req.Message ?? "—")
                             @if (!string.IsNullOrWhiteSpace(req.AdminNotes))
                             {
-                                <div class="text-muted extra-small mt-1 fst-italic">Note: @req.AdminNotes</div>
+                                <div class="text-muted extra-small mt-1 fst-italic">@(isArabic ? "ملاحظة: " : "Note: ")@req.AdminNotes</div>
                             }
                         </td>
                         <td>
                             @if (req.Status == CustomerRequestStatus.New)
                             {
-                                <span class="badge bg-warning text-dark">New</span>
+                                <span class="badge bg-warning text-dark">@Localizer["New"]</span>
                             }
                             else if (req.Status == CustomerRequestStatus.Contacted)
                             {
-                                <span class="badge bg-info text-white">Contacted</span>
+                                <span class="badge bg-info text-white">@Localizer["Contacted"]</span>
                             }
                             else if (req.Status == CustomerRequestStatus.Completed)
                             {
-                                <span class="badge bg-success">Completed</span>
+                                <span class="badge bg-success">@Localizer["Completed"]</span>
                             }
                             else
                             {
-                                <span class="badge bg-secondary">Cancelled</span>
+                                <span class="badge bg-secondary">@(isArabic ? "ملغي" : "Cancelled")</span>
                             }
                         </td>
                         <td class="text-end">
                             <div class="d-inline-flex gap-2 align-items-center">
-                                <a href="https://wa.me/@req.PhoneNumber" target="_blank" class="btn btn-sm btn-success rounded-circle" title="Chat on WhatsApp">
+                                <a href="https://wa.me/@req.PhoneNumber" target="_blank" class="btn btn-sm btn-success rounded-circle" title="@Localizer["OpenWhatsApp"]">
                                     <i class="bi bi-whatsapp"></i>
                                 </a>
-                                <a href="tel:@req.PhoneNumber" class="btn btn-sm btn-outline-primary rounded-circle" title="Call Customer">
+                                <a href="tel:@req.PhoneNumber" class="btn btn-sm btn-outline-primary rounded-circle" title="@(isArabic ? "اتصال" : "Call Customer")">
                                     <i class="bi bi-telephone"></i>
                                 </a>
                                 <!-- Quick Status Dropdown Modal Trigger -->
                                 <button type="button" class="btn btn-sm btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#updateModal-@req.Id">
-                                    Update
+                                    @(isArabic ? "تحديث" : "Update")
                                 </button>
                             </div>
 
@@ -100,7 +102,7 @@
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content rounded-4">
                                         <div class="modal-header">
-                                            <h6 class="modal-title fw-bold">Update Request — @req.CustomerName</h6>
+                                            <h6 class="modal-title fw-bold">@(isArabic ? $"تحديث طلب — {req.CustomerName}" : $"Update Request — {req.CustomerName}")</h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <form asp-action="UpdateStatus" method="post">
@@ -108,22 +110,22 @@
                                             <input type="hidden" name="id" value="@req.Id" />
                                             <div class="modal-body">
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-bold">Status</label>
+                                                    <label class="form-label small fw-bold">@Localizer["Status"]</label>
                                                     <select name="status" class="form-select">
-                                                        <option value="@CustomerRequestStatus.New" selected="@(req.Status == CustomerRequestStatus.New)">New</option>
-                                                        <option value="@CustomerRequestStatus.Contacted" selected="@(req.Status == CustomerRequestStatus.Contacted)">Contacted (In Progress)</option>
-                                                        <option value="@CustomerRequestStatus.Completed" selected="@(req.Status == CustomerRequestStatus.Completed)">Completed (Order Placed)</option>
-                                                        <option value="@CustomerRequestStatus.Cancelled" selected="@(req.Status == CustomerRequestStatus.Cancelled)">Cancelled / Not Interested</option>
+                                                        <option value="@CustomerRequestStatus.New" selected="@(req.Status == CustomerRequestStatus.New)">@Localizer["New"]</option>
+                                                        <option value="@CustomerRequestStatus.Contacted" selected="@(req.Status == CustomerRequestStatus.Contacted)">@(isArabic ? "تم التواصل (قيد المتابعة)" : "Contacted (In Progress)")</option>
+                                                        <option value="@CustomerRequestStatus.Completed" selected="@(req.Status == CustomerRequestStatus.Completed)">@(isArabic ? "مكتمل (تم تأكيد الطلب)" : "Completed (Order Placed)")</option>
+                                                        <option value="@CustomerRequestStatus.Cancelled" selected="@(req.Status == CustomerRequestStatus.Cancelled)">@(isArabic ? "ملغي / غير مهتم" : "Cancelled / Not Interested")</option>
                                                     </select>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-bold">Admin Follow-up Notes</label>
-                                                    <textarea name="adminNotes" class="form-control" rows="2" placeholder="e.g. Spoke on WhatsApp, customer wants size XL next week">@req.AdminNotes</textarea>
+                                                    <label class="form-label small fw-bold">@(isArabic ? "ملاحظات المتابعة" : "Admin Follow-up Notes")</label>
+                                                    <textarea name="adminNotes" class="form-control" rows="2" placeholder="@(isArabic ? "مثال: تم التواصل عبر واتساب والعميل يريد مقاس XL الأسبوع القادم" : "e.g. Spoke on WhatsApp, customer wants size XL next week")">@req.AdminNotes</textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">Save Update</button>
+                                                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@(isArabic ? "إلغاء" : "Cancel")</button>
+                                                <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@(isArabic ? "حفظ التحديث" : "Save Update")</button>
                                             </div>
                                         </form>
                                     </div>

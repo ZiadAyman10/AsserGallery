@@ -1,16 +1,19 @@
+@using System.Globalization
 @{
-    ViewData["Title"] = "Add New Product";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["AddNewProduct"].Value;
     var categories = ViewBag.Categories as List<CategoryDto> ?? new List<CategoryDto>();
     var colors = ViewBag.Colors as List<ColorDto> ?? new List<ColorDto>();
+    var currency = Localizer["Currency"].Value;
 }
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Add New Product</h4>
-        <p class="text-muted small mb-0">Create a new item with multi-color stock tracking and dual photos.</p>
+        <h4 class="fw-bold mb-1">@Localizer["AddNewProduct"]</h4>
+        <p class="text-muted small mb-0">@(isArabic ? "إضافة قطعة ملابس جديدة مع تتبع مخزون الألوان والصور المزدوجة." : "Create a new item with multi-color stock tracking and dual photos.")</p>
     </div>
     <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
-        <i class="bi bi-arrow-left me-1"></i> Back to Products
+        <i class="bi bi-arrow-@(isArabic ? "right" : "left") me-1"></i> @(isArabic ? "العودة للمنتجات" : "Back to Products")
     </a>
 </div>
 
@@ -20,37 +23,39 @@
         <!-- Left Column: Details -->
         <div class="col-lg-8">
             <div class="card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">1. Product Information</h5>
+                <h5 class="fw-bold mb-3 border-bottom pb-2">@(isArabic ? "1. بيانات المنتج الأساسية" : "1. Product Information")</h5>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Product Name (English) *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "اسم المنتج (بالإنجليزية) *" : "Product Name (English) *")</label>
                         <input type="text" name="name" class="form-control" required placeholder="e.g. Summer Linen Shirt" />
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">اسم المنتج (بالعربي) *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "اسم المنتج (بالعربية) *" : "Arabic Name *")</label>
                         <input type="text" name="arabicName" class="form-control text-end" required placeholder="مثال: قميص كتان صيفي" />
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Regular Price (EGP) *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? $"السعر الأساسي ({currency}) *" : $"Regular Price ({currency}) *")</label>
                         <input type="number" step="1" name="price" class="form-control" required placeholder="500" />
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Discounted Price (Optional)</label>
+                        <label class="form-label small fw-bold">@(isArabic ? $"سعر الخصم / العرض ({currency}) — اختياري" : $"Discounted Price ({currency}) - Optional")</label>
                         <input type="number" step="1" name="discountedPrice" class="form-control" placeholder="380" />
-                        <span class="text-muted extra-small">Leave empty if no discount</span>
+                        <span class="text-muted extra-small">@(isArabic ? "اتركه فارغاً إذا لم يكن هناك خصم" : "Leave empty if no discount")</span>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">SubCategory *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "القسم الفرعي *" : "SubCategory *")</label>
                         <select name="subCategoryId" class="form-select" required>
-                            <option value="">Select SubCategory...</option>
+                            <option value="">@(isArabic ? "اختر القسم الفرعي..." : "Select SubCategory...")</option>
                             @foreach (var cat in categories)
                             {
-                                <optgroup label="@cat.Name (@cat.ArabicName)">
+                                <optgroup label="@(isArabic && !string.IsNullOrWhiteSpace(cat.ArabicName) ? cat.ArabicName : cat.Name)">
                                     @foreach (var sub in cat.SubCategories)
                                     {
-                                        <option value="@sub.Id">@sub.Name (@sub.ArabicName)</option>
+                                        <option value="@sub.Id">
+                                            @(isArabic && !string.IsNullOrWhiteSpace(sub.ArabicName) ? sub.ArabicName : sub.Name)
+                                        </option>
                                     }
                                 </optgroup>
                             }
@@ -60,20 +65,20 @@
                     <div class="col-md-6 d-flex align-items-center gap-4 pt-4">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="isFeatured" id="isFeatured" value="true" />
-                            <label class="form-check-label small fw-bold" for="isFeatured">Featured in Home Rail</label>
+                            <label class="form-check-label small fw-bold" for="isFeatured">@(isArabic ? "تمييز المنتج في الواجهة الرئيسية" : "Featured in Home Rail")</label>
                         </div>
                         <div>
-                            <label class="form-label small fw-bold mb-0 me-2">Display Order:</label>
+                            <label class="form-label small fw-bold mb-0 me-2">@(isArabic ? "الترتيب:" : "Display Order:")</label>
                             <input type="number" name="displayOrder" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="1" />
                         </div>
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label small fw-bold">Description (English)</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "الوصف والتفاصيل (بالإنجليزية)" : "Description (English)")</label>
                         <textarea name="description" class="form-control" rows="3" placeholder="Fabric composition, fit details, wash instructions..."></textarea>
                     </div>
                     <div class="col-12">
-                        <label class="form-label small fw-bold">الوصف والتفاصيل (بالعربي)</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "الوصف والتفاصيل (بالعربية)" : "Arabic Description")</label>
                         <textarea name="arabicDescription" class="form-control text-end" rows="3" placeholder="تفاصيل الخامة والمقاسات وطريقة الغسيل..."></textarea>
                     </div>
                 </div>
@@ -82,10 +87,10 @@
             <!-- Color & Stock Matrix (§4.1) -->
             <div class="card-custom p-4 mb-4">
                 <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
-                    <h5 class="fw-bold mb-0">2. Color Variants & Stock Quantities</h5>
-                    <span class="badge bg-light text-dark border">Per-Color Inventory</span>
+                    <h5 class="fw-bold mb-0">@(isArabic ? "2. ألوان المنتج وكميات المخزون" : "2. Color Variants & Stock Quantities")</h5>
+                    <span class="badge bg-light text-dark border">@Localizer["ColorStockMatrix"]</span>
                 </div>
-                <p class="text-muted small">Specify available quantities for each color variant. Enter 0 for colors currently out of stock.</p>
+                <p class="text-muted small">@(isArabic ? "حدد الكمية المتوفرة في المخزن لكل لون. اترك 0 للألوان غير المتوفرة حالياً." : "Specify available quantities for each color variant. Enter 0 for colors currently out of stock.")</p>
 
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     @for (int i = 0; i < colors.Count; i++)
@@ -96,13 +101,13 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="color-dot" style="background-color: @c.HexCode; width: 20px; height: 20px;"></span>
                                     <div>
-                                        <div class="fw-bold small">@c.Name</div>
-                                        <div class="text-muted extra-small">@c.ArabicName</div>
+                                        <div class="fw-bold small">@(isArabic && !string.IsNullOrWhiteSpace(c.ArabicName) ? c.ArabicName : c.Name)</div>
+                                        <div class="text-muted extra-small">@(isArabic ? c.Name : c.ArabicName)</div>
                                     </div>
                                 </div>
                                 <input type="hidden" name="colorIds" value="@c.Id" />
                                 <div style="width: 80px;">
-                                    <input type="number" name="quantities" class="form-control form-control-sm text-center" min="0" value="0" placeholder="Qty" />
+                                    <input type="number" name="quantities" class="form-control form-control-sm text-center" min="0" value="0" placeholder="0" />
                                 </div>
                             </div>
                         </div>
@@ -114,38 +119,38 @@
         <!-- Right Column: Dual Images (§4.8 Original vs AI) -->
         <div class="col-lg-4">
             <div class="card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-3 border-bottom pb-2">3. Product Images</h5>
-                <p class="text-muted small">Asser Gallery supports storing both the studio AI photo and the authentic phone photo for buyer transparency.</p>
+                <h5 class="fw-bold mb-3 border-bottom pb-2">@(isArabic ? "3. صور المنتج" : "3. Product Images")</h5>
+                <p class="text-muted small">@(isArabic ? "يتيح متجر آسر رفع صورتين لكل منتج (صورة الاستوديو وصورة الموبايل الواقعية) لضمان أقصى شفافية." : "Asser Gallery supports storing both the studio AI photo and the authentic phone photo for buyer transparency.")</p>
 
                 <!-- AI Enhanced Photo (Studio) -->
                 <div class="mb-4 p-3 bg-light rounded-3 border">
                     <label class="form-label small fw-bold text-primary">
-                        <i class="bi bi-stars text-warning me-1"></i> AI Studio Photo (Primary)
+                        <i class="bi bi-stars text-warning me-1"></i> @(isArabic ? "صورة الاستوديو بالذكاء الاصطناعي (الرئيسية)" : "AI Studio Photo (Primary)")
                     </label>
                     <input type="file" name="aiPhotoFile" class="form-control form-control-sm mb-2" accept="image/*" />
-                    <span class="text-muted extra-small d-block mb-1">Or paste direct image URL:</span>
+                    <span class="text-muted extra-small d-block mb-1">@(isArabic ? "أو ضع رابط مباشر للصورة:" : "Or paste direct image URL:")</span>
                     <input type="url" name="aiPhotoUrl" class="form-control form-control-sm" placeholder="https://..." />
                 </div>
 
                 <!-- Original Phone Camera Photo -->
                 <div class="mb-3 p-3 bg-light rounded-3 border">
                     <label class="form-label small fw-bold text-dark">
-                        <i class="bi bi-camera-fill me-1"></i> Real Phone Photo (Original)
+                        <i class="bi bi-camera-fill me-1"></i> @(isArabic ? "صورة الموبايل الواقعية (الأصلية)" : "Real Phone Photo (Original)")
                     </label>
                     <input type="file" name="originalPhotoFile" class="form-control form-control-sm mb-2" accept="image/*" />
-                    <span class="text-muted extra-small d-block mb-1">Or paste direct image URL:</span>
+                    <span class="text-muted extra-small d-block mb-1">@(isArabic ? "أو ضع رابط مباشر للصورة:" : "Or paste direct image URL:")</span>
                     <input type="url" name="originalPhotoUrl" class="form-control form-control-sm" placeholder="https://..." />
                 </div>
 
                 <div class="p-2 bg-info bg-opacity-10 rounded-3 text-info extra-small mb-3">
-                    <i class="bi bi-lightbulb me-1"></i> Need help generating prompts for studio enhancement? Check our <a asp-action="Index" asp-controller="ImageGuide" class="fw-bold">Photo & AI Guide</a>.
+                    <i class="bi bi-lightbulb me-1"></i> @(isArabic ? "تحتاج مساعدة في إنشاء أوامر تحسين الصور بالذكاء الاصطناعي؟ راجع" : "Need help generating prompts for studio enhancement? Check our") <a asp-action="Index" asp-controller="ImageGuide" class="fw-bold">@Localizer["PhotoAndAiGuide"]</a>.
                 </div>
             </div>
 
             <!-- Submit Buttons -->
             <div class="card-custom p-4">
                 <button type="submit" class="btn btn-dark w-100 py-2 rounded-pill fw-bold shadow">
-                    <i class="bi bi-check2-circle me-1"></i> Save Product & Stock
+                    <i class="bi bi-check2-circle me-1"></i> @(isArabic ? "حفظ المنتج والمخزون" : "Save Product & Stock")
                 </button>
             </div>
         </div>

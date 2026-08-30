@@ -55,4 +55,38 @@ public class PublicApiAndControllerTests : IClassFixture<CustomWebApplicationFac
         var response = await _client.GetAsync("/Catalog?minPrice=100&maxPrice=1000");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
+
+    [Fact]
+    public async Task Localization_ArabicCulture_ShouldRenderArabicStrings()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "/");
+        request.Headers.Add("Cookie", ".AspNetCore.Culture=c%3Dar%7Cuic%3Dar");
+
+        var response = await _client.SendAsync(request);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var rawHtml = await response.Content.ReadAsStringAsync();
+        var decodedHtml = WebUtility.HtmlDecode(rawHtml);
+
+        decodedHtml.Should().Contain("آسر جاليري");
+        decodedHtml.Should().Contain("الرئيسية");
+        decodedHtml.Should().Contain("ج.م");
+        decodedHtml.Should().NotContain("@Localizer");
+    }
+
+    [Fact]
+    public async Task Localization_EnglishCulture_ShouldRenderEnglishStrings()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "/");
+        request.Headers.Add("Cookie", ".AspNetCore.Culture=c%3Den%7Cuic%3Den");
+
+        var response = await _client.SendAsync(request);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var rawHtml = await response.Content.ReadAsStringAsync();
+        var decodedHtml = WebUtility.HtmlDecode(rawHtml);
+
+        decodedHtml.Should().Contain("Asser Gallery");
+        decodedHtml.Should().Contain("Home");
+        decodedHtml.Should().Contain("EGP");
+        decodedHtml.Should().NotContain("@Localizer");
+    }
 }

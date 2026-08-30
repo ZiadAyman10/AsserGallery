@@ -12,6 +12,7 @@ public record MonthlyTrendDto(
 
 public record CategoryBreakdownDto(
     string CategoryName,
+    string CategoryArabicName,
     int ProductCount,
     int TotalStock
 );
@@ -19,6 +20,7 @@ public record CategoryBreakdownDto(
 public record TopSellingProductDto(
     int ProductId,
     string ProductName,
+    string ProductArabicName,
     int QuantitySold,
     decimal TotalRevenue
 );
