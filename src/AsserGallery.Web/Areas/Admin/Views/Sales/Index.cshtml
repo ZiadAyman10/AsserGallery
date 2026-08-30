@@ -27,7 +27,7 @@
     <div class="col-md-4">
         <div class="card-custom p-3 border-start border-4 border-success">
             <span class="text-muted small">Total Filtered Sales</span>
-            <h3 class="fw-bold text-success mb-0">@totalAmount.ToString("N0") <small class="fs-6 fw-normal">EGP</small></h3>
+            <h3 class="fw-bold text-success mb-0">@totalAmount.ToString("N0") <small class="fs-6 fw-normal">@Localizer["Currency"]</small></h3>
         </div>
     </div>
     <div class="col-md-4">
@@ -40,7 +40,7 @@
         <div class="card-custom p-3 border-start border-4 border-info">
             <span class="text-muted small">Average Order Value</span>
             <h3 class="fw-bold text-info mb-0">
-                @((Model.Count > 0 ? totalAmount / Model.Count : 0m).ToString("N0")) <small class="fs-6 fw-normal">EGP</small>
+                @((Model.Count > 0 ? totalAmount / Model.Count : 0m).ToString("N0")) <small class="fs-6 fw-normal">@Localizer["Currency"]</small>
             </h3>
         </div>
     </div>
@@ -111,7 +111,7 @@
                             </div>
                         </td>
                         <td>
-                            <strong class="text-success fs-6">@sale.TotalAmount.ToString("N0") EGP</strong>
+                            <strong class="text-success fs-6">@sale.TotalAmount.ToString("N0") @Localizer["Currency"]</strong>
                         </td>
                         <td class="text-end">
                             <a asp-action="Details" asp-route-id="@sale.Id" class="btn btn-sm btn-outline-dark">

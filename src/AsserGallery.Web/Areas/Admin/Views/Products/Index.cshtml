@@ -90,10 +90,10 @@
                             <span class="badge bg-light text-dark border">@prod.CategoryName / @prod.SubCategoryName</span>
                         </td>
                         <td>
-                            <div class="fw-bold">@((prod.DiscountedPrice ?? prod.Price).ToString("N0")) EGP</div>
+                            <div class="fw-bold">@((prod.DiscountedPrice ?? prod.Price).ToString("N0")) @Localizer["Currency"]</div>
                             @if (prod.DiscountedPrice.HasValue)
                             {
-                                <div class="text-muted small text-decoration-line-through">@prod.Price.ToString("N0") EGP</div>
+                                <div class="text-muted small text-decoration-line-through">@prod.Price.ToString("N0") @Localizer["Currency"]</div>
                             }
                         </td>
                         <td>

@@ -73,15 +73,15 @@
                             </span>
                         </td>
                         <td class="text-center">@item.Quantity</td>
-                        <td class="text-end">@item.UnitPrice.ToString("N0") EGP</td>
-                        <td class="text-end fw-bold">@item.SubTotal.ToString("N0") EGP</td>
+                        <td class="text-end">@item.UnitPrice.ToString("N0") @Localizer["Currency"]</td>
+                        <td class="text-end fw-bold">@item.SubTotal.ToString("N0") @Localizer["Currency"]</td>
                     </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="4" class="text-end fs-5">Total Amount:</th>
-                    <th class="text-end fs-5 text-success">@Model.TotalAmount.ToString("N0") EGP</th>
+                    <th class="text-end fs-5 text-success">@Model.TotalAmount.ToString("N0") @Localizer["Currency"]</th>
                 </tr>
             </tfoot>
         </table>

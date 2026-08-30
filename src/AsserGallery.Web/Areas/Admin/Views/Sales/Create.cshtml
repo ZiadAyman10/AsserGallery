@@ -59,7 +59,7 @@
                             <tr>
                                 <th style="width: 45%;">Product & Color Variant</th>
                                 <th style="width: 20%;">Qty</th>
-                                <th style="width: 25%;">Unit Price (EGP)</th>
+                                <th style="width: 25%;">Unit Price (@Localizer["Currency"])</th>
                                 <th style="width: 10%;"></th>
                             </tr>
                         </thead>
@@ -101,7 +101,7 @@
                 <!-- Total Amount Summary Card -->
                 <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between mt-3">
                     <span class="fs-5 fw-bold">Grand Total:</span>
-                    <span class="fs-4 fw-extrabold text-success" id="grandTotalDisplay">0 EGP</span>
+                    <span class="fs-4 fw-extrabold text-success" id="grandTotalDisplay">0 @Localizer["Currency"]</span>
                 </div>
 
                 <div class="mt-4 text-end">
@@ -116,33 +116,35 @@
 
 @section Scripts {
 <script>
+    const currencyLabel = '@Localizer["Currency"].Value';
     function onVariantSelected(selectElement) {
         const selectedOption = selectElement.options[selectElement.selectedIndex];
-        const row = selectElement.closest('tr');
-        const priceInput = row.querySelector('.item-price');
-        const prodIdInput = row.querySelector('.hidden-prod-id');
-        const qtyInput = row.querySelector('.item-qty');
-
+        const row = selectElement.closest('.sale-item-row');
         if (selectedOption && selectedOption.value) {
-            const price = selectedOption.getAttribute('data-price') || '0';
-            const prodId = selectedOption.getAttribute('data-prodid') || '0';
-            const stock = parseInt(selectedOption.getAttribute('data-stock') || '1');
+            const price = selectedOption.getAttribute('data-price');
+            const prodId = selectedOption.getAttribute('data-prodid');
+            const stock = parseInt(selectedOption.getAttribute('data-stock'), 10);
 
-            priceInput.value = price;
-            prodIdInput.value = prodId;
+            row.querySelector('.hidden-prod-id').value = prodId;
+            row.querySelector('.item-price').value = price;
+            const qtyInput = row.querySelector('.item-qty');
             qtyInput.max = stock;
+            if (parseInt(qtyInput.value, 10) > stock) {
+                qtyInput.value = stock;
+            }
         }
         calcTotal();
     }
 
     function addSaleRow() {
-        const firstRow = document.querySelector('.sale-item-row');
+        const tbody = document.getElementById('saleItemsBody');
+        const firstRow = tbody.querySelector('.sale-item-row');
         const newRow = firstRow.cloneNode(true);
         newRow.querySelector('.variant-select').selectedIndex = 0;
+        newRow.querySelector('.hidden-prod-id').value = '';
         newRow.querySelector('.item-qty').value = 1;
         newRow.querySelector('.item-price').value = 0;
-        newRow.querySelector('.hidden-prod-id').value = '';
-        document.getElementById('saleItemsBody').appendChild(newRow);
+        tbody.appendChild(newRow);
         calcTotal();
     }
 
@@ -163,7 +165,7 @@
             const price = parseFloat(row.querySelector('.item-price').value) || 0;
             total += (qty * price);
         });
-        document.getElementById('grandTotalDisplay').innerText = total.toLocaleString() + ' EGP';
+        document.getElementById('grandTotalDisplay').innerText = total.toLocaleString() + ' ' + currencyLabel;
     }
 
     document.addEventListener('DOMContentLoaded', calcTotal);

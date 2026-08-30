@@ -84,4 +84,135 @@
   <data name="Logout" xml:space="preserve">
     <value>تسجيل الخروج</value>
   </data>
+  
+  <!-- Admin & Dashboard Keys -->
+  <data name="Operations" xml:space="preserve">
+    <value>العمليات</value>
+  </data>
+  <data name="CustomerAndVisibility" xml:space="preserve">
+    <value>العملاء والظهور</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>الإعدادات والتكوين</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>لوحة التحكم</value>
+  </data>
+  <data name="ProductsAndStock" xml:space="preserve">
+    <value>المنتجات والمخزون</value>
+  </data>
+  <data name="SalesAndOrders" xml:space="preserve">
+    <value>المبيعات والطلبات</value>
+  </data>
+  <data name="IncomeAndExpenses" xml:space="preserve">
+    <value>الإيرادات والمصروفات</value>
+  </data>
+  <data name="CustomerRequests" xml:space="preserve">
+    <value>طلبات العملاء</value>
+  </data>
+  <data name="FacebookPublishing" xml:space="preserve">
+    <value>النشر على فيسبوك</value>
+  </data>
+  <data name="PhotoAndAiGuide" xml:space="preserve">
+    <value>دليل التصوير والذكاء الاصطناعي</value>
+  </data>
+  <data name="StoreSettings" xml:space="preserve">
+    <value>إعدادات المتجر</value>
+  </data>
+  <data name="ViewPublicStore" xml:space="preserve">
+    <value>عرض المتجر</value>
+  </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>لوحة الإدارة</value>
+  </data>
+  <data name="TotalRevenue" xml:space="preserve">
+    <value>إجمالي المبيعات</value>
+  </data>
+  <data name="TotalOrders" xml:space="preserve">
+    <value>إجمالي الطلبات</value>
+  </data>
+  <data name="NetProfit" xml:space="preserve">
+    <value>صافي الأرباح</value>
+  </data>
+  <data name="TotalProducts" xml:space="preserve">
+    <value>إجمالي المنتجات</value>
+  </data>
+  <data name="TotalStockUnits" xml:space="preserve">
+    <value>إجمالي القطع بالمخزن</value>
+  </data>
+  <data name="LowStockAlert" xml:space="preserve">
+    <value>تنبيه المخزون المنخفض</value>
+  </data>
+  <data name="RevenueVsExpenses" xml:space="preserve">
+    <value>مقارنة الإيرادات بالمصروفات (آخر 6 أشهر)</value>
+  </data>
+  <data name="StockHealth" xml:space="preserve">
+    <value>حالة المخزون</value>
+  </data>
+  <data name="CategoryDistribution" xml:space="preserve">
+    <value>توزيع المنتجات حسب الأقسام</value>
+  </data>
+  <data name="TopSellingProducts" xml:space="preserve">
+    <value>أعلى المنتجات مبيعاً</value>
+  </data>
+  <data name="RecentSalesOrders" xml:space="preserve">
+    <value>أحدث فواتير المبيعات</value>
+  </data>
+  <data name="QuickActions" xml:space="preserve">
+    <value>إجراءات سريعة</value>
+  </data>
+  <data name="NewSaleInvoice" xml:space="preserve">
+    <value>فاتورة بيع جديدة</value>
+  </data>
+  <data name="AddNewProduct" xml:space="preserve">
+    <value>إضافة منتج جديد</value>
+  </data>
+  <data name="RecordExpense" xml:space="preserve">
+    <value>تسجيل مصروف</value>
+  </data>
+  <data name="ExportCsv" xml:space="preserve">
+    <value>تصدير CSV</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="InvoiceNumber" xml:space="preserve">
+    <value>رقم الفاتورة</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>العميل</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>التاريخ</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>المبلغ</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="UnitsSold" xml:space="preserve">
+    <value>قطعة مباعة</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>متوفر</value>
+  </data>
+  <data name="Revenue" xml:space="preserve">
+    <value>الإيرادات</value>
+  </data>
+  <data name="Expenses" xml:space="preserve">
+    <value>المصروفات</value>
+  </data>
+  <data name="Profit" xml:space="preserve">
+    <value>الأرباح</value>
+  </data>
+  <data name="SalesRevenue" xml:space="preserve">
+    <value>إيرادات المبيعات</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
 </root>

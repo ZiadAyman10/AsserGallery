@@ -87,7 +87,7 @@
                                     <select name="productId" class="form-select" required>
                                         @foreach (var p in products)
                                         {
-                                            <option value="@p.Id">@p.Name (@p.ArabicName) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) EGP</option>
+                                            <option value="@p.Id">@p.Name (@p.ArabicName) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) @Localizer["Currency"]</option>
                                         }
                                     </select>
                                 </div>

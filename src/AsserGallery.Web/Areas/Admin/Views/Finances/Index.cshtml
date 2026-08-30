@@ -28,8 +28,8 @@
         <div class="col-sm-6 col-lg-4">
             <div class="stat-kpi-card border-start border-4 border-success">
                 <div class="stat-kpi-label">Total Revenue (Income)</div>
-                <div class="stat-kpi-value text-success">@summary.TotalIncome.ToString("N0") <small class="fs-6 fw-normal">EGP</small></div>
-                <div class="text-muted extra-small mt-1">This month: +@summary.ThisMonthIncome.ToString("N0") EGP</div>
+                <div class="stat-kpi-value text-success">@summary.TotalIncome.ToString("N0") <small class="fs-6 fw-normal">@Localizer["Currency"]</small></div>
+                <div class="text-muted extra-small mt-1">This month: +@summary.ThisMonthIncome.ToString("N0") @Localizer["Currency"]</div>
             </div>
         </div>
 
@@ -37,8 +37,8 @@
         <div class="col-sm-6 col-lg-4">
             <div class="stat-kpi-card border-start border-4 border-danger">
                 <div class="stat-kpi-label">Total Expenses</div>
-                <div class="stat-kpi-value text-danger">@summary.TotalExpense.ToString("N0") <small class="fs-6 fw-normal">EGP</small></div>
-                <div class="text-muted extra-small mt-1">This month: -@summary.ThisMonthExpense.ToString("N0") EGP</div>
+                <div class="stat-kpi-value text-danger">@summary.TotalExpense.ToString("N0") <small class="fs-6 fw-normal">@Localizer["Currency"]</small></div>
+                <div class="text-muted extra-small mt-1">This month: -@summary.ThisMonthExpense.ToString("N0") @Localizer["Currency"]</div>
             </div>
         </div>
 
@@ -47,9 +47,9 @@
             <div class="stat-kpi-card border-start border-4 @(summary.NetProfit >= 0 ? "border-primary" : "border-warning")">
                 <div class="stat-kpi-label">Net Profit (Balance)</div>
                 <div class="stat-kpi-value @(summary.NetProfit >= 0 ? "text-primary" : "text-danger")">
-                    @summary.NetProfit.ToString("N0") <small class="fs-6 fw-normal">EGP</small>
+                    @summary.NetProfit.ToString("N0") <small class="fs-6 fw-normal">@Localizer["Currency"]</small>
                 </div>
-                <div class="text-muted extra-small mt-1">This month profit: @summary.ThisMonthNetProfit.ToString("N0") EGP</div>
+                <div class="text-muted extra-small mt-1">This month profit: @summary.ThisMonthNetProfit.ToString("N0") @Localizer["Currency"]</div>
             </div>
         </div>
     </div>
@@ -114,7 +114,7 @@
                             }
                         </td>
                         <td class="text-end fw-bold fs-6 @(tx.Type == TransactionType.Income ? "text-success" : "text-danger")">
-                            @(tx.Type == TransactionType.Income ? "+" : "-")@tx.Amount.ToString("N0") EGP
+                            @(tx.Type == TransactionType.Income ? "+" : "-")@tx.Amount.ToString("N0") @Localizer["Currency"]
                         </td>
                         <td class="text-end">
                             <form asp-action="Delete" asp-route-id="@tx.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this transaction?');">

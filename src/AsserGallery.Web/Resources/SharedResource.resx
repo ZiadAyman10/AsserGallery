@@ -84,4 +84,135 @@
   <data name="Logout" xml:space="preserve">
     <value>Logout</value>
   </data>
+
+  <!-- Admin & Dashboard Keys -->
+  <data name="Operations" xml:space="preserve">
+    <value>Operations</value>
+  </data>
+  <data name="CustomerAndVisibility" xml:space="preserve">
+    <value>Customer &amp; Visibility</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="ProductsAndStock" xml:space="preserve">
+    <value>Products &amp; Stock</value>
+  </data>
+  <data name="SalesAndOrders" xml:space="preserve">
+    <value>Sales &amp; Orders</value>
+  </data>
+  <data name="IncomeAndExpenses" xml:space="preserve">
+    <value>Income &amp; Expenses</value>
+  </data>
+  <data name="CustomerRequests" xml:space="preserve">
+    <value>Customer Requests</value>
+  </data>
+  <data name="FacebookPublishing" xml:space="preserve">
+    <value>Facebook Publishing</value>
+  </data>
+  <data name="PhotoAndAiGuide" xml:space="preserve">
+    <value>Photo &amp; AI Guide</value>
+  </data>
+  <data name="StoreSettings" xml:space="preserve">
+    <value>Store Settings</value>
+  </data>
+  <data name="ViewPublicStore" xml:space="preserve">
+    <value>View Public Store</value>
+  </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Admin Panel</value>
+  </data>
+  <data name="TotalRevenue" xml:space="preserve">
+    <value>Total Sales Revenue</value>
+  </data>
+  <data name="TotalOrders" xml:space="preserve">
+    <value>Total Orders</value>
+  </data>
+  <data name="NetProfit" xml:space="preserve">
+    <value>Net Profit</value>
+  </data>
+  <data name="TotalProducts" xml:space="preserve">
+    <value>Total Products</value>
+  </data>
+  <data name="TotalStockUnits" xml:space="preserve">
+    <value>Total Stock Units</value>
+  </data>
+  <data name="LowStockAlert" xml:space="preserve">
+    <value>Low Stock Alert</value>
+  </data>
+  <data name="RevenueVsExpenses" xml:space="preserve">
+    <value>Revenue vs Expenses (Last 6 Months)</value>
+  </data>
+  <data name="StockHealth" xml:space="preserve">
+    <value>Stock Health</value>
+  </data>
+  <data name="CategoryDistribution" xml:space="preserve">
+    <value>Category Distribution</value>
+  </data>
+  <data name="TopSellingProducts" xml:space="preserve">
+    <value>Top Performing Products</value>
+  </data>
+  <data name="RecentSalesOrders" xml:space="preserve">
+    <value>Recent Sales Orders</value>
+  </data>
+  <data name="QuickActions" xml:space="preserve">
+    <value>Quick Actions</value>
+  </data>
+  <data name="NewSaleInvoice" xml:space="preserve">
+    <value>New Sale Invoice</value>
+  </data>
+  <data name="AddNewProduct" xml:space="preserve">
+    <value>Add New Product</value>
+  </data>
+  <data name="RecordExpense" xml:space="preserve">
+    <value>Record Expense</value>
+  </data>
+  <data name="ExportCsv" xml:space="preserve">
+    <value>Export CSV</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="InvoiceNumber" xml:space="preserve">
+    <value>Invoice #</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="UnitsSold" xml:space="preserve">
+    <value>Units Sold</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>In Stock</value>
+  </data>
+  <data name="Revenue" xml:space="preserve">
+    <value>Revenue</value>
+  </data>
+  <data name="Expenses" xml:space="preserve">
+    <value>Expenses</value>
+  </data>
+  <data name="Profit" xml:space="preserve">
+    <value>Profit</value>
+  </data>
+  <data name="SalesRevenue" xml:space="preserve">
+    <value>Sales Revenue</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
 </root>

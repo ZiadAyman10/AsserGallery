@@ -32,7 +32,7 @@
                         @foreach (var p in products)
                         {
                             <option value="@p.Id" selected="@(selectedProductId == p.Id)">
-                                @p.Name (@p.ArabicName) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) EGP
+                                @p.Name (@p.ArabicName) — @((p.DiscountedPrice ?? p.Price).ToString("N0")) @Localizer["Currency"]
                             </option>
                         }
                     </select>
