@@ -1,17 +1,20 @@
 @model List<FinancialTransactionDto>
+@using System.Globalization
 @{
-    ViewData["Title"] = "Financial Transactions";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = isArabic ? "الإيرادات والمصروفات" : "Financial Transactions";
     var summary = ViewBag.Summary as FinancialSummaryDto;
     var selectedType = ViewBag.SelectedType as TransactionType?;
+    var curr = isArabic ? "ج.م" : "EGP";
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Financial Management</h4>
-        <p class="text-muted small mb-0">Track all cashflow: sales revenue, stock purchases, packaging, delivery & ads.</p>
+        <h4 class="fw-bold mb-1">@(isArabic ? "الإدارة المالية وحركة النقدية" : "Financial Management")</h4>
+        <p class="text-muted small mb-0">@(isArabic ? "تتبع إيرادات المبيعات ومصروفات شراء البضاعة، التغليف، الشحن، والإعلانات." : "Track all cashflow: sales revenue, stock purchases, packaging, delivery & ads.")</p>
     </div>
     <a asp-action="Create" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">
-        <i class="bi bi-plus-lg me-1"></i> Record Transaction
+        <i class="bi bi-plus-lg me-1"></i> @(isArabic ? "تسجيل حركة مالية جديدة" : "Record Transaction")
     </a>
 </div>
 
@@ -22,29 +25,29 @@
         <!-- Total Income -->
         <div class="col-sm-6 col-lg-4">
             <div class="stat-kpi-card border-start border-4 border-success">
-                <div class="stat-kpi-label">Total Revenue (Income)</div>
-                <div class="stat-kpi-value text-success">@summary.TotalIncome.ToString("N0") <small class="fs-6 fw-normal">EGP</small></div>
-                <div class="text-muted extra-small mt-1">This month: +@summary.ThisMonthIncome.ToString("N0") EGP</div>
+                <div class="stat-kpi-label">@(isArabic ? "إجمالي الإيرادات (المبيعات)" : "Total Revenue (Income)")</div>
+                <div class="stat-kpi-value text-success">@summary.TotalIncome.ToString("N0") <small class="fs-6 fw-normal">@curr</small></div>
+                <div class="text-muted extra-small mt-1">@(isArabic ? "هذا الشهر:" : "This month:") +@summary.ThisMonthIncome.ToString("N0") @curr</div>
             </div>
         </div>
 
         <!-- Total Expenses -->
         <div class="col-sm-6 col-lg-4">
             <div class="stat-kpi-card border-start border-4 border-danger">
-                <div class="stat-kpi-label">Total Expenses</div>
-                <div class="stat-kpi-value text-danger">@summary.TotalExpense.ToString("N0") <small class="fs-6 fw-normal">EGP</small></div>
-                <div class="text-muted extra-small mt-1">This month: -@summary.ThisMonthExpense.ToString("N0") EGP</div>
+                <div class="stat-kpi-label">@(isArabic ? "إجمالي المصروفات" : "Total Expenses")</div>
+                <div class="stat-kpi-value text-danger">@summary.TotalExpense.ToString("N0") <small class="fs-6 fw-normal">@curr</small></div>
+                <div class="text-muted extra-small mt-1">@(isArabic ? "هذا الشهر:" : "This month:") -@summary.ThisMonthExpense.ToString("N0") @curr</div>
             </div>
         </div>
 
         <!-- Net Profit -->
         <div class="col-sm-12 col-lg-4">
             <div class="stat-kpi-card border-start border-4 @(summary.NetProfit >= 0 ? "border-primary" : "border-warning")">
-                <div class="stat-kpi-label">Net Profit (Balance)</div>
+                <div class="stat-kpi-label">@(isArabic ? "صافي الرصيد والأرباح" : "Net Profit (Balance)")</div>
                 <div class="stat-kpi-value @(summary.NetProfit >= 0 ? "text-primary" : "text-danger")">
-                    @summary.NetProfit.ToString("N0") <small class="fs-6 fw-normal">EGP</small>
+                    @summary.NetProfit.ToString("N0") <small class="fs-6 fw-normal">@curr</small>
                 </div>
-                <div class="text-muted extra-small mt-1">This month profit: @summary.ThisMonthNetProfit.ToString("N0") EGP</div>
+                <div class="text-muted extra-small mt-1">@(isArabic ? "أرباح هذا الشهر:" : "This month profit:") @summary.ThisMonthNetProfit.ToString("N0") @curr</div>
             </div>
         </div>
     </div>
@@ -52,12 +55,12 @@
 
 <!-- Transactions List -->
 <div class="card-custom p-0 overflow-hidden mb-4">
-    <div class="p-3 border-bottom d-flex align-items-center justify-content-between">
-        <h5 class="fw-bold mb-0">Transaction Records</h5>
+    <div class="p-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <h5 class="fw-bold mb-0">@(isArabic ? "سجل الحركات المالية" : "Transaction Records")</h5>
         <div class="d-flex gap-2">
-            <a asp-action="Index" class="btn btn-sm @(selectedType == null ? "btn-dark" : "btn-outline-secondary") rounded-pill">All</a>
-            <a asp-action="Index" asp-route-type="@TransactionType.Income" class="btn btn-sm @(selectedType == TransactionType.Income ? "btn-success" : "btn-outline-success") rounded-pill">Income Only</a>
-            <a asp-action="Index" asp-route-type="@TransactionType.Expense" class="btn btn-sm @(selectedType == TransactionType.Expense ? "btn-danger" : "btn-outline-danger") rounded-pill">Expenses Only</a>
+            <a asp-action="Index" class="btn btn-sm @(selectedType == null ? "btn-dark" : "btn-outline-secondary") rounded-pill">@(isArabic ? "الكل" : "All")</a>
+            <a asp-action="Index" asp-route-type="@TransactionType.Income" class="btn btn-sm @(selectedType == TransactionType.Income ? "btn-success" : "btn-outline-success") rounded-pill">@(isArabic ? "الإيرادات فقط" : "Income Only")</a>
+            <a asp-action="Index" asp-route-type="@TransactionType.Expense" class="btn btn-sm @(selectedType == TransactionType.Expense ? "btn-danger" : "btn-outline-danger") rounded-pill">@(isArabic ? "المصروفات فقط" : "Expenses Only")</a>
         </div>
     </div>
 
@@ -65,20 +68,20 @@
         <table class="table table-custom table-hover align-middle mb-0">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Title & Description</th>
-                    <th>Category</th>
-                    <th>Linked Product</th>
-                    <th>Type</th>
-                    <th class="text-end">Amount</th>
-                    <th class="text-end">Action</th>
+                    <th>@(isArabic ? "التاريخ" : "Date")</th>
+                    <th>@(isArabic ? "البيان والوصف" : "Title & Description")</th>
+                    <th>@(isArabic ? "التصنيف" : "Category")</th>
+                    <th>@(isArabic ? "المنتج المرتبط" : "Linked Product")</th>
+                    <th>@(isArabic ? "النوع" : "Type")</th>
+                    <th class="text-end">@(isArabic ? "المبلغ" : "Amount")</th>
+                    <th class="text-end">@(isArabic ? "الإجراء" : "Action")</th>
                 </tr>
             </thead>
             <tbody>
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">No transactions found.</td>
+                        <td colspan="7" class="text-center py-4 text-muted">@(isArabic ? "لا توجد معاملات مسجلة." : "No transactions found.")</td>
                     </tr>
                 }
                 @foreach (var tx in Model)
@@ -93,7 +96,7 @@
                             }
                         </td>
                         <td>
-                            <span class="badge bg-light text-dark border">@tx.Category</span>
+                            <span class="badge bg-surface-subtle text-main border">@tx.Category</span>
                         </td>
                         <td class="small">
                             @(tx.LinkedProductName ?? "—")
@@ -101,20 +104,20 @@
                         <td>
                             @if (tx.Type == TransactionType.Income)
                             {
-                                <span class="badge bg-success bg-opacity-10 text-success">Income</span>
+                                <span class="badge bg-success bg-opacity-10 text-success">@(isArabic ? "إيراد" : "Income")</span>
                             }
                             else
                             {
-                                <span class="badge bg-danger bg-opacity-10 text-danger">Expense</span>
+                                <span class="badge bg-danger bg-opacity-10 text-danger">@(isArabic ? "مصروف" : "Expense")</span>
                             }
                         </td>
                         <td class="text-end fw-bold fs-6 @(tx.Type == TransactionType.Income ? "text-success" : "text-danger")">
-                            @(tx.Type == TransactionType.Income ? "+" : "-")@tx.Amount.ToString("N0") EGP
+                            @(tx.Type == TransactionType.Income ? "+" : "-")@tx.Amount.ToString("N0") @curr
                         </td>
                         <td class="text-end">
-                            <form asp-action="Delete" asp-route-id="@tx.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this transaction?');">
+                            <form asp-action="Delete" asp-route-id="@tx.Id" method="post" class="d-inline" onsubmit="return confirm('@(isArabic ? "هل أنت متأكد من حذف هذه المعاملة؟" : "Delete this transaction?")');">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="@(isArabic ? "حذف" : "Delete")">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>

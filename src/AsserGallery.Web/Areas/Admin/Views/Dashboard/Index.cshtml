@@ -2,8 +2,9 @@
 @using System.Globalization
 @{
     var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
-    ViewData["Title"] = "Dashboard Overview";
+    ViewData["Title"] = isArabic ? "لوحة التحكم الرئيسية" : "Dashboard Overview";
     var finances = ViewBag.Finances as FinancialSummaryDto;
+    var curr = isArabic ? "ج.م" : "EGP";
 }
 
 <!-- Key Metric Stat KPI Cards -->
@@ -12,14 +13,14 @@
     <div class="col-sm-6 col-xl-3">
         <div class="stat-kpi-card">
             <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="stat-kpi-label">Total Products</span>
+                <span class="stat-kpi-label">@(isArabic ? "إجمالي المنتجات" : "Total Products")</span>
                 <span class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary"><i class="bi bi-tags fs-5"></i></span>
             </div>
             <div class="stat-kpi-value">@Model.TotalProductsCount</div>
             <div class="small text-muted mt-1">
-                <span class="text-success fw-bold">@Model.InStockProductsCount</span> in stock • 
-                <span class="text-warning fw-bold">@Model.LimitedStockProductsCount</span> limited • 
-                <span class="text-danger fw-bold">@Model.OutOfStockProductsCount</span> out
+                <span class="text-success fw-bold">@Model.InStockProductsCount</span> @(isArabic ? "متوفر" : "in stock") • 
+                <span class="text-warning fw-bold">@Model.LimitedStockProductsCount</span> @(isArabic ? "محدود" : "limited") • 
+                <span class="text-danger fw-bold">@Model.OutOfStockProductsCount</span> @(isArabic ? "نفد" : "out")
             </div>
         </div>
     </div>
@@ -28,12 +29,12 @@
     <div class="col-sm-6 col-xl-3">
         <div class="stat-kpi-card">
             <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="stat-kpi-label">Total Sales Revenue</span>
+                <span class="stat-kpi-label">@(isArabic ? "إجمالي المبيعات" : "Total Sales Revenue")</span>
                 <span class="p-2 rounded-circle bg-success bg-opacity-10 text-success"><i class="bi bi-currency-exchange fs-5"></i></span>
             </div>
-            <div class="stat-kpi-value text-success">@Model.TotalRevenue.ToString("N0") <small class="fs-6 fw-normal">EGP</small></div>
+            <div class="stat-kpi-value text-success">@Model.TotalRevenue.ToString("N0") <small class="fs-6 fw-normal">@curr</small></div>
             <div class="small text-muted mt-1">
-                From <strong>@Model.TotalOrdersCount</strong> confirmed customer orders
+                @(isArabic ? "من" : "From") <strong>@Model.TotalOrdersCount</strong> @(isArabic ? "طلب مؤكد" : "confirmed orders")
             </div>
         </div>
     </div>
@@ -42,14 +43,14 @@
     <div class="col-sm-6 col-xl-3">
         <div class="stat-kpi-card">
             <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="stat-kpi-label">Net Profit (All Time)</span>
+                <span class="stat-kpi-label">@(isArabic ? "صافي الأرباح" : "Net Profit")</span>
                 <span class="p-2 rounded-circle bg-info bg-opacity-10 text-info"><i class="bi bi-graph-up-arrow fs-5"></i></span>
             </div>
             <div class="stat-kpi-value @(Model.NetProfit >= 0 ? "text-primary" : "text-danger")">
-                @Model.NetProfit.ToString("N0") <small class="fs-6 fw-normal">EGP</small>
+                @Model.NetProfit.ToString("N0") <small class="fs-6 fw-normal">@curr</small>
             </div>
             <div class="small text-muted mt-1">
-                Income (@Model.TotalRevenue.ToString("N0")) - Expenses (@Model.TotalExpenses.ToString("N0"))
+                @(isArabic ? "الإيرادات" : "Income") (@Model.TotalRevenue.ToString("N0")) - @(isArabic ? "المصروفات" : "Expenses") (@Model.TotalExpenses.ToString("N0"))
             </div>
         </div>
     </div>
@@ -58,13 +59,13 @@
     <div class="col-sm-6 col-xl-3">
         <div class="stat-kpi-card">
             <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="stat-kpi-label">New Customer Requests</span>
+                <span class="stat-kpi-label">@(isArabic ? "طلبات العملاء الجديدة" : "New Customer Requests")</span>
                 <span class="p-2 rounded-circle bg-warning bg-opacity-10 text-warning"><i class="bi bi-bell-fill fs-5"></i></span>
             </div>
             <div class="stat-kpi-value text-warning">@Model.PendingCustomerRequestsCount</div>
             <div class="small mt-1">
                 <a asp-area="Admin" asp-controller="CustomerRequests" asp-action="Index" class="text-decoration-none fw-semibold">
-                    View callbacks to follow up <i class="bi bi-arrow-right"></i>
+                    @(isArabic ? "عرض طلبات المعاودة والتواصل" : "View callbacks to follow up") <i class="bi bi-arrow-@(isArabic ? "left" : "right")"></i>
                 </a>
             </div>
         </div>
@@ -75,19 +76,19 @@
 <div class="row g-3 mb-4">
     <div class="col-12">
         <div class="card-custom p-3 d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <span class="fw-bold small text-muted">QUICK ACTIONS:</span>
+            <span class="fw-bold small text-muted">@(isArabic ? "روابط وإجراءات سريعة:" : "QUICK ACTIONS:")</span>
             <div class="d-flex flex-wrap gap-2">
                 <a asp-area="Admin" asp-controller="Products" asp-action="Create" class="btn btn-sm btn-dark rounded-pill">
-                    <i class="bi bi-plus-circle me-1"></i> Add Product
+                    <i class="bi bi-plus-circle me-1"></i> @(isArabic ? "إضافة منتج" : "Add Product")
                 </a>
                 <a asp-area="Admin" asp-controller="Sales" asp-action="Create" class="btn btn-sm btn-success rounded-pill">
-                    <i class="bi bi-cart-plus me-1"></i> Register Sale
+                    <i class="bi bi-cart-plus me-1"></i> @(isArabic ? "تسجيل مبيعة" : "Register Sale")
                 </a>
                 <a asp-area="Admin" asp-controller="Finances" asp-action="Create" class="btn btn-sm btn-outline-dark rounded-pill">
-                    <i class="bi bi-cash me-1"></i> Add Expense/Income
+                    <i class="bi bi-cash me-1"></i> @(isArabic ? "تسجيل مصروف / إيراد" : "Add Expense/Income")
                 </a>
                 <a asp-area="Admin" asp-controller="Facebook" asp-action="Index" class="btn btn-sm btn-primary rounded-pill">
-                    <i class="bi bi-facebook me-1"></i> Facebook Assistant
+                    <i class="bi bi-facebook me-1"></i> @(isArabic ? "مساعد النشر في فيسبوك" : "Facebook Assistant")
                 </a>
             </div>
         </div>
@@ -100,13 +101,13 @@
     <div class="col-lg-7">
         <div class="card-custom h-100 p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-                <h5 class="fw-bold mb-0">Recent Sales & Orders</h5>
-                <a asp-area="Admin" asp-controller="Sales" asp-action="Index" class="small text-decoration-none text-muted fw-semibold">View All</a>
+                <h5 class="fw-bold mb-0">@(isArabic ? "أحدث المبيعات والطلبات" : "Recent Sales & Orders")</h5>
+                <a asp-area="Admin" asp-controller="Sales" asp-action="Index" class="small text-decoration-none text-muted fw-semibold">@(isArabic ? "عرض الكل" : "View All")</a>
             </div>
 
             @if (!Model.RecentSales.Any())
             {
-                <p class="text-muted small my-3">No sales registered yet.</p>
+                <p class="text-muted small my-3">@(isArabic ? "لا توجد مبيعات مسجلة بعد." : "No sales registered yet.")</p>
             }
             else
             {
@@ -114,11 +115,11 @@
                     <table class="table table-custom table-hover align-middle mb-0">
                         <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Customer</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Date</th>
+                                <th>@(isArabic ? "الفاتورة" : "Invoice")</th>
+                                <th>@(isArabic ? "العميل" : "Customer")</th>
+                                <th>@(isArabic ? "العناصر" : "Items")</th>
+                                <th>@(isArabic ? "الإجمالي" : "Total")</th>
+                                <th>@(isArabic ? "التاريخ" : "Date")</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -126,9 +127,9 @@
                             {
                                 <tr>
                                     <td class="fw-bold"><a asp-area="Admin" asp-controller="Sales" asp-action="Details" asp-route-id="@sale.Id" class="text-decoration-none">@sale.SaleNumber</a></td>
-                                    <td>@(sale.CustomerName ?? "Direct Customer")</td>
-                                    <td><span class="badge bg-secondary">@sale.Items.Count item(s)</span></td>
-                                    <td class="fw-bold text-success">@sale.TotalAmount.ToString("N0") EGP</td>
+                                    <td>@(sale.CustomerName ?? (isArabic ? "عميل مباشر" : "Direct Customer"))</td>
+                                    <td><span class="badge bg-secondary">@sale.Items.Count @(isArabic ? "قطع" : "item(s)")</span></td>
+                                    <td class="fw-bold text-success">@sale.TotalAmount.ToString("N0") @curr</td>
                                     <td class="small text-muted">@sale.SaleDate.ToString("dd MMM yyyy")</td>
                                 </tr>
                             }
@@ -143,29 +144,29 @@
     <div class="col-lg-5">
         <div class="card-custom h-100 p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-                <h5 class="fw-bold mb-0">Callback Requests</h5>
-                <a asp-area="Admin" asp-controller="CustomerRequests" asp-action="Index" class="small text-decoration-none text-muted fw-semibold">View All</a>
+                <h5 class="fw-bold mb-0">@(isArabic ? "طلبات التواصل والمعاودة" : "Callback Requests")</h5>
+                <a asp-area="Admin" asp-controller="CustomerRequests" asp-action="Index" class="small text-decoration-none text-muted fw-semibold">@(isArabic ? "عرض الكل" : "View All")</a>
             </div>
 
             @if (!Model.RecentRequests.Any())
             {
-                <p class="text-muted small my-3">No pending customer requests.</p>
+                <p class="text-muted small my-3">@(isArabic ? "لا توجد طلبات عملاء معلقة." : "No pending customer requests.")</p>
             }
             else
             {
                 <div class="d-flex flex-column gap-3">
                     @foreach (var req in Model.RecentRequests)
                     {
-                        <div class="p-3 rounded-3 border d-flex justify-content-between align-items-center">
+                        <div class="p-3 rounded-3 border d-flex justify-content-between align-items-center bg-surface-subtle">
                             <div>
                                 <h6 class="fw-bold mb-0">@req.CustomerName</h6>
                                 <p class="text-muted small mb-0">@req.PhoneNumber • <span class="badge bg-info bg-opacity-10 text-info">@req.PreferredChannel</span></p>
                                 @if (!string.IsNullOrWhiteSpace(req.ProductName))
                                 {
-                                    <span class="badge bg-light text-dark border small mt-1">@req.ProductName</span>
+                                    <span class="badge bg-surface text-main border small mt-1">@req.ProductName</span>
                                 }
                             </div>
-                            <a href="https://wa.me/@req.PhoneNumber" target="_blank" class="btn btn-sm btn-success rounded-circle" title="Open WhatsApp">
+                            <a href="https://wa.me/@req.PhoneNumber" target="_blank" class="btn btn-sm btn-success rounded-circle" title="@(isArabic ? "مراسلة عبر واتساب" : "Open WhatsApp")">
                                 <i class="bi bi-whatsapp"></i>
                             </a>
                         </div>

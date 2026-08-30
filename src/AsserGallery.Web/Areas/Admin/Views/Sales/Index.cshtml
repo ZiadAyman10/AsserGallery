@@ -1,19 +1,22 @@
 @model List<SaleDto>
+@using System.Globalization
 @{
-    ViewData["Title"] = "Sales & Orders";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = isArabic ? "المبيعات وفواتير الطلبات" : "Sales & Orders";
     var totalAmount = (decimal)(ViewBag.TotalSalesAmount ?? 0m);
     var search = ViewBag.Search as string;
     var startDate = ViewBag.StartDate as DateTime?;
     var endDate = ViewBag.EndDate as DateTime?;
+    var curr = isArabic ? "ج.م" : "EGP";
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Sales & Orders Ledger</h4>
-        <p class="text-muted small mb-0">Record orders, auto-reduce inventory, and track customer receipts.</p>
+        <h4 class="fw-bold mb-1">@(isArabic ? "سجل المبيعات والطلبات" : "Sales & Orders Ledger")</h4>
+        <p class="text-muted small mb-0">@(isArabic ? "تسجيل فواتير البيع، الخصم التلقائي من المخزون، وإصدار إيصالات العملاء." : "Record orders, auto-reduce inventory, and track customer receipts.")</p>
     </div>
     <a asp-action="Create" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
-        <i class="bi bi-cart-plus me-1"></i> Register New Sale
+        <i class="bi bi-cart-plus me-1"></i> @(isArabic ? "تسجيل مبيعة جديدة" : "Register New Sale")
     </a>
 </div>
 
@@ -21,21 +24,21 @@
 <div class="row g-3 mb-4">
     <div class="col-md-4">
         <div class="card-custom p-3 border-start border-4 border-success">
-            <span class="text-muted small">Total Filtered Sales</span>
-            <h3 class="fw-bold text-success mb-0">@totalAmount.ToString("N0") <small class="fs-6 fw-normal">EGP</small></h3>
+            <span class="text-muted small">@(isArabic ? "إجمالي المبيعات المفلترة" : "Total Filtered Sales")</span>
+            <h3 class="fw-bold text-success mb-0">@totalAmount.ToString("N0") <small class="fs-6 fw-normal">@curr</small></h3>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card-custom p-3 border-start border-4 border-primary">
-            <span class="text-muted small">Total Orders Count</span>
-            <h3 class="fw-bold text-primary mb-0">@Model.Count <small class="fs-6 fw-normal">orders</small></h3>
+            <span class="text-muted small">@(isArabic ? "عدد الفواتير والطلبات" : "Total Orders Count")</span>
+            <h3 class="fw-bold text-primary mb-0">@Model.Count <small class="fs-6 fw-normal">@(isArabic ? "طلب" : "orders")</small></h3>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card-custom p-3 border-start border-4 border-info">
-            <span class="text-muted small">Average Order Value</span>
+            <span class="text-muted small">@(isArabic ? "متوسط قيمة الطلب" : "Average Order Value")</span>
             <h3 class="fw-bold text-info mb-0">
-                @((Model.Count > 0 ? totalAmount / Model.Count : 0m).ToString("N0")) <small class="fs-6 fw-normal">EGP</small>
+                @((Model.Count > 0 ? totalAmount / Model.Count : 0m).ToString("N0")) <small class="fs-6 fw-normal">@curr</small>
             </h3>
         </div>
     </div>
@@ -46,17 +49,17 @@
     <form method="get" asp-action="Index">
         <div class="row g-2 align-items-center">
             <div class="col-md-4">
-                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="Search by invoice #, customer name, phone..." />
+                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="@(isArabic ? "ابحث برقم الفاتورة، اسم العميل، الهاتف..." : "Search by invoice #, customer name, phone...")" />
             </div>
             <div class="col-md-3">
-                <input type="date" name="startDate" value="@(startDate?.ToString("yyyy-MM-dd"))" class="form-control form-control-sm" placeholder="Start Date" />
+                <input type="date" name="startDate" value="@(startDate?.ToString("yyyy-MM-dd"))" class="form-control form-control-sm" />
             </div>
             <div class="col-md-3">
-                <input type="date" name="endDate" value="@(endDate?.ToString("yyyy-MM-dd"))" class="form-control form-control-sm" placeholder="End Date" />
+                <input type="date" name="endDate" value="@(endDate?.ToString("yyyy-MM-dd"))" class="form-control form-control-sm" />
             </div>
             <div class="col-md-2 d-flex gap-1">
-                <button type="submit" class="btn btn-sm btn-dark w-100">Filter</button>
-                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Reset</a>
+                <button type="submit" class="btn btn-sm btn-dark w-100">@(isArabic ? "تصفية" : "Filter")</button>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">@(isArabic ? "إلغاء" : "Reset")</a>
             </div>
         </div>
     </form>
@@ -68,20 +71,20 @@
         <table class="table table-custom table-hover align-middle mb-0">
             <thead>
                 <tr>
-                    <th>Invoice #</th>
-                    <th>Date</th>
-                    <th>Customer Name</th>
-                    <th>Phone</th>
-                    <th>Items Summary</th>
-                    <th>Total Amount</th>
-                    <th class="text-end">Action</th>
+                    <th>@(isArabic ? "رقم الفاتورة" : "Invoice #")</th>
+                    <th>@(isArabic ? "التاريخ" : "Date")</th>
+                    <th>@(isArabic ? "اسم العميل" : "Customer Name")</th>
+                    <th>@(isArabic ? "الهاتف" : "Phone")</th>
+                    <th>@(isArabic ? "ملخص المنتجات" : "Items Summary")</th>
+                    <th>@(isArabic ? "الإجمالي" : "Total Amount")</th>
+                    <th class="text-end">@(isArabic ? "الإجراء" : "Action")</th>
                 </tr>
             </thead>
             <tbody>
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">No sales orders found.</td>
+                        <td colspan="7" class="text-center py-4 text-muted">@(isArabic ? "لا توجد طلبات أو فواتير مسجلة." : "No sales orders found.")</td>
                     </tr>
                 }
                 @foreach (var sale in Model)
@@ -99,18 +102,18 @@
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach (var item in sale.Items)
                                 {
-                                    <span class="badge bg-light text-dark border small">
+                                    <span class="badge bg-surface-subtle text-main border small">
                                         @item.ProductName (@item.ColorName) × @item.Quantity
                                     </span>
                                 }
                             </div>
                         </td>
                         <td>
-                            <strong class="text-success fs-6">@sale.TotalAmount.ToString("N0") EGP</strong>
+                            <strong class="text-success fs-6">@sale.TotalAmount.ToString("N0") @curr</strong>
                         </td>
                         <td class="text-end">
                             <a asp-action="Details" asp-route-id="@sale.Id" class="btn btn-sm btn-outline-dark">
-                                <i class="bi bi-receipt me-1"></i> Receipt
+                                <i class="bi bi-receipt me-1"></i> @(isArabic ? "الفاتورة" : "Receipt")
                             </a>
                         </td>
                     </tr>
