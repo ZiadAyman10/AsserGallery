@@ -47,7 +47,8 @@ public class AdminIntegrationTests : IClassFixture<CustomWebApplicationFactory>
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var html = await response.Content.ReadAsStringAsync();
-        html.Should().Contain("Admin Login");
+        html.Should().Contain("admin@assergallery.com");
+        html.Should().Contain("name=\"email\"");
     }
 
     [Fact]
