@@ -34,7 +34,7 @@
     --bg-main: #090d16;
     --bg-surface: #111827;
     --bg-surface-elevated: #1e293b;
-    --bg-surface-subtle: #1e293b;
+    --bg-surface-subtle: #1a2234;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --text-inverse: #090d16;
@@ -77,11 +77,12 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     font-family: var(--font-heading);
     font-weight: 700;
     letter-spacing: -0.02em;
+    color: var(--text-main);
 }
 
 /* Navbar */
 .navbar-custom {
-    background: rgba(var(--bg-surface), 0.85);
+    background: var(--bg-surface);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-main);
@@ -95,7 +96,7 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.65rem;
     font-weight: 800;
     font-size: 1.35rem;
     color: var(--text-main) !important;
@@ -332,9 +333,9 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 
 /* Buttons */
 .btn-primary-action {
-    background: var(--text-main);
-    color: var(--bg-main);
-    border: 1px solid var(--text-main);
+    background: var(--accent);
+    color: #ffffff;
+    border: 1px solid var(--accent);
     border-radius: var(--radius-md);
     font-weight: 700;
     padding: 0.75rem 1.5rem;
@@ -348,8 +349,8 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 }
 
 .btn-primary-action:hover {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: #1d4ed8;
+    border-color: #1d4ed8;
     color: #ffffff;
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
@@ -404,7 +405,7 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(var(--bg-surface), 0.9);
+    background: rgba(var(--bg-surface), 0.95);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-top: 1px solid var(--border-main);
@@ -436,7 +437,7 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 }
 
 .mobile-nav-item.active, .mobile-nav-item:hover {
-    color: var(--text-main);
+    color: var(--accent);
     font-weight: 700;
 }
 
@@ -474,6 +475,7 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     border: 1px solid var(--border-main);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
+    color: var(--text-main);
 }
 
 .table-custom {
@@ -491,6 +493,162 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     vertical-align: middle;
 }
 
+/* ==========================================================================
+   Comprehensive Dark Mode Overrides (Fix 5: Text Visibility & Themes)
+   ========================================================================== */
+[data-theme="dark"] .bg-light,
+[data-theme="dark"] .bg-surface-subtle {
+    background-color: var(--bg-surface-subtle) !important;
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: var(--bg-surface) !important;
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .text-dark,
+[data-theme="dark"] .text-body {
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .border,
+[data-theme="dark"] .border-top,
+[data-theme="dark"] .border-bottom,
+[data-theme="dark"] .border-start,
+[data-theme="dark"] .border-end {
+    border-color: var(--border-main) !important;
+}
+
+/* Modal Dark Mode */
+[data-theme="dark"] .modal-content {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-main);
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-footer {
+    border-color: var(--border-main);
+}
+
+[data-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Form inputs */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: var(--bg-surface-subtle);
+    color: var(--text-main);
+    border-color: var(--border-main);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background-color: var(--bg-surface-subtle);
+    color: var(--text-main);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.25rem var(--accent-glow);
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+[data-theme="dark"] .input-group-text {
+    background-color: var(--bg-surface-subtle);
+    color: var(--text-muted);
+    border-color: var(--border-main);
+}
+
+/* Buttons in dark mode */
+[data-theme="dark"] .btn-dark {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .btn-dark:hover {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .btn-light {
+    background-color: var(--bg-surface-subtle);
+    border-color: var(--border-main);
+    color: var(--text-main);
+}
+
+[data-theme="dark"] .btn-light:hover {
+    background-color: var(--bg-surface-elevated);
+    color: var(--text-main);
+}
+
+[data-theme="dark"] .btn-outline-dark,
+[data-theme="dark"] .btn-outline-secondary {
+    color: var(--text-main);
+    border-color: var(--border-main);
+}
+
+[data-theme="dark"] .btn-outline-dark:hover,
+[data-theme="dark"] .btn-outline-secondary:hover {
+    background-color: var(--bg-surface-subtle);
+    color: var(--text-main);
+    border-color: var(--accent);
+}
+
+/* Badges & Tables */
+[data-theme="dark"] .badge.bg-light {
+    background-color: var(--bg-surface-subtle) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-main) !important;
+}
+
+[data-theme="dark"] .badge.bg-secondary {
+    background-color: rgba(148, 163, 184, 0.2) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .table {
+    color: var(--text-main);
+    border-color: var(--border-main);
+}
+
+[data-theme="dark"] .table > :not(caption) > * > * {
+    background-color: transparent;
+    color: var(--text-main);
+    border-color: var(--border-main);
+}
+
+[data-theme="dark"] .pagination .page-link {
+    background-color: var(--bg-surface);
+    border-color: var(--border-main);
+    color: var(--text-main);
+}
+
+[data-theme="dark"] .pagination .page-item.active .page-link {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+}
+
+[data-theme="dark"] .pagination .page-item.disabled .page-link {
+    background-color: var(--bg-surface-subtle);
+    border-color: var(--border-main);
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .breadcrumb-item.active {
+    color: var(--text-main);
+}
+
 /* RTL Layout Adjustments */
 [dir="rtl"] {
     text-align: right;
@@ -498,4 +656,69 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 
 [dir="rtl"] .dropdown-menu {
     text-align: right;
+}
+
+/* ==========================================================================
+   Responsive Design Enhancements (Fix 7: Mobile & Tablet Optimization)
+   ========================================================================== */
+@media (max-width: 767.98px) {
+    h1, .display-4 {
+        font-size: 1.85rem !important;
+        line-height: 1.25;
+    }
+    h2, .display-6 {
+        font-size: 1.5rem !important;
+        line-height: 1.3;
+    }
+    h3 {
+        font-size: 1.25rem !important;
+    }
+    .hero-banner {
+        padding: 1.75rem 1.25rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1.5rem;
+    }
+    .promo-offer-card {
+        padding: 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .product-card-img-wrapper {
+        aspect-ratio: 1/1.25;
+    }
+    .brand-logo {
+        font-size: 1.1rem;
+    }
+    .card-custom {
+        padding: 1rem !important;
+        border-radius: var(--radius-sm);
+    }
+    .btn-whatsapp, .btn-messenger, .btn-primary-action {
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+    .stat-kpi-card {
+        padding: 1rem;
+    }
+    .stat-kpi-value {
+        font-size: 1.4rem;
+    }
+    .table th, .table td {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .row-cols-2 > * {
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+    }
+    .product-card .p-3 {
+        padding: 0.75rem !important;
+    }
+    .price-current {
+        font-size: 1rem;
+    }
 }
