@@ -21,6 +21,19 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         updateThemeIcons(document.documentElement.getAttribute('data-theme'));
+
+        // Realtime Search Debounce in Catalog
+        const searchInput = document.getElementById('catalogSearchInput');
+        const filterForm = document.getElementById('catalogFilterForm');
+        if (searchInput && filterForm) {
+            let debounceTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    filterForm.submit();
+                }, 500);
+            });
+        }
     });
 
     // 2. Clipboard Helper
