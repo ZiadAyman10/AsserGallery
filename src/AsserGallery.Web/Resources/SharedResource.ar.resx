@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- App Identity -->
   <data name="AppName" xml:space="preserve">
     <value>آسر جاليري</value>
   </data>
+
+  <!-- Public Navigation -->
   <data name="Home" xml:space="preserve">
     <value>الرئيسية</value>
   </data>
@@ -13,8 +16,10 @@
     <value>تواصل معنا</value>
   </data>
   <data name="AdminDashboard" xml:space="preserve">
-    <value>لوحة تحكم الإدارة</value>
+    <value>لوحة التحكم</value>
   </data>
+
+  <!-- Home Page -->
   <data name="Discover" xml:space="preserve">
     <value>اكتشف جديدنا</value>
   </data>
@@ -30,6 +35,8 @@
   <data name="SpecialOffers" xml:space="preserve">
     <value>أقوى العروض والخصومات</value>
   </data>
+
+  <!-- Product Status -->
   <data name="Available" xml:space="preserve">
     <value>متوفر</value>
   </data>
@@ -39,6 +46,8 @@
   <data name="OutOfStock" xml:space="preserve">
     <value>نفدت الكمية</value>
   </data>
+
+  <!-- Order Actions -->
   <data name="OrderWhatsApp" xml:space="preserve">
     <value>طلب مباشر عبر واتساب</value>
   </data>
@@ -48,12 +57,16 @@
   <data name="RequestCallback" xml:space="preserve">
     <value>طلب حجز / معاودة اتصال</value>
   </data>
+
+  <!-- Product Photos -->
   <data name="OriginalPhoto" xml:space="preserve">
     <value>الصورة الواقعية (تصوير الموبايل)</value>
   </data>
   <data name="AiEnhancedPhoto" xml:space="preserve">
     <value>تصوير ستوديو (محسن بالذكاء الاصطناعي)</value>
   </data>
+
+  <!-- Filters -->
   <data name="Colors" xml:space="preserve">
     <value>الألوان المتوفرة</value>
   </data>
@@ -78,10 +91,129 @@
   <data name="InStockOnly" xml:space="preserve">
     <value>المتوفر فقط</value>
   </data>
+
+  <!-- Auth -->
   <data name="Login" xml:space="preserve">
     <value>تسجيل الدخول</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>تسجيل الخروج</value>
+  </data>
+
+  <!-- ===== Admin Panel Strings ===== -->
+  <data name="AdminPanel" xml:space="preserve">
+    <value>لوحة الإدارة</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>العمليات</value>
+  </data>
+  <data name="CustomerVisibility" xml:space="preserve">
+    <value>العملاء والتسويق</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+
+  <!-- Admin Sidebar Links -->
+  <data name="ProductsAndStock" xml:space="preserve">
+    <value>المنتجات والمخزون</value>
+  </data>
+  <data name="SalesAndOrders" xml:space="preserve">
+    <value>المبيعات والطلبات</value>
+  </data>
+  <data name="IncomeAndExpenses" xml:space="preserve">
+    <value>الإيرادات والمصروفات</value>
+  </data>
+  <data name="CustomerRequests" xml:space="preserve">
+    <value>طلبات العملاء</value>
+  </data>
+  <data name="FacebookPublishing" xml:space="preserve">
+    <value>النشر على فيسبوك</value>
+  </data>
+  <data name="PhotoAiGuide" xml:space="preserve">
+    <value>دليل التصوير والذكاء الاصطناعي</value>
+  </data>
+  <data name="StoreSettings" xml:space="preserve">
+    <value>إعدادات المتجر</value>
+  </data>
+  <data name="ViewPublicStore" xml:space="preserve">
+    <value>معاينة الموقع</value>
+  </data>
+  <data name="ColorsManagement" xml:space="preserve">
+    <value>إدارة الألوان</value>
+  </data>
+
+  <!-- Admin CRUD Actions -->
+  <data name="AddProduct" xml:space="preserve">
+    <value>إضافة منتج جديد</value>
+  </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>تعديل المنتج</value>
+  </data>
+  <data name="DeleteProduct" xml:space="preserve">
+    <value>حذف المنتج</value>
+  </data>
+  <data name="AddCategory" xml:space="preserve">
+    <value>إضافة قسم رئيسي</value>
+  </data>
+  <data name="AddSubCategory" xml:space="preserve">
+    <value>إضافة قسم فرعي</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>تعديل القسم</value>
+  </data>
+  <data name="EditSubCategory" xml:space="preserve">
+    <value>تعديل القسم الفرعي</value>
+  </data>
+  <data name="DeleteCategory" xml:space="preserve">
+    <value>حذف القسم</value>
+  </data>
+  <data name="DeleteSubCategory" xml:space="preserve">
+    <value>حذف القسم الفرعي</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>حفظ</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>إنشاء</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="Inventory" xml:space="preserve">
+    <value>المخزون</value>
+  </data>
+  <data name="Featured" xml:space="preserve">
+    <value>مميز في الصفحة الرئيسية</value>
+  </data>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>ترتيب العرض</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>الوصف</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>المنتجات</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+  <data name="Finances" xml:space="preserve">
+    <value>المالية</value>
+  </data>
+  <data name="Sales" xml:space="preserve">
+    <value>المبيعات</value>
   </data>
 </root>
