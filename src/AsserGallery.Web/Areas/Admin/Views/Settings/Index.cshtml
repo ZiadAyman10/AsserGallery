@@ -1,11 +1,13 @@
 @model StoreSettingsDto
+@using System.Globalization
 @{
-    ViewData["Title"] = "Store Settings & Branding";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["StoreSettingsTitle"].Value;
 }
 
 <div class="mb-4">
-    <h4 class="fw-bold mb-1">Store Settings & Configuration</h4>
-    <p class="text-muted small mb-0">Configure store branding, order communication channels, and availability behaviors.</p>
+    <h4 class="fw-bold mb-1">@Localizer["StoreSettingsTitle"]</h4>
+    <p class="text-muted small mb-0">@Localizer["ManageSettingsDescription"]</p>
 </div>
 
 <div class="row justify-content-center">
@@ -15,25 +17,25 @@
                 @Html.AntiForgeryToken()
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Store Brand Name (English) *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "اسم المتجر (بالإنجليزية) *" : "Store Brand Name (English) *")</label>
                         <input type="text" name="StoreName" class="form-control" value="@Model.StoreName" required />
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">اسم المتجر (بالعربي) *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "اسم المتجر (بالعربية) *" : "Store Arabic Name *")</label>
                         <input type="text" name="StoreArabicName" class="form-control text-end" value="@Model.StoreArabicName" required />
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Primary WhatsApp Order Phone *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "رقم واتساب الأساسي للطلبات *" : "Primary WhatsApp Order Phone *")</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-whatsapp text-success"></i></span>
                             <input type="text" name="WhatsAppNumber" class="form-control" value="@Model.WhatsAppNumber" required placeholder="201012345678" />
                         </div>
-                        <span class="text-muted extra-small">Include country code without '+' (e.g. 201012345678)</span>
+                        <span class="text-muted extra-small">@(isArabic ? "كتابة كود الدولة بدون علامة '+' (مثال: 201012345678)" : "Include country code without '+' (e.g. 201012345678)")</span>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Facebook Messenger Handle *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "معرف ماسنجر فيسبوك *" : "Facebook Messenger Handle *")</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-messenger text-primary"></i></span>
                             <input type="text" name="MessengerUsername" class="form-control" value="@Model.MessengerUsername" required placeholder="assergallery.eg" />
@@ -41,11 +43,11 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Currency Code (EN) *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "رمز العملة (EN) *" : "Currency Code (EN) *")</label>
                         <input type="text" name="Currency" class="form-control" value="@Model.Currency" required />
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">رمز العملة (AR) *</label>
+                        <label class="form-label small fw-bold">@(isArabic ? "رمز العملة (AR) *" : "Currency Symbol (AR) *")</label>
                         <input type="text" name="CurrencyArabic" class="form-control text-end" value="@Model.CurrencyArabic" required />
                     </div>
 
@@ -53,15 +55,15 @@
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" name="HideOutOfStock" id="hideOutOfStockSwitch" value="true" checked="@Model.HideOutOfStock" />
                             <label class="form-check-label fw-bold small" for="hideOutOfStockSwitch">
-                                Automatically hide out-of-stock items completely on the public catalog (§4.3)
+                                @(isArabic ? "إخفاء المنتجات التي نفد مخزونها تماماً من الكتالوج العام تلقائياً" : "Automatically hide out-of-stock items completely on the public catalog (§4.3)")
                             </label>
                         </div>
-                        <span class="text-muted extra-small ms-4 d-block">If unchecked, out-of-stock items remain visible with an 'Out of Stock' badge.</span>
+                        <span class="text-muted extra-small ms-4 d-block">@(isArabic ? "إذا لم يتم التفعيل، تظهر المنتجات المنتهية مع شارة 'نفدت الكمية'." : "If unchecked, out-of-stock items remain visible with an 'Out of Stock' badge.")</span>
                     </div>
 
                     <div class="col-12 mt-4 text-end">
                         <button type="submit" class="btn btn-dark btn-lg rounded-pill px-5 fw-bold shadow">
-                            <i class="bi bi-check2-circle me-1"></i> Save Settings
+                            <i class="bi bi-check2-circle me-1"></i> @Localizer["SaveSettings"]
                         </button>
                     </div>
                 </div>

@@ -21,6 +21,19 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         updateThemeIcons(document.documentElement.getAttribute('data-theme'));
+
+        // Realtime Search Debounce in Catalog
+        const searchInput = document.getElementById('catalogSearchInput');
+        const filterForm = document.getElementById('catalogFilterForm');
+        if (searchInput && filterForm) {
+            let debounceTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    filterForm.submit();
+                }, 500);
+            });
+        }
     });
 
     // 2. Clipboard Helper
@@ -30,7 +43,8 @@
         const text = target.value || target.innerText;
         navigator.clipboard.writeText(text).then(() => {
             const origHtml = buttonElement.innerHTML;
-            buttonElement.innerHTML = '✅ Copied!';
+            const isAr = document.documentElement.getAttribute('lang') === 'ar';
+            buttonElement.innerHTML = isAr ? '✅ تم النسخ!' : '✅ Copied!';
             buttonElement.classList.add('btn-success');
             setTimeout(() => {
                 buttonElement.innerHTML = origHtml;

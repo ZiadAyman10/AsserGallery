@@ -65,7 +65,7 @@
                     else
                     {
                         <a href="/Culture/SetLanguage?culture=ar&returnUrl=@Uri.EscapeDataString(returnUrl)" class="btn-lang-toggle" title="التحويل للغة العربية">
-                            <i class="bi bi-globe"></i> عربي
+                            <i class="bi bi-globe"></i> العربية
                         </a>
                     }
 
@@ -130,7 +130,7 @@
     <footer class="border-top py-4 mt-auto" style="border-color: var(--border-main) !important; background: var(--bg-surface);">
         <div class="container-fluid max-w-7xl text-center">
             <div class="d-flex flex-wrap justify-content-center gap-3 mb-2 text-muted small">
-                <span>&copy; @DateTime.UtcNow.Year @Localizer["AppName"]. All rights reserved.</span>
+                <span>&copy; @DateTime.UtcNow.Year @Localizer["AppName"]. @(isRtl ? "جميع الحقوق محفوظة." : "All rights reserved.")</span>
                 <span>•</span>
                 <a asp-controller="Catalog" asp-action="Index" class="text-decoration-none text-muted">@Localizer["Catalog"]</a>
                 <span>•</span>
@@ -138,7 +138,7 @@
                 <span>•</span>
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="text-decoration-none text-muted">@Localizer["AdminDashboard"]</a>
             </div>
-            <p class="text-muted small mb-0">High-quality curated fashion collection. Direct orders via WhatsApp & Messenger.</p>
+            <p class="text-muted small mb-0">@(isRtl ? "تشكيلة أزياء وملابس راقية ومختارة بعناية. طلب مباشر وسريع عبر واتساب وماسنجر." : "High-quality curated fashion collection. Direct orders via WhatsApp & Messenger.")</p>
         </div>
     </footer>
 
