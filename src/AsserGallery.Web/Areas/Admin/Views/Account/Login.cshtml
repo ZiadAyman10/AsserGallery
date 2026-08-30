@@ -1,16 +1,48 @@
+@using System.Globalization
 @{
-    Layout = "_Layout";
+    // Standalone layout — avoids admin-area context issues after logout
+    Layout = null;
     ViewData["Title"] = "Admin Login";
     var returnUrl = ViewBag.ReturnUrl as string;
+    var isRtl = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
 }
-
-<div class="row justify-content-center my-5">
-    <div class="col-md-5 col-lg-4">
+<!DOCTYPE html>
+<html lang="@(isRtl ? "ar" : "en")" dir="@(isRtl ? "rtl" : "ltr")" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login — Asser Gallery</title>
+    @if (isRtl)
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" />
+    }
+    else
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/design-system.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100" style="background: var(--bg-main);">
+    <div class="w-100" style="max-width: 440px; padding: 1rem;">
         <div class="card-custom p-4 p-md-5 shadow-lg">
             <div class="text-center mb-4">
-                <span class="badge-logo fs-4 px-3 py-2 d-inline-block mb-2">AG</span>
-                <h4 class="fw-bold mb-1">Admin Portal</h4>
-                <p class="text-muted small">Sign in to manage inventory, sales & orders</p>
+                <!-- Logo -->
+                <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-3"
+                     style="width:56px;height:56px;background:linear-gradient(135deg,#2563eb,#7c3aed);">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="7" width="26" height="20" rx="2" stroke="white" stroke-width="2" fill="none"/>
+                        <line x1="3" y1="12" x2="29" y2="12" stroke="white" stroke-width="1.5"/>
+                        <line x1="16" y1="2" x2="16" y2="7" stroke="white" stroke-width="2"/>
+                        <path d="M12 2 Q16 5 20 2" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                        <circle cx="16" cy="19" r="3" stroke="white" stroke-width="1.5" fill="none"/>
+                        <line x1="16" y1="22" x2="16" y2="27" stroke="white" stroke-width="1.5"/>
+                        <line x1="13" y1="27" x2="19" y2="27" stroke="white" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <h4 class="fw-bold mb-1">@(isRtl ? "بوابة الإدارة" : "Admin Portal")</h4>
+                <p class="text-muted small">@(isRtl ? "سجّل دخولك لإدارة المخزون والمبيعات والطلبات" : "Sign in to manage inventory, sales & orders")</p>
             </div>
 
             @if (!ViewData.ModelState.IsValid)
@@ -30,30 +62,64 @@
                 <input type="hidden" name="returnUrl" value="@returnUrl" />
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Email Address</label>
+                    <label class="form-label small fw-bold">@(isRtl ? "البريد الإلكتروني" : "Email Address")</label>
                     <div class="input-group">
                         <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-envelope text-muted"></i></span>
-                        <input type="email" name="email" class="form-control border-start-0" required placeholder="admin@assergallery.com" value="admin@assergallery.com" />
+                        <input type="email" name="email" class="form-control border-start-0" required
+                               placeholder="@(isRtl ? "admin@example.com" : "admin@assergallery.com")"
+                               autocomplete="email" />
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Password</label>
+                    <label class="form-label small fw-bold">@(isRtl ? "كلمة المرور" : "Password")</label>
                     <div class="input-group">
                         <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-lock text-muted"></i></span>
-                        <input type="password" name="password" class="form-control border-start-0" required placeholder="••••••••" value="Admin@123456" />
+                        <input type="password" name="password" id="passwordInput" class="form-control border-start-0 border-end-0" required
+                               placeholder="••••••••" autocomplete="current-password" />
+                        <button type="button" class="input-group-text bg-transparent border-start-0"
+                                onclick="togglePwd()" title="Show/hide password" style="cursor:pointer;">
+                            <i class="bi bi-eye" id="pwdEyeIcon"></i>
+                        </button>
                     </div>
                 </div>
 
                 <div class="form-check mb-4">
-                    <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" value="true" checked />
-                    <label class="form-check-label small" for="rememberMe">Remember me</label>
+                    <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" value="true" />
+                    <label class="form-check-label small" for="rememberMe">
+                        @(isRtl ? "تذكّرني" : "Remember me")
+                    </label>
                 </div>
 
                 <button type="submit" class="btn btn-dark w-100 py-2 rounded-pill fw-bold shadow">
-                    <i class="bi bi-box-arrow-in-right me-2"></i> Log In to Dashboard
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                    @(isRtl ? "دخول إلى لوحة التحكم" : "Log In to Dashboard")
                 </button>
             </form>
+
+            <div class="text-center mt-4">
+                <a href="/" class="text-muted small text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    @(isRtl ? "العودة للموقع" : "Back to public site")
+                </a>
+            </div>
         </div>
     </div>
-</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script>
+        function togglePwd() {
+            const inp = document.getElementById('passwordInput');
+            const ico = document.getElementById('pwdEyeIcon');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                ico.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                inp.type = 'password';
+                ico.classList.replace('bi-eye-slash', 'bi-eye');
+            }
+        }
+    </script>
+</body>
+</html>
