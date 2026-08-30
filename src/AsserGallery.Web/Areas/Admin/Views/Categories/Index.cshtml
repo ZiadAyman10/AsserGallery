@@ -1,15 +1,17 @@
 @model List<CategoryDto>
+@using System.Globalization
 @{
-    ViewData["Title"] = "Category Hierarchy Management";
+    var isRtl = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["Categories"];
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Categories & SubCategories</h4>
-        <p class="text-muted small mb-0">Organize your clothing catalog hierarchically (Men / Women / Kids → Subcategories).</p>
+        <h4 class="fw-bold mb-1">@Localizer["Categories"]</h4>
+        <p class="text-muted small mb-0">@(isRtl ? "تنظيم أقسام الملابس الرئيسية والفرعية مع إمكانية التعديل والإضافة والحذف." : "Organize your clothing catalog hierarchically (Main Categories & SubCategories) with full CRUD.")</p>
     </div>
     <button type="button" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-        <i class="bi bi-plus-lg me-1"></i> Add Main Category
+        <i class="bi bi-plus-lg me-1"></i> @Localizer["AddCategory"]
     </button>
 </div>
 
@@ -20,38 +22,120 @@
             <div class="card-custom p-4 h-100 d-flex flex-column">
                 <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
                     <div>
-                        <h5 class="fw-bold mb-0">@cat.Name</h5>
-                        <div class="text-muted small">@cat.ArabicName</div>
+                        <h5 class="fw-bold mb-0">@(isRtl ? cat.ArabicName : cat.Name)</h5>
+                        <div class="text-muted small">@(isRtl ? cat.Name : cat.ArabicName) <span class="badge bg-secondary bg-opacity-25 text-body ms-1">Order: @cat.DisplayOrder</span></div>
                     </div>
                     <div class="d-flex gap-2 align-items-center">
-                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addSubCategoryModal-@cat.Id">
-                            <i class="bi bi-plus-circle me-1"></i> Add SubCategory
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle" data-bs-toggle="modal" data-bs-target="#editCategoryModal-@cat.Id" title="@Localizer["EditCategory"]">
+                            <i class="bi bi-pencil"></i>
                         </button>
-                        <form asp-action="DeleteCategory" asp-route-id="@cat.Id" method="post" onsubmit="return confirm('Delete this entire category and its subcategories?');">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addSubCategoryModal-@cat.Id">
+                            <i class="bi bi-plus-circle me-1"></i> @Localizer["AddSubCategory"]
+                        </button>
+                        <form asp-action="DeleteCategory" asp-route-id="@cat.Id" method="post" onsubmit="return confirm('@(isRtl ? "هل أنت متأكد من حذف هذا القسم وجميع أقسامه الفرعية؟" : "Delete this entire category and its subcategories?")');">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle">
+                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" title="@Localizer["DeleteCategory"]">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <h6 class="fw-bold small text-muted text-uppercase mb-2">SubCategories (@cat.SubCategories.Count)</h6>
+                <h6 class="fw-bold small text-muted text-uppercase mb-2">@(isRtl ? "الأقسام الفرعية" : "SubCategories") (@cat.SubCategories.Count)</h6>
                 <div class="d-flex flex-column gap-2 mb-3 flex-grow-1">
                     @if (!cat.SubCategories.Any())
                     {
-                        <p class="text-muted small my-2">No subcategories defined yet.</p>
+                        <p class="text-muted small my-2">@(isRtl ? "لا توجد أقسام فرعية بعد." : "No subcategories defined yet.")</p>
                     }
                     @foreach (var sub in cat.SubCategories)
                     {
-                        <div class="p-2 px-3 rounded-3 border bg-light d-flex align-items-center justify-content-between">
+                        <div class="p-2 px-3 rounded-3 border bg-surface-subtle d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="fw-bold small">@sub.Name</span>
-                                <span class="text-muted small ms-2">(@sub.ArabicName)</span>
+                                <span class="fw-bold small">@(isRtl ? sub.ArabicName : sub.Name)</span>
+                                <span class="text-muted small ms-2">(@(isRtl ? sub.Name : sub.ArabicName))</span>
+                                <span class="badge bg-secondary rounded-pill ms-2">@sub.ProductCount @(isRtl ? "منتج" : "products")</span>
                             </div>
-                            <span class="badge bg-secondary rounded-pill">@sub.ProductCount products</span>
+                            <div class="d-flex gap-1 align-items-center">
+                                <button type="button" class="btn btn-sm btn-link text-secondary p-1" data-bs-toggle="modal" data-bs-target="#editSubCategoryModal-@sub.Id" title="@Localizer["EditSubCategory"]">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <form asp-action="DeleteSubCategory" asp-route-id="@sub.Id" method="post" onsubmit="return confirm('@(isRtl ? "هل أنت متأكد من حذف هذا القسم الفرعي؟" : "Delete this subcategory?")');" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-link text-danger p-1" title="@Localizer["DeleteSubCategory"]">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Edit SubCategory Modal -->
+                        <div class="modal fade" id="editSubCategoryModal-@sub.Id" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content rounded-4">
+                                    <div class="modal-header">
+                                        <h6 class="modal-title fw-bold">@Localizer["EditSubCategory"]: @sub.Name</h6>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form asp-action="EditSubCategory" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@sub.Id" />
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold">SubCategory Name (EN) *</label>
+                                                <input type="text" name="name" class="form-control" required value="@sub.Name" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold">الاسم بالعربي *</label>
+                                                <input type="text" name="arabicName" class="form-control text-end" required value="@sub.ArabicName" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold">@Localizer["DisplayOrder"]</label>
+                                                <input type="number" name="displayOrder" class="form-control" value="@sub.DisplayOrder" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                                            <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Save"]</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     }
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Category Modal -->
+        <div class="modal fade" id="editCategoryModal-@cat.Id" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header">
+                        <h6 class="modal-title fw-bold">@Localizer["EditCategory"]: @cat.Name</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form asp-action="EditCategory" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@cat.Id" />
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Category Name (EN) *</label>
+                                <input type="text" name="name" class="form-control" required value="@cat.Name" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">الاسم بالعربي *</label>
+                                <input type="text" name="arabicName" class="form-control text-end" required value="@cat.ArabicName" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">@Localizer["DisplayOrder"]</label>
+                                <input type="number" name="displayOrder" class="form-control" value="@cat.DisplayOrder" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                            <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Save"]</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -61,7 +145,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-4">
                     <div class="modal-header">
-                        <h6 class="modal-title fw-bold">Add SubCategory to @cat.Name</h6>
+                        <h6 class="modal-title fw-bold">@Localizer["AddSubCategory"] @cat.Name</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <form asp-action="CreateSubCategory" method="post">
@@ -77,13 +161,13 @@
                                 <input type="text" name="arabicName" class="form-control text-end" required placeholder="مثال: قمصان رسمية" />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-bold">Display Order</label>
+                                <label class="form-label small fw-bold">@Localizer["DisplayOrder"]</label>
                                 <input type="number" name="displayOrder" class="form-control" value="1" />
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">Create SubCategory</button>
+                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                            <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Create"]</button>
                         </div>
                     </form>
                 </div>
@@ -97,7 +181,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header">
-                <h6 class="modal-title fw-bold">Add Main Category</h6>
+                <h6 class="modal-title fw-bold">@Localizer["AddCategory"]</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form asp-action="CreateCategory" method="post">
@@ -112,13 +196,13 @@
                         <input type="text" name="arabicName" class="form-control text-end" required placeholder="مثال: أحذية وكوتشيات" />
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Display Order</label>
+                        <label class="form-label small fw-bold">@Localizer["DisplayOrder"]</label>
                         <input type="number" name="displayOrder" class="form-control" value="1" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">Create Category</button>
+                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                    <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3">@Localizer["Create"]</button>
                 </div>
             </form>
         </div>

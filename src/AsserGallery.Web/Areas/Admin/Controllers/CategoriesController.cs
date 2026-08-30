@@ -23,6 +23,7 @@ public class CategoriesController : Controller
         return View(categories);
     }
 
+    // ── Category Create ──────────────────────────────────────────────────────
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateCategory(string name, string arabicName, string? description, string? arabicDescription, int displayOrder)
@@ -33,6 +34,28 @@ public class CategoriesController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    // ── Category Edit ────────────────────────────────────────────────────────
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditCategory(int id, string name, string arabicName, string? description, string? arabicDescription, int displayOrder, bool isActive = true)
+    {
+        var command = new UpdateCategoryCommand(id, name, arabicName, description, arabicDescription, displayOrder, isActive);
+        await _mediator.Send(command);
+        TempData["SuccessMessage"] = $"Category '{name}' updated.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ── Category Delete ──────────────────────────────────────────────────────
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteCategory(int id)
+    {
+        await _mediator.Send(new DeleteCategoryCommand(id));
+        TempData["SuccessMessage"] = "Category deleted.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ── SubCategory Create ───────────────────────────────────────────────────
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateSubCategory(int categoryId, string name, string arabicName, string? description, string? arabicDescription, int displayOrder)
@@ -43,12 +66,24 @@ public class CategoriesController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    // ── SubCategory Edit ─────────────────────────────────────────────────────
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteCategory(int id)
+    public async Task<IActionResult> EditSubCategory(int id, string name, string arabicName, string? description, string? arabicDescription, int displayOrder, bool isActive = true)
     {
-        await _mediator.Send(new DeleteCategoryCommand(id));
-        TempData["SuccessMessage"] = "Category deleted.";
+        var command = new UpdateSubCategoryCommand(id, name, arabicName, description, arabicDescription, displayOrder, isActive);
+        await _mediator.Send(command);
+        TempData["SuccessMessage"] = $"Subcategory '{name}' updated.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ── SubCategory Delete ───────────────────────────────────────────────────
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteSubCategory(int id)
+    {
+        await _mediator.Send(new DeleteSubCategoryCommand(id));
+        TempData["SuccessMessage"] = "Subcategory deleted.";
         return RedirectToAction(nameof(Index));
     }
 }
