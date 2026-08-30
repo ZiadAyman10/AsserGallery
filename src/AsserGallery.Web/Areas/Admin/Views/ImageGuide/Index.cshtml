@@ -1,10 +1,12 @@
+@using System.Globalization
 @{
-    ViewData["Title"] = "Photography & AI Image Workflow Guide";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["PhotoAndAiGuide"].Value;
 }
 
 <div class="mb-4">
-    <h4 class="fw-bold mb-1">Product Photography & AI Enhancement Guide</h4>
-    <p class="text-muted small mb-0">Best practices for taking high-quality phone photos of clothes and turning them into luxury studio renders.</p>
+    <h4 class="fw-bold mb-1">@Localizer["PhotoAndAiGuide"]</h4>
+    <p class="text-muted small mb-0">@(isArabic ? "أفضل الممارسات لالتقاط صور احترافية للملابس بالموبايل وتحويلها لصور ستوديو فاخرة بالذكاء الاصطناعي." : "Best practices for taking high-quality phone photos of clothes and turning them into luxury studio renders.")</p>
 </div>
 
 <!-- Photography Tips Cards -->
@@ -13,13 +15,13 @@
         <div class="card-custom p-4 h-100 border-top border-4 border-primary">
             <div class="d-flex align-items-center gap-2 mb-3">
                 <span class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary fs-5"><i class="bi bi-camera"></i></span>
-                <h5 class="fw-bold mb-0">1. Phone Photography</h5>
+                <h5 class="fw-bold mb-0">@(isArabic ? "1. التصوير بالموبايل" : "1. Phone Photography")</h5>
             </div>
             <ul class="text-muted small ps-3 mb-0" style="line-height: 1.8;">
-                <li><strong>Natural Light:</strong> Shoot near a window with indirect morning sunlight. Avoid harsh camera flash.</li>
-                <li><strong>Clean Background:</strong> Hang garments against a plain white or neutral gray wall / door.</li>
-                <li><strong>Aspect Ratio:</strong> Shoot in portrait orientation (3:4 aspect ratio).</li>
-                <li><strong>True Colors:</strong> Do not use warm beauty filters on the original photo so customers see the real dye.</li>
+                <li><strong>@(isArabic ? "الإضاءة الطبيعية:" : "Natural Light:")</strong> @(isArabic ? "التصوير قرب نافذة بإضاءة شمس الصباح غير المباشرة وتجنب الفلاش المباشر." : "Shoot near a window with indirect morning sunlight. Avoid harsh camera flash.")</li>
+                <li><strong>@(isArabic ? "خلفية نظيفة:" : "Clean Background:")</strong> @(isArabic ? "تعليق الملابس على جدار أبيض أو رمادي محايد." : "Hang garments against a plain white or neutral gray wall / door.")</li>
+                <li><strong>@(isArabic ? "أبعاد الصورة:" : "Aspect Ratio:")</strong> @(isArabic ? "التصوير بوضعية البورتريه الرأسية (نسبة 3:4)." : "Shoot in portrait orientation (3:4 aspect ratio).")</li>
+                <li><strong>@(isArabic ? "اللون الحقيقي:" : "True Colors:")</strong> @(isArabic ? "عدم استخدام فلاتر تجميلية على الصورة الأصلية ليرى العميل اللون الحقيقي." : "Do not use warm beauty filters on the original photo so customers see the real dye.")</li>
             </ul>
         </div>
     </div>
@@ -28,12 +30,12 @@
         <div class="card-custom p-4 h-100 border-top border-4 border-warning">
             <div class="d-flex align-items-center gap-2 mb-3">
                 <span class="p-2 rounded-circle bg-warning bg-opacity-10 text-warning fs-5"><i class="bi bi-stars"></i></span>
-                <h5 class="fw-bold mb-0">2. AI Studio Enhancement</h5>
+                <h5 class="fw-bold mb-0">@(isArabic ? "2. التحسين بالذكاء الاصطناعي" : "2. AI Studio Enhancement")</h5>
             </div>
             <ul class="text-muted small ps-3 mb-0" style="line-height: 1.8;">
-                <li>Upload your phone photo to AI tools (e.g. Midjourney image-to-image, Photoshop Generative AI, or Canva Magic Studio).</li>
-                <li>Enhance lighting, add an elegant minimalist aesthetic studio backdrop, or place garment on a styled model.</li>
-                <li>Upload both the <strong>AI Studio view</strong> and the <strong>Real phone photo</strong> to the product in Asser Gallery.</li>
+                <li>@(isArabic ? "رفع صورة الموبايل إلى أدوات الذكاء الاصطناعي (مثل Midjourney image-to-image أو Photoshop Generative AI أو Canva Magic Studio)." : "Upload your phone photo to AI tools (e.g. Midjourney image-to-image, Photoshop Generative AI, or Canva Magic Studio).")</li>
+                <li>@(isArabic ? "تحسين الإضاءة وإضافة خلفية ستوديو أنيقة أو عرض الملابس على موديل." : "Enhance lighting, add an elegant minimalist aesthetic studio backdrop, or place garment on a styled model.")</li>
+                <li>@(isArabic ? "رفع الصورتين معاً (صورة الستوديو بالذكاء الاصطناعي + الصورة الواقعية بالموبايل) في صفحة المنتج." : "Upload both the AI Studio view and the Real phone photo to the product in Asser Gallery.")</li>
             </ul>
         </div>
     </div>
@@ -42,11 +44,11 @@
         <div class="card-custom p-4 h-100 border-top border-4 border-success">
             <div class="d-flex align-items-center gap-2 mb-3">
                 <span class="p-2 rounded-circle bg-success bg-opacity-10 text-success fs-5"><i class="bi bi-shield-check"></i></span>
-                <h5 class="fw-bold mb-0">3. Customer Transparency</h5>
+                <h5 class="fw-bold mb-0">@(isArabic ? "3. الشفافية وثقة العميل" : "3. Customer Transparency")</h5>
             </div>
             <ul class="text-muted small ps-3 mb-0" style="line-height: 1.8;">
-                <li>Buyers love the eye-catching studio photos on social media, but appreciate seeing real fabric texture before purchasing.</li>
-                <li>The built-in <strong>Original vs AI View Switcher</strong> gives buyers 100% confidence, reducing returns.</li>
+                <li>@(isArabic ? "العملاء تجذبهم صور الستوديو على السوشيال ميديا، لكن يفضلون رؤية خامة القماش الحقيقية قبل الشراء." : "Buyers love the eye-catching studio photos on social media, but appreciate seeing real fabric texture before purchasing.")</li>
+                <li>@(isArabic ? "زر التبديل التفاعلي المدمج (صورة الموبايل vs صورة الستوديو) يمنح العميل ثقة 100% ويقلل المرتجعات." : "The built-in Original vs AI View Switcher gives buyers 100% confidence, reducing returns.")</li>
             </ul>
         </div>
     </div>
@@ -54,21 +56,21 @@
 
 <!-- Copyable AI Prompt Templates -->
 <div class="card-custom p-4 mb-4">
-    <h5 class="fw-bold mb-3 border-bottom pb-2">Pre-formatted AI Prompt Templates (Copy & Paste)</h5>
-    <p class="text-muted small">Use these tested prompt structures when running Image-to-Image in Midjourney, Stable Diffusion, or ChatGPT DALL-E:</p>
+    <h5 class="fw-bold mb-3 border-bottom pb-2">@(isArabic ? "قوالب أوامر الذكاء الاصطناعي الجاهزة (نسخ ولصق)" : "Pre-formatted AI Prompt Templates (Copy & Paste)")</h5>
+    <p class="text-muted small">@(isArabic ? "استخدم هذه القوالب المجربة عند تشغيل Image-to-Image في Midjourney أو Stable Diffusion أو ChatGPT DALL-E:" : "Use these tested prompt structures when running Image-to-Image in Midjourney, Stable Diffusion, or ChatGPT DALL-E:")</p>
 
     <div class="row g-3">
         <!-- Template 1: Studio Model Look -->
         <div class="col-lg-6">
             <div class="p-3 bg-light rounded-3 border h-100 d-flex flex-column justify-content-between">
                 <div>
-                    <span class="badge bg-dark mb-2">Template 1: Luxury Minimalist Studio</span>
+                    <span class="badge bg-dark mb-2">@(isArabic ? "القالب 1: ستوديو معماري هادئ وفاخر" : "Template 1: Luxury Minimalist Studio")</span>
                     <p id="prompt1" class="font-monospace small text-dark mb-2">
                         High-end luxury fashion catalog photograph of [ITEM NAME, e.g. Egyptian linen casual shirt], editorial photoshoot, clean soft diffused daylight, warm minimal architectural studio backdrop, 8k resolution, photorealistic fabric texture, natural wrinkles, Vogue aesthetic --ar 3:4 --v 6.0
                     </p>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-dark rounded-pill" onclick="copyToClipboard('prompt1', this)">
-                    <i class="bi bi-clipboard me-1"></i> Copy Prompt
+                    <i class="bi bi-clipboard me-1"></i> @(isArabic ? "نسخ الأمر (Prompt)" : "Copy Prompt")
                 </button>
             </div>
         </div>
@@ -77,13 +79,13 @@
         <div class="col-lg-6">
             <div class="p-3 bg-light rounded-3 border h-100 d-flex flex-column justify-content-between">
                 <div>
-                    <span class="badge bg-dark mb-2">Template 2: Premium Wooden Hanger Flat-Lay</span>
+                    <span class="badge bg-dark mb-2">@(isArabic ? "القالب 2: شماعة خشبية فاخرة وخلفية حجرية" : "Template 2: Premium Wooden Hanger Flat-Lay")</span>
                     <p id="prompt2" class="font-monospace small text-dark mb-2">
                         Commercial product photograph of [ITEM NAME] hanging gracefully on a dark walnut wooden hanger against a clean textured limestone wall, soft side lighting casting gentle shadows, ultra sharp focus on weave and stitching details, 4k ultra-high definition --ar 3:4
                     </p>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-dark rounded-pill" onclick="copyToClipboard('prompt2', this)">
-                    <i class="bi bi-clipboard me-1"></i> Copy Prompt
+                    <i class="bi bi-clipboard me-1"></i> @(isArabic ? "نسخ الأمر (Prompt)" : "Copy Prompt")
                 </button>
             </div>
         </div>

@@ -1,19 +1,22 @@
 @model SaleDto
+@using System.Globalization
 @{
-    ViewData["Title"] = $"Invoice — {Model.SaleNumber}";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = isArabic ? $"فاتورة — {Model.SaleNumber}" : $"Invoice — {Model.SaleNumber}";
+    var currency = Localizer["Currency"].Value;
 }
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Sale Receipt</h4>
-        <p class="text-muted small mb-0">Invoice #@Model.SaleNumber</p>
+        <h4 class="fw-bold mb-1">@Localizer["SaleReceipt"]</h4>
+        <p class="text-muted small mb-0">@Localizer["InvoiceNumber"] @Model.SaleNumber</p>
     </div>
     <div class="d-flex gap-2">
         <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Sales
+            <i class="bi bi-arrow-@(isArabic ? "right" : "left") me-1"></i> @Localizer["BackToSales"]
         </a>
         <button type="button" class="btn btn-dark btn-sm rounded-pill" onclick="window.print()">
-            <i class="bi bi-printer me-1"></i> Print Invoice
+            <i class="bi bi-printer me-1"></i> @Localizer["PrintInvoice"]
         </button>
     </div>
 </div>
@@ -23,26 +26,26 @@
     <div class="d-flex justify-content-between align-items-start border-bottom pb-4 mb-4">
         <div>
             <span class="badge-logo fs-4 px-3 py-1 d-inline-block mb-2">AG</span>
-            <h4 class="fw-bold mb-0">Asser Gallery</h4>
-            <p class="text-muted small mb-0">Cairo, Egypt • WhatsApp Order</p>
+            <h4 class="fw-bold mb-0">@Localizer["AppName"]</h4>
+            <p class="text-muted small mb-0">@(isArabic ? "القاهرة، مصر • طلب عبر المتجر الإلكتروني" : "Cairo, Egypt • Online WhatsApp Order")</p>
         </div>
         <div class="text-end">
-            <h5 class="fw-bold text-success mb-1">PAID / CONFIRMED</h5>
-            <div class="small text-muted">Invoice: <strong>@Model.SaleNumber</strong></div>
-            <div class="small text-muted">Date: <strong>@Model.SaleDate.ToString("dd MMM yyyy, hh:mm tt")</strong></div>
+            <h5 class="fw-bold text-success mb-1">@Localizer["PaidConfirmed"]</h5>
+            <div class="small text-muted">@Localizer["InvoiceNumber"]: <strong>@Model.SaleNumber</strong></div>
+            <div class="small text-muted">@Localizer["Date"]: <strong>@Model.SaleDate.ToString("dd MMM yyyy, hh:mm tt")</strong></div>
         </div>
     </div>
 
     <!-- Customer Info -->
     <div class="row g-3 mb-4">
         <div class="col-sm-6">
-            <span class="text-muted small d-block">Billed To:</span>
-            <h6 class="fw-bold mb-1">@(Model.CustomerName ?? "Walk-in Customer")</h6>
-            <p class="text-muted small mb-0">Phone: @(Model.CustomerPhone ?? "—")</p>
+            <span class="text-muted small d-block">@Localizer["BilledTo"]</span>
+            <h6 class="fw-bold mb-1">@(Model.CustomerName ?? (isArabic ? "عميل مباشر" : "Walk-in Customer"))</h6>
+            <p class="text-muted small mb-0">@Localizer["Phone"]: @(Model.CustomerPhone ?? "—")</p>
         </div>
         <div class="col-sm-6 text-sm-end">
-            <span class="text-muted small d-block">Order Notes:</span>
-            <p class="small mb-0">@(Model.Notes ?? "Standard customer delivery.")</p>
+            <span class="text-muted small d-block">@Localizer["OrderNotes"]</span>
+            <p class="small mb-0">@(Model.Notes ?? (isArabic ? "تسليم قياسي." : "Standard customer delivery."))</p>
         </div>
     </div>
 
@@ -51,11 +54,11 @@
         <table class="table table-bordered align-middle">
             <thead class="table-light">
                 <tr>
-                    <th>Item Description</th>
-                    <th>Color Variant</th>
-                    <th class="text-center">Qty</th>
-                    <th class="text-end">Unit Price</th>
-                    <th class="text-end">Subtotal</th>
+                    <th>@Localizer["ItemDescription"]</th>
+                    <th>@Localizer["ColorVariant"]</th>
+                    <th class="text-center">@Localizer["Qty"]</th>
+                    <th class="text-end">@Localizer["UnitPrice"]</th>
+                    <th class="text-end">@Localizer["Subtotal"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,31 +66,31 @@
                 {
                     <tr>
                         <td>
-                            <strong>@item.ProductName</strong>
-                            <div class="text-muted extra-small">@item.ProductArabicName</div>
+                            <strong>@(isArabic && !string.IsNullOrWhiteSpace(item.ProductArabicName) ? item.ProductArabicName : item.ProductName)</strong>
+                            <div class="text-muted extra-small">@(isArabic ? item.ProductName : item.ProductArabicName)</div>
                         </td>
                         <td>
                             <span class="d-inline-flex align-items-center gap-1">
                                 <span class="color-dot" style="width: 10px; height: 10px; background-color: @item.ColorHexCode;"></span>
-                                <span>@item.ColorName (@item.ColorArabicName)</span>
+                                <span>@(isArabic && !string.IsNullOrWhiteSpace(item.ColorArabicName) ? item.ColorArabicName : item.ColorName)</span>
                             </span>
                         </td>
                         <td class="text-center">@item.Quantity</td>
-                        <td class="text-end">@item.UnitPrice.ToString("N0") @Localizer["Currency"]</td>
-                        <td class="text-end fw-bold">@item.SubTotal.ToString("N0") @Localizer["Currency"]</td>
+                        <td class="text-end">@item.UnitPrice.ToString("N0") @currency</td>
+                        <td class="text-end fw-bold">@item.SubTotal.ToString("N0") @currency</td>
                     </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="4" class="text-end fs-5">Total Amount:</th>
-                    <th class="text-end fs-5 text-success">@Model.TotalAmount.ToString("N0") @Localizer["Currency"]</th>
+                    <th colspan="4" class="text-end fs-5">@Localizer["GrandTotal"]</th>
+                    <th class="text-end fs-5 text-success">@Model.TotalAmount.ToString("N0") @currency</th>
                 </tr>
             </tfoot>
         </table>
     </div>
 
     <div class="text-center text-muted small pt-3 border-top">
-        Thank you for shopping with Asser Gallery! All items are quality guaranteed.
+        @(isArabic ? "شكراً لتسوقكم مع آسر جاليري! جميع المنتجات أصلية وبضمان الجودة." : "Thank you for shopping with Asser Gallery! All items are quality guaranteed.")
     </div>
 </div>

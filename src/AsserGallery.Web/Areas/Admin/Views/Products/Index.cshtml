@@ -1,19 +1,22 @@
 @model AsserGallery.Application.Common.Models.PaginatedList<ProductDto>
+@using System.Globalization
 @{
-    ViewData["Title"] = "Product Inventory";
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+    ViewData["Title"] = Localizer["ProductInventory"].Value;
     var categories = ViewBag.Categories as List<CategoryDto> ?? new List<CategoryDto>();
     var selectedCatId = ViewBag.CategoryId as int?;
     var selectedStatus = ViewBag.Status as ProductStatus?;
     var search = ViewBag.Search as string;
+    var currency = Localizer["Currency"].Value;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Products & Stock</h4>
-        <p class="text-muted small mb-0">Manage your clothing items, multi-color stock levels, and pricing.</p>
+        <h4 class="fw-bold mb-1">@Localizer["ProductsAndStock"]</h4>
+        <p class="text-muted small mb-0">@Localizer["ManageProductsDescription"]</p>
     </div>
     <a asp-area="Admin" asp-controller="Products" asp-action="Create" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">
-        <i class="bi bi-plus-lg me-1"></i> Add New Product
+        <i class="bi bi-plus-lg me-1"></i> @Localizer["AddNewProduct"]
     </a>
 </div>
 
@@ -22,28 +25,30 @@
     <form method="get" asp-action="Index">
         <div class="row g-2 align-items-center">
             <div class="col-md-5">
-                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="Search by name, description..." />
+                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="@Localizer["SearchProductsPlaceholder"]" />
             </div>
             <div class="col-md-3">
                 <select name="categoryId" class="form-select form-select-sm">
-                    <option value="">All Categories</option>
+                    <option value="">@Localizer["AllCategories"]</option>
                     @foreach (var cat in categories)
                     {
-                        <option value="@cat.Id" selected="@(selectedCatId == cat.Id)">@cat.Name (@cat.ArabicName)</option>
+                        <option value="@cat.Id" selected="@(selectedCatId == cat.Id)">
+                            @(isArabic && !string.IsNullOrWhiteSpace(cat.ArabicName) ? cat.ArabicName : cat.Name)
+                        </option>
                     }
                 </select>
             </div>
             <div class="col-md-2">
                 <select name="status" class="form-select form-select-sm">
-                    <option value="">All Statuses</option>
-                    <option value="@ProductStatus.Available" selected="@(selectedStatus == ProductStatus.Available)">Available</option>
-                    <option value="@ProductStatus.LimitedStock" selected="@(selectedStatus == ProductStatus.LimitedStock)">Limited Stock</option>
-                    <option value="@ProductStatus.OutOfStock" selected="@(selectedStatus == ProductStatus.OutOfStock)">Out of Stock</option>
+                    <option value="">@Localizer["AllStatuses"]</option>
+                    <option value="@ProductStatus.Available" selected="@(selectedStatus == ProductStatus.Available)">@Localizer["Available"]</option>
+                    <option value="@ProductStatus.LimitedStock" selected="@(selectedStatus == ProductStatus.LimitedStock)">@Localizer["LimitedStock"]</option>
+                    <option value="@ProductStatus.OutOfStock" selected="@(selectedStatus == ProductStatus.OutOfStock)">@Localizer["OutOfStock"]</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex gap-1">
-                <button type="submit" class="btn btn-sm btn-dark w-100">Filter</button>
-                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Reset</a>
+                <button type="submit" class="btn btn-sm btn-dark w-100">@Localizer["Filter"]</button>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">@Localizer["Reset"]</a>
             </div>
         </div>
     </form>
@@ -55,21 +60,21 @@
         <table class="table table-custom table-hover align-middle mb-0">
             <thead>
                 <tr>
-                    <th style="width: 70px;">Image</th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Color Stock Matrix</th>
-                    <th>Total Stock</th>
-                    <th>Status</th>
-                    <th class="text-end" style="width: 140px;">Actions</th>
+                    <th style="width: 70px;">@Localizer["Image"]</th>
+                    <th>@Localizer["ProductName"]</th>
+                    <th>@Localizer["Category"]</th>
+                    <th>@Localizer["Price"]</th>
+                    <th>@Localizer["ColorStockMatrix"]</th>
+                    <th>@Localizer["TotalStock"]</th>
+                    <th>@Localizer["Status"]</th>
+                    <th class="text-end" style="width: 140px;">@Localizer["Actions"]</th>
                 </tr>
             </thead>
             <tbody>
                 @if (!Model.Items.Any())
                 {
                     <tr>
-                        <td colspan="8" class="text-center py-4 text-muted">No products found.</td>
+                        <td colspan="8" class="text-center py-4 text-muted">@Localizer["NoProductsFound"]</td>
                     </tr>
                 }
                 @foreach (var prod in Model.Items)
@@ -79,21 +84,27 @@
                             <img src="@(prod.PrimaryImageUrl ?? "https://via.placeholder.com/60")" alt="@prod.Name" class="rounded-3 object-fit-cover" style="width: 50px; height: 50px;" />
                         </td>
                         <td>
-                            <div class="fw-bold">@prod.Name</div>
-                            <div class="text-muted small">@prod.ArabicName</div>
+                            <div class="fw-bold">@(isArabic && !string.IsNullOrWhiteSpace(prod.ArabicName) ? prod.ArabicName : prod.Name)</div>
+                            <div class="text-muted small">@(isArabic ? prod.Name : prod.ArabicName)</div>
                             @if (prod.IsFeatured)
                             {
-                                <span class="badge bg-warning text-dark small"><i class="bi bi-star-fill"></i> Featured</span>
+                                <span class="badge bg-warning text-dark small"><i class="bi bi-star-fill"></i> @Localizer["Featured"]</span>
                             }
                         </td>
                         <td>
-                            <span class="badge bg-light text-dark border">@prod.CategoryName / @prod.SubCategoryName</span>
+                            <span class="badge bg-light text-dark border">
+                                @(isArabic && !string.IsNullOrWhiteSpace(prod.CategoryArabicName) ? prod.CategoryArabicName : prod.CategoryName)
+                                @if (!string.IsNullOrWhiteSpace(prod.SubCategoryName))
+                                {
+                                    <span> / @(isArabic && !string.IsNullOrWhiteSpace(prod.SubCategoryArabicName) ? prod.SubCategoryArabicName : prod.SubCategoryName)</span>
+                                }
+                            </span>
                         </td>
                         <td>
-                            <div class="fw-bold">@((prod.DiscountedPrice ?? prod.Price).ToString("N0")) @Localizer["Currency"]</div>
+                            <div class="fw-bold">@((prod.DiscountedPrice ?? prod.Price).ToString("N0")) @currency</div>
                             @if (prod.DiscountedPrice.HasValue)
                             {
-                                <div class="text-muted small text-decoration-line-through">@prod.Price.ToString("N0") @Localizer["Currency"]</div>
+                                <div class="text-muted small text-decoration-line-through">@prod.Price.ToString("N0") @currency</div>
                             }
                         </td>
                         <td>
@@ -102,7 +113,7 @@
                                 {
                                     <span class="badge @(v.Quantity > 0 ? "bg-light text-dark border" : "bg-danger text-white") small d-inline-flex align-items-center gap-1">
                                         <span class="color-dot" style="width: 8px; height: 8px; background-color: @v.ColorHexCode;"></span>
-                                        <span>@v.ColorName: <strong>@v.Quantity</strong></span>
+                                        <span>@(isArabic && !string.IsNullOrWhiteSpace(v.ColorArabicName) ? v.ColorArabicName : v.ColorName): <strong>@v.Quantity</strong></span>
                                     </span>
                                 }
                             </div>
@@ -115,28 +126,28 @@
                         <td>
                             @if (prod.Status == ProductStatus.Available)
                             {
-                                <span class="status-badge status-available">Available</span>
+                                <span class="status-badge status-available">@Localizer["Available"]</span>
                             }
                             else if (prod.Status == ProductStatus.LimitedStock)
                             {
-                                <span class="status-badge status-limited">Limited</span>
+                                <span class="status-badge status-limited">@Localizer["LimitedStock"]</span>
                             }
                             else
                             {
-                                <span class="status-badge status-outofstock">Out of Stock</span>
+                                <span class="status-badge status-outofstock">@Localizer["OutOfStock"]</span>
                             }
                         </td>
                         <td class="text-end">
                             <div class="d-inline-flex gap-1">
-                                <a asp-area="Admin" asp-controller="Facebook" asp-action="GroupAssistant" asp-route-productId="@prod.Id" class="btn btn-sm btn-outline-primary" title="Facebook Post Helper">
+                                <a asp-area="Admin" asp-controller="Facebook" asp-action="GroupAssistant" asp-route-productId="@prod.Id" class="btn btn-sm btn-outline-primary" title="@Localizer["FacebookPublishing"]">
                                     <i class="bi bi-facebook"></i>
                                 </a>
-                                <a asp-action="Edit" asp-route-id="@prod.Id" class="btn btn-sm btn-outline-dark" title="Edit">
+                                <a asp-action="Edit" asp-route-id="@prod.Id" class="btn btn-sm btn-outline-dark" title="@Localizer["Edit"]">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
-                                <form asp-action="Delete" asp-route-id="@prod.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <form asp-action="Delete" asp-route-id="@prod.Id" method="post" class="d-inline" onsubmit="return confirm('@Localizer["Delete"]?');">
                                     @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="@Localizer["Delete"]">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>

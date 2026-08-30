@@ -205,7 +205,7 @@
                     <div class="dropdown">
                         <button class="btn btn-sm btn-light border dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i>
-                            <span class="d-none d-md-inline small fw-semibold">Admin</span>
+                            <span class="d-none d-md-inline small fw-semibold">@(isRtl ? "المسؤول" : "Admin")</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li><a class="dropdown-item" asp-area="Admin" asp-controller="Settings" asp-action="Index"><i class="bi bi-gear me-2"></i>@Localizer["Settings"]</a></li>

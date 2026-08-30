@@ -84,8 +84,6 @@
   <data name="Logout" xml:space="preserve">
     <value>تسجيل الخروج</value>
   </data>
-  
-  <!-- Admin & Dashboard Keys -->
   <data name="Operations" xml:space="preserve">
     <value>العمليات</value>
   </data>
@@ -214,5 +212,349 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>الإعدادات</value>
+  </data>
+
+  <!-- Products Section -->
+  <data name="ProductInventory" xml:space="preserve">
+    <value>مخزون المنتجات</value>
+  </data>
+  <data name="ManageProductsDescription" xml:space="preserve">
+    <value>إدارة منتجات الملابس وتحديد أسعارها ومستويات المخزون لكل لون.</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>جميع الحالات</value>
+  </data>
+  <data name="SearchProductsPlaceholder" xml:space="preserve">
+    <value>البحث بالاسم، الوصف...</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>إعادة ضبط</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>الصورة</value>
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>اسم المنتج</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>القسم</value>
+  </data>
+  <data name="ColorStockMatrix" xml:space="preserve">
+    <value>مصفوفة مخزون الألوان</value>
+  </data>
+  <data name="TotalStock" xml:space="preserve">
+    <value>إجمالي المخزون</value>
+  </data>
+  <data name="Featured" xml:space="preserve">
+    <value>مميز</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="NoProductsFound" xml:space="preserve">
+    <value>لم يتم العثور على أي منتجات.</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>اللون</value>
+  </data>
+  <data name="Stock" xml:space="preserve">
+    <value>الكمية بالمخزن</value>
+  </data>
+
+  <!-- Sales Section -->
+  <data name="SalesAndOrdersLedger" xml:space="preserve">
+    <value>سجل المبيعات والطلبات</value>
+  </data>
+  <data name="ManageSalesDescription" xml:space="preserve">
+    <value>تسجيل طلبات المبيعات، والخصم التلقائي من المخزون، وتتبع إيصالات العملاء.</value>
+  </data>
+  <data name="RegisterNewSale" xml:space="preserve">
+    <value>تسجيل عملية بيع جديدة</value>
+  </data>
+  <data name="ExportCsvExcel" xml:space="preserve">
+    <value>تصدير CSV / Excel</value>
+  </data>
+  <data name="TotalFilteredSales" xml:space="preserve">
+    <value>إجمالي مبيعات التصفية</value>
+  </data>
+  <data name="TotalOrdersCount" xml:space="preserve">
+    <value>إجمالي عدد الطلبات</value>
+  </data>
+  <data name="AverageOrderValue" xml:space="preserve">
+    <value>متوسط قيمة الطلب</value>
+  </data>
+  <data name="OrdersCountUnit" xml:space="preserve">
+    <value>طلب</value>
+  </data>
+  <data name="SearchSalesPlaceholder" xml:space="preserve">
+    <value>بحث برقم الفاتورة، اسم العميل، الهاتف...</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>تاريخ البدء</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>تاريخ الانتهاء</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>الهاتف</value>
+  </data>
+  <data name="CustomerName" xml:space="preserve">
+    <value>اسم العميل</value>
+  </data>
+  <data name="ItemsSummary" xml:space="preserve">
+    <value>ملخص المنتجات</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>إجمالي المبلغ</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>الإجراء</value>
+  </data>
+  <data name="Receipt" xml:space="preserve">
+    <value>إيصال</value>
+  </data>
+  <data name="NoSalesFound" xml:space="preserve">
+    <value>لا توجد فواتير مبيعات مسجلة.</value>
+  </data>
+  <data name="SaleReceipt" xml:space="preserve">
+    <value>إيصال المبيعات</value>
+  </data>
+  <data name="BackToSales" xml:space="preserve">
+    <value>العودة للمبيعات</value>
+  </data>
+  <data name="PrintInvoice" xml:space="preserve">
+    <value>طباعة الفاتورة</value>
+  </data>
+  <data name="PaidConfirmed" xml:space="preserve">
+    <value>مدفوع / مؤكد</value>
+  </data>
+  <data name="BilledTo" xml:space="preserve">
+    <value>فاتورة إلى:</value>
+  </data>
+  <data name="OrderNotes" xml:space="preserve">
+    <value>ملاحظات الطلب:</value>
+  </data>
+  <data name="ItemDescription" xml:space="preserve">
+    <value>بيان المنتج</value>
+  </data>
+  <data name="ColorVariant" xml:space="preserve">
+    <value>اللون والبديل</value>
+  </data>
+  <data name="Qty" xml:space="preserve">
+    <value>الكمية</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>سعر الوحدة</value>
+  </data>
+  <data name="Subtotal" xml:space="preserve">
+    <value>الإجمالي الفرعي</value>
+  </data>
+  <data name="OrderItems" xml:space="preserve">
+    <value>عناصر الطلب</value>
+  </data>
+  <data name="AddAnotherItem" xml:space="preserve">
+    <value>إضافة عنصر آخر</value>
+  </data>
+  <data name="GrandTotal" xml:space="preserve">
+    <value>المجموع الإجمالي:</value>
+  </data>
+  <data name="ConfirmSale" xml:space="preserve">
+    <value>تأكيد عملية البيع وتحديث المخزون</value>
+  </data>
+
+  <!-- Finances Section -->
+  <data name="FinancialTransactions" xml:space="preserve">
+    <value>المعاملات المالية</value>
+  </data>
+  <data name="FinancialManagement" xml:space="preserve">
+    <value>الإدارة المالية</value>
+  </data>
+  <data name="ManageFinancesDescription" xml:space="preserve">
+    <value>تتبع كافة التدفقات النقدية: إيرادات المبيعات، مشتريات البضاعة، التغليف، التوصيل والإعلانات.</value>
+  </data>
+  <data name="RecordTransaction" xml:space="preserve">
+    <value>تسجيل معاملة مالية</value>
+  </data>
+  <data name="TotalIncomeRevenue" xml:space="preserve">
+    <value>إجمالي الإيرادات</value>
+  </data>
+  <data name="NetProfitBalance" xml:space="preserve">
+    <value>صافي الأرباح (الرصيد)</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>هذا الشهر:</value>
+  </data>
+  <data name="ThisMonthProfit" xml:space="preserve">
+    <value>أرباح هذا الشهر:</value>
+  </data>
+  <data name="TransactionRecords" xml:space="preserve">
+    <value>سجل المعاملات المالية</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>الكل</value>
+  </data>
+  <data name="IncomeOnly" xml:space="preserve">
+    <value>الإيرادات فقط</value>
+  </data>
+  <data name="ExpensesOnly" xml:space="preserve">
+    <value>المصروفات فقط</value>
+  </data>
+  <data name="TitleAndDescription" xml:space="preserve">
+    <value>العنوان والبيان</value>
+  </data>
+  <data name="LinkedProduct" xml:space="preserve">
+    <value>المنتج المرتبط</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>النوع</value>
+  </data>
+  <data name="Income" xml:space="preserve">
+    <value>إيراد</value>
+  </data>
+  <data name="Expense" xml:space="preserve">
+    <value>مصروف</value>
+  </data>
+  <data name="NoTransactionsFound" xml:space="preserve">
+    <value>لا توجد معاملات مالية مسجلة.</value>
+  </data>
+  <data name="ConfirmDeleteTransaction" xml:space="preserve">
+    <value>هل أنت متأكد من حذف هذه المعاملة؟</value>
+  </data>
+
+  <!-- Customer Requests Section -->
+  <data name="CustomerInquiriesAndCallbacks" xml:space="preserve">
+    <value>استفسارات وطلبات العملاء</value>
+  </data>
+  <data name="CustomerCallbackAndHoldRequests" xml:space="preserve">
+    <value>طلبات معاودة الاتصال وحجز القطع</value>
+  </data>
+  <data name="ManageRequestsDescription" xml:space="preserve">
+    <value>متابعة طلبات العملاء الذين طلبوا الحجز أو استفسروا عن المقاسات والألوان.</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>جديد</value>
+  </data>
+  <data name="Contacted" xml:space="preserve">
+    <value>تم التواصل</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+  <data name="CustomerInfo" xml:space="preserve">
+    <value>بيانات العميل</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>المنتج</value>
+  </data>
+  <data name="MessageRequest" xml:space="preserve">
+    <value>الرسالة / الاستفسار</value>
+  </data>
+  <data name="ActionsAndUpdate" xml:space="preserve">
+    <value>الإجراء وتحديث الحالة</value>
+  </data>
+  <data name="NoRequestsFound" xml:space="preserve">
+    <value>لا توجد طلبات عملاء في هذا العرض.</value>
+  </data>
+  <data name="MarkAsContacted" xml:space="preserve">
+    <value>تحديد كـ تم التواصل</value>
+  </data>
+  <data name="MarkAsCompleted" xml:space="preserve">
+    <value>تحديد كـ مكتمل</value>
+  </data>
+  <data name="OpenWhatsApp" xml:space="preserve">
+    <value>فتح واتساب</value>
+  </data>
+
+  <!-- Facebook Publishing Section -->
+  <data name="FacebookPublishingCenter" xml:space="preserve">
+    <value>مركز النشر على فيسبوك والمجموعات</value>
+  </data>
+  <data name="FacebookPublishingDescription" xml:space="preserve">
+    <value>نشر تلقائي لصفحات فيسبوك ومساعد النشر اليدوي لمجموعات وجروبات فيسبوك.</value>
+  </data>
+  <data name="AddDestination" xml:space="preserve">
+    <value>إضافة وجهة نشر جديدة</value>
+  </data>
+  <data name="GroupPostingAssistant" xml:space="preserve">
+    <value>مساعد النشر في الجروبات</value>
+  </data>
+  <data name="MetaApiBannerTitle" xml:space="preserve">
+    <value>بنية الربط والنشر عبر Meta API</value>
+  </data>
+  <data name="MetaApiBannerDesc" xml:space="preserve">
+    <value>صفحات فيسبوك: نشر فوري بضغطة زر عبر Graph API الرسمي. جروبات فيسبوك: مساعد النشر يجهز نص الإعلان الأنيق مع الأسعار والروابط للنشر المباشر السريع.</value>
+  </data>
+  <data name="PostsLogged" xml:space="preserve">
+    <value>منشور مسجل</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>مجموعة / جروب</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>صفحة عامة</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>الهدف:</value>
+  </data>
+  <data name="OpenAssistant" xml:space="preserve">
+    <value>فتح المساعد</value>
+  </data>
+  <data name="PublishAnnouncement" xml:space="preserve">
+    <value>نشر الإعلان</value>
+  </data>
+
+  <!-- Categories Section -->
+  <data name="CategoriesManagement" xml:space="preserve">
+    <value>إدارة الأقسام والتصنيفات</value>
+  </data>
+  <data name="ManageCategoriesDescription" xml:space="preserve">
+    <value>تنظيم هيكل المتجر والأقسام الرئيسية والفرعية.</value>
+  </data>
+  <data name="AddNewCategory" xml:space="preserve">
+    <value>إضافة قسم رئيسي جديد</value>
+  </data>
+  <data name="AddNewSubCategory" xml:space="preserve">
+    <value>إضافة قسم فرعي جديد</value>
+  </data>
+  <data name="CategoryName" xml:space="preserve">
+    <value>اسم القسم</value>
+  </data>
+  <data name="CategoryArabicName" xml:space="preserve">
+    <value>اسم القسم بالعربية</value>
+  </data>
+  <data name="SubCategoriesCount" xml:space="preserve">
+    <value>الأقسام الفرعية</value>
+  </data>
+  <data name="ProductsCount" xml:space="preserve">
+    <value>عدد المنتجات</value>
+  </data>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>ترتيب العرض</value>
+  </data>
+
+  <!-- Store Settings Section -->
+  <data name="StoreSettingsTitle" xml:space="preserve">
+    <value>إعدادات المتجر العامة</value>
+  </data>
+  <data name="ManageSettingsDescription" xml:space="preserve">
+    <value>ضبط بيانات التواصل، أرقام الواتساب، العملة وحسابات السوشيال ميديا.</value>
+  </data>
+  <data name="SaveSettings" xml:space="preserve">
+    <value>حفظ الإعدادات</value>
+  </data>
+  <data name="WhatsAppNumber" xml:space="preserve">
+    <value>رقم الواتساب</value>
+  </data>
+  <data name="FacebookPageUrl" xml:space="preserve">
+    <value>رابط صفحة فيسبوك</value>
+  </data>
+  <data name="InstagramUrl" xml:space="preserve">
+    <value>رابط انستجرام</value>
+  </data>
+  <data name="StoreAddress" xml:space="preserve">
+    <value>عنوان المتجر</value>
   </data>
 </root>
