@@ -381,6 +381,9 @@
   <data name="TotalIncomeRevenue" xml:space="preserve">
     <value>Total Revenue (Income)</value>
   </data>
+  <data name="TotalExpenses" xml:space="preserve">
+    <value>Total Expenses</value>
+  </data>
   <data name="NetProfitBalance" xml:space="preserve">
     <value>Net Profit (Balance)</value>
   </data>

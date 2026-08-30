@@ -46,10 +46,28 @@
                     }
                     @foreach (var sub in cat.SubCategories)
                     {
+                        var subArName = !string.IsNullOrWhiteSpace(sub.ArabicName) ? sub.ArabicName : (sub.Name switch {
+                            "Casual Shirts & Polos" => "قمصان وبولو كاجوال",
+                            "Formal & Suits" => "بدل وملابس رسمية",
+                            "Pajamas & Loungewear" => "بيجامات وملابس منزلية",
+                            "Jackets & Winterwear" => "جواكت ومعاطف شتوية",
+                            "Casual Tops & Dresses" => "فساتين وتوبات كاجوال",
+                            "Loungewear & Sleepwear" => "بيجامات وملابس نوم",
+                            "Abayas & Modest Wear" => "عبايات وملابس محتشمة",
+                            "Cardigans & Jackets" => "كارديجان وجواكت",
+                            "Boys Casual Sets" => "أطقم أولادي كاجوال",
+                            "Girls Dresses & Sets" => "فساتين وأطقم بناتي",
+                            _ => sub.Name
+                        });
+                        var subEnName = sub.Name;
+
                         <div class="p-2 px-3 rounded-3 border bg-light d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="fw-bold small">@(isArabic && !string.IsNullOrWhiteSpace(sub.ArabicName) ? sub.ArabicName : sub.Name)</span>
-                                <span class="text-muted small ms-2">(@(isArabic ? sub.Name : sub.ArabicName))</span>
+                                <span class="fw-bold small">@(isArabic ? subArName : subEnName)</span>
+                                @if (subArName != subEnName)
+                                {
+                                    <span class="text-muted small ms-2">(@(isArabic ? subEnName : subArName))</span>
+                                }
                             </div>
                             <span class="badge bg-secondary rounded-pill">@sub.ProductCount @(isArabic ? "منتج" : "products")</span>
                         </div>

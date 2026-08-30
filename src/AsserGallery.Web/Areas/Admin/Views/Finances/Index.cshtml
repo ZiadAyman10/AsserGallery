@@ -91,13 +91,29 @@
                 }
                 @foreach (var tx in Model)
                 {
+                    var title = isArabic ? (tx.Title switch {
+                        "First Batch Sales Revenue" => "دفعة إيرادات المبيعات الأولى",
+                        "Facebook & Instagram Boost Ads Campaign" => "حملة إعلانات ممولة على فيسبوك وإنستجرام",
+                        "Custom Branded Bags & Box Packaging" => "أكياس وكراتين شوبنج مطبوعة بشعار آسر جاليري",
+                        "Summer Fabric & Workshop Stock Purchase" => "شراء أقمشة صيفية وبكرات ستان وكتان من سوق الأزهر",
+                        _ => tx.Title
+                    }) : tx.Title;
+
+                    var desc = isArabic ? (tx.Description switch {
+                        "Direct sales from group posts and WhatsApp orders" => "مبيعات مباشرة من منشورات الجروبات وطلبات الواتساب",
+                        "Targeted sponsored posts for Summer Linen Shirt launch" => "منشورات ممولة مستهدفة لإطلاق قميص الكتان الصيفي",
+                        "Printed 500 premium glossy bags with Asser Gallery logo" => "طباعة 500 كيس لامع فاخر مع شعار المتجر",
+                        "Purchased high-thread linen rolls and satin rolls from Al-Azhar textile market" => "شراء رولات كتان عالي الجودة ورولات ستان من تجار الأزهر",
+                        _ => tx.Description
+                    }) : tx.Description;
+
                     <tr>
                         <td class="small text-muted">@tx.Date.ToString("dd MMM yyyy")</td>
                         <td>
-                            <div class="fw-bold">@tx.Title</div>
-                            @if (!string.IsNullOrWhiteSpace(tx.Description))
+                            <div class="fw-bold">@title</div>
+                            @if (!string.IsNullOrWhiteSpace(desc))
                             {
-                                <div class="text-muted extra-small">@tx.Description</div>
+                                <div class="text-muted extra-small">@desc</div>
                             }
                         </td>
                         <td>

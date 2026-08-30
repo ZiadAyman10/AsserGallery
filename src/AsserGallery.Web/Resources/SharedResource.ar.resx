@@ -381,6 +381,9 @@
   <data name="TotalIncomeRevenue" xml:space="preserve">
     <value>إجمالي الإيرادات</value>
   </data>
+  <data name="TotalExpenses" xml:space="preserve">
+    <value>إجمالي المصروفات</value>
+  </data>
   <data name="NetProfitBalance" xml:space="preserve">
     <value>صافي الأرباح (الرصيد)</value>
   </data>
