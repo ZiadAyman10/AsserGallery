@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- App Identity -->
   <data name="AppName" xml:space="preserve">
     <value>Asser Gallery</value>
   </data>
+
+  <!-- Public Navigation -->
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
@@ -15,6 +18,8 @@
   <data name="AdminDashboard" xml:space="preserve">
     <value>Admin Dashboard</value>
   </data>
+
+  <!-- Home Page -->
   <data name="Discover" xml:space="preserve">
     <value>Discover</value>
   </data>
@@ -30,6 +35,8 @@
   <data name="SpecialOffers" xml:space="preserve">
     <value>Special Offers</value>
   </data>
+
+  <!-- Product Status -->
   <data name="Available" xml:space="preserve">
     <value>Available</value>
   </data>
@@ -39,6 +46,8 @@
   <data name="OutOfStock" xml:space="preserve">
     <value>Out of Stock</value>
   </data>
+
+  <!-- Order Actions -->
   <data name="OrderWhatsApp" xml:space="preserve">
     <value>Order via WhatsApp</value>
   </data>
@@ -48,12 +57,16 @@
   <data name="RequestCallback" xml:space="preserve">
     <value>Request Callback / Hold</value>
   </data>
+
+  <!-- Product Photos -->
   <data name="OriginalPhoto" xml:space="preserve">
     <value>Real Photo (Phone)</value>
   </data>
   <data name="AiEnhancedPhoto" xml:space="preserve">
     <value>Studio AI View</value>
   </data>
+
+  <!-- Filters -->
   <data name="Colors" xml:space="preserve">
     <value>Available Colors</value>
   </data>
@@ -78,10 +91,129 @@
   <data name="InStockOnly" xml:space="preserve">
     <value>In Stock Only</value>
   </data>
+
+  <!-- Auth -->
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Logout</value>
+  </data>
+
+  <!-- ===== Admin Panel Strings ===== -->
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Admin Panel</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>Operations</value>
+  </data>
+  <data name="CustomerVisibility" xml:space="preserve">
+    <value>Customer &amp; Visibility</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+
+  <!-- Admin Sidebar Links -->
+  <data name="ProductsAndStock" xml:space="preserve">
+    <value>Products &amp; Stock</value>
+  </data>
+  <data name="SalesAndOrders" xml:space="preserve">
+    <value>Sales &amp; Orders</value>
+  </data>
+  <data name="IncomeAndExpenses" xml:space="preserve">
+    <value>Income &amp; Expenses</value>
+  </data>
+  <data name="CustomerRequests" xml:space="preserve">
+    <value>Customer Requests</value>
+  </data>
+  <data name="FacebookPublishing" xml:space="preserve">
+    <value>Facebook Publishing</value>
+  </data>
+  <data name="PhotoAiGuide" xml:space="preserve">
+    <value>Photo &amp; AI Guide</value>
+  </data>
+  <data name="StoreSettings" xml:space="preserve">
+    <value>Store Settings</value>
+  </data>
+  <data name="ViewPublicStore" xml:space="preserve">
+    <value>View Public Store</value>
+  </data>
+  <data name="ColorsManagement" xml:space="preserve">
+    <value>Colors Management</value>
+  </data>
+
+  <!-- Admin CRUD Actions -->
+  <data name="AddProduct" xml:space="preserve">
+    <value>Add New Product</value>
+  </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>Edit Product</value>
+  </data>
+  <data name="DeleteProduct" xml:space="preserve">
+    <value>Delete Product</value>
+  </data>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Add Main Category</value>
+  </data>
+  <data name="AddSubCategory" xml:space="preserve">
+    <value>Add SubCategory</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="EditSubCategory" xml:space="preserve">
+    <value>Edit SubCategory</value>
+  </data>
+  <data name="DeleteCategory" xml:space="preserve">
+    <value>Delete Category</value>
+  </data>
+  <data name="DeleteSubCategory" xml:space="preserve">
+    <value>Delete SubCategory</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Inventory" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="Featured" xml:space="preserve">
+    <value>Featured in Home Rail</value>
+  </data>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>Display Order</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Finances" xml:space="preserve">
+    <value>Finances</value>
+  </data>
+  <data name="Sales" xml:space="preserve">
+    <value>Sales</value>
   </data>
 </root>
